@@ -13,3 +13,22 @@ def timestamp_string():
 	# Format the time as a string with no spaces
 	time_string = now.strftime("%Y%m%d%H%M%S")
 	return time_string
+
+def convert_minecraft_date_to_est_str(minecraft_date_str):
+	date_str = "2023-03-30T05:03:50.7487117Z"
+
+	# Parse the date string into a datetime object using dateutil.parser
+	date = parse(date_str)
+
+	# Convert to Eastern Time
+	eastern = pytz.timezone('US/Eastern')
+	date_eastern = date.astimezone(eastern)
+
+	# Format the date as a string
+	date_formatted = date_eastern.strftime('%B %d, %Y at %I:%M%p %Z')
+
+	# Print the formatted date
+	print(f'eastern zone formatted: {date_formatted}')
+
+	return date_formatted
+

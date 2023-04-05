@@ -11,7 +11,9 @@ from helperFunctions import timestamp_string
 from datetime import datetime
 from pytz import timezone
 
-from login import get_microsoft_login_data
+from login import get_microsoft_login_data, get_minecraft_login_data
+from realms import get_realms_info, get_world_map_img, get_world_backups, get_latest_map_img_url
+from helperFunctions import convert_minecraft_date_to_est_str
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app, resources={r"/*": {"origins": ["https://www.whollyaigame.com", "https://api.replicate.com"]}})
@@ -20,13 +22,131 @@ SITE_DOMAIN = 'https://www.whollyaigame.com'
 
 @app.route("/")
 def index():
-		return render_template('index.html')
+	return render_template('index.html')
 
 @app.route("/login/microsoft", methods=['POST'])
 def login_microsoft():
+
+	if request.method == "OPTIONS": # CORS preflight
+		return _build_cors_preflight_response()
+	elif request.method != "POST":
+		raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+
 	request_json = request.get_json()
 	login_data = get_microsoft_login_data()
-	response = jsonify(success=True,login_data=login_data)
+	response = jsonify(login_data=login_data)
+	return _corsify_actual_response(response)
+
+
+@app.route("/login/minecraft", methods=['POST'])
+def login_minecraft():
+
+	if request.method == "OPTIONS": # CORS preflight
+		return _build_cors_preflight_response()
+	elif request.method != "POST":
+		raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+
+	request_json = request.get_json()
+	redirected_url = request_json["redirected_url"]
+	auth_code_verifier = request_json["auth_code_verifier"]
+	auth_state = request_json["auth_state"]
+
+	minecraft_login_data = get_minecraft_login_data(redirected_url, auth_code_verifier, auth_state)
+	response = jsonify(minecraft_login_data=minecraft_login_data)
+	return _corsify_actual_response(response)
+
+
+@app.route("/realms", methods=['POST'])
+def realms():
+
+	if request.method == "OPTIONS": # CORS preflight
+		return _build_cors_preflight_response()
+	elif request.method != "POST":
+		raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+
+	request_json = request.get_json()
+	access_token = request_json["access_token"]
+	username = request_json["username"]
+	uuid = request_json["uuid"]
+
+	realms_info = get_realms_info(access_token, username, uuid)
+
+	if realms_info == None:
+		raise NotFound("Failed to fetch realms info, look into why")
+
+	response = jsonify(realms_info=realms_info)
+	return _corsify_actual_response(response)
+
+
+@app.route("/realms/latest_backup_info", methods=['POST'])
+def latest_backup_info():
+
+	if request.method == "OPTIONS": # CORS preflight
+		return _build_cors_preflight_response()
+	elif request.method != "POST":
+		raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+
+	request_json = request.get_json()
+	access_token = request_json["access_token"]
+	username = request_json["username"]
+	uuid = request_json["uuid"]
+	worldId = request_json["worldId"]
+
+	backups_json = get_world_backups(access_token, username, uuid, worldId)
+	if len(data["backups"]) > 0:
+		latest_backup_id = data["backups"][0]["backupId"]
+		latest_backup_date = convert_minecraft_date_to_est_str(latest_backup_id)
+		response = jsonify(latest_backup_id=latest_backup_id, latest_backup_date=latest_backup_date)
+		return _corsify_actual_response(response)
+
+	else:
+		print("No backups found.")
+		raise NotFound("No backups found.")
+
+
+@app.route("/world/map/generate", methods=['POST'])
+def world_map_generate():
+
+	if request.method == "OPTIONS": # CORS preflight
+		return _build_cors_preflight_response()
+	elif request.method != "POST":
+		raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+
+	request_json = request.get_json()
+	access_token = request_json["access_token"]
+	username = request_json["username"]
+	uuid = request_json["uuid"]
+	worldId = request_json["worldId"]
+	activeSlot = request_json["activeSlot"]
+
+	map_img_info = get_world_map_img(access_token, username, uuid, worldId, activeSlot)
+
+	if map_img_info == None:
+		raise NotFound("Failed to fetch world_map url, look into why")
+
+	response = jsonify(map_img_info=map_img_info)
+	return _corsify_actual_response(response)
+
+
+@app.route("/world/map/retrieve", methods=['POST'])
+def world_map_retrieve():
+
+	if request.method == "OPTIONS": # CORS preflight
+		return _build_cors_preflight_response()
+	elif request.method != "POST":
+		raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+
+	request_json = request.get_json()
+	blob_path = request_json["blob_path"]
+	bucket_name = request_json["bucket_name"]
+
+	map_img_url = get_latest_map_img_url(bucket_name, blob_path)
+
+	if map_img_url == None:
+		raise NotFound("Failed to get signed url to latest map img, look into why")
+
+	response = jsonify(map_img_url=map_img_url)
+	return _corsify_actual_response(response)
 
 
 @app.route("/generate", methods=['POST'])

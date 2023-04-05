@@ -5,6 +5,9 @@ import subprocess
 import sys
 import requests
 
+from datetime import datetime
+from dateutil.parser import parse
+import pytz
 
 # uuid': 'ae66b652e508403a9c4587ff0f011760', 'name': 'klopez89'
 
@@ -89,8 +92,8 @@ latest_version = minecraft_launcher_lib.utils.get_latest_version()["release"]
 # Get Minecraft directory
 minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory()
 
-# Make sure, the latest version of Minecraft is installed
-minecraft_launcher_lib.install.install_minecraft_version(latest_version, minecraft_directory)
+# # Make sure, the latest version of Minecraft is installed
+# minecraft_launcher_lib.install.install_minecraft_version(latest_version, minecraft_directory)
 
 # Login
 login_url, state, code_verifier = minecraft_launcher_lib.microsoft_account.get_secure_login_data(CLIENT_ID, REDIRECT_URL)
@@ -136,8 +139,8 @@ world_backups = get_world_backups(world_id, headers, cookies)
 print(f'The world_backups: {world_backups}')
 
 
-latest_backup_download_info = get_latest_backup_url(world_id, 1, headers, cookies)
-print(f'The latest_backup_download_info: {latest_backup_download_info}')
+# latest_backup_download_info = get_latest_backup_url(world_id, 1, headers, cookies)
+# print(f'The latest_backup_download_info: {latest_backup_download_info}')
 
 
 # game_ownership = check_game_ownership(access_token)
@@ -153,3 +156,28 @@ print(f'The latest_backup_download_info: {latest_backup_download_info}')
 # unmined-cli image render --trim --world="/Users/kevinlopez/Downloads/world" --output="MyMap.png"
 
 
+# date_str = "2023-03-30T05:03:50.7487117Z"
+
+# # Parse the date string into a datetime object using dateutil.parser
+# date = parse(date_str)
+
+# # Convert to Eastern Time
+# eastern = pytz.timezone('US/Eastern')
+# date_eastern = date.astimezone(eastern)
+
+# # Format the date as a string
+# date_formatted = date_eastern.strftime('%B %d, %Y at %I:%M%p %Z')
+
+# # Print the formatted date
+# print(f'eastern zone formatted: {date_formatted}')
+
+
+# # Create a timezone-aware datetime object by adding timezone information
+# utc = pytz.timezone('UTC')
+
+# # Get the current timezone-aware datetime object
+# now = datetime.now(pytz.utc)
+
+# # Calculate the difference in seconds between the two dates
+# diff = (date - now).total_seconds()
+# print(f'Time from now in seconds: {diff}')

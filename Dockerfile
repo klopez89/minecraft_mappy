@@ -12,6 +12,7 @@ WORKDIR $APP_HOME
 COPY . ./
 
 # Install production dependencies.
+RUN apt-get update && apt-get install -y icu-devtools
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Run the web service on container startup. Here we use the gunicorn
