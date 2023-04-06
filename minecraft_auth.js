@@ -53,8 +53,8 @@ function beginMicrosoftLogin() {
 
 
 function beginMinecraftLogin() {
-  auth_code_verifier = localStorage.getItem('auth_code_verifier');
-  auth_state = localStorage.getItem('auth_state');
+  const auth_code_verifier = localStorage.getItem('auth_code_verifier');
+  const auth_state = localStorage.getItem('auth_state');
 
   if (auth_code_verifier == null && auth_state == null) {
     console.log('We dont have code auth_code_verifier or auth_state so wont continue with minecraft login!');
@@ -77,11 +77,11 @@ function beginMinecraftLogin() {
     dataType: "json",
     success: function(response) {
       console.log('Minecraft login successful:', response);
-      minecraft_login_data = response["minecraft_login_data"];
-      access_token = minecraft_login_data["access_token"];
-      refresh_token = minecraft_login_data["refresh_token"];
-      username = minecraft_login_data["username"];
-      uuid = minecraft_login_data["uuid"];
+      const minecraft_login_data = response["minecraft_login_data"];
+      const access_token = minecraft_login_data["access_token"];
+      const refresh_token = minecraft_login_data["refresh_token"];
+      const username = minecraft_login_data["username"];
+      const uuid = minecraft_login_data["uuid"];
 
       // Save acccess and refresh tokens to local storage
       localStorage.setItem('access_token', access_token);
@@ -89,11 +89,165 @@ function beginMinecraftLogin() {
       localStorage.setItem('username', username);
       localStorage.setItem('uuid', uuid);
 
-      mapper_url = `https://www.whollyaigame.com/mapper`
-      window.location.href = mapper_url
+      // const mapper_url = `https://www.whollyaigame.com/mapper`
+      // window.location.href = mapper_url
+
+      fetchRealmsInfo(username, uuid, access_token);
     },
     error: function(xhr, status, error) {
       console.error('Minecraft login failed:', error);
     }
   });
+}
+
+
+
+function fetchRealmsInfo(username, uuid, access_token) {
+  minecraft_auth_info = {
+    'username': username,
+    'uuid': uuid,
+    'access_token': access_token
+  }
+  $.ajax({
+    url: 'https://minecraftmappy-5k3b37mzsa-ue.a.run.app/realms',
+    method: 'POST',
+    data: JSON.stringify(minecraft_auth_info),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(response) {
+      console.log('Realms info fetch successful:', response);
+      const realms_info = response["realms_info"];
+      const realm_servers = realms_info["servers"];
+      presentRealmWorldSelection(realm_servers, uuid)
+    },
+    error: function(xhr, status, error) {
+      console.error('Realms info fetch failed:', error);
+    }
+  });
+}
+
+
+
+
+function realmWorldSelected(event) {
+  let accessToken = localStorage.getItem('access_token');
+  let uuid = event.getAttribute('uuid');
+  let username = event.getAttribute('host');
+  let activeSlot = event.getAttribute('activeSlot');
+  let worldId = event.getAttribute('worldId');
+  let worldName = event.getAttribute('worldName');
+
+  localStorage.setItem('selected_world_id', worldId);
+  localStorage.setItem('selected_world_name', worldName);
+  localStorage.setItem('selected_world_slot', activeSlot);
+
+  console.log(`Selected Realm World: UUID=${uuid}, Host=${username}, Active Slot=${activeSlot}, worldId=${worldId}, worldName=${worldName}`);
+
+  world_info = {
+    'uuid': uuid,
+    'username': username,
+    'active_slot': activeSlot,
+    'world_id': worldId,
+    'access_token': accessToken
+  }
+
+  generateNewMapImage(world_info)
+}
+
+// world info has: uuid, username, active_slot, world_id, access_token
+function generateNewMapImage(world_info) {
+
+  $.ajax({
+    url: 'https://minecraftmappy-5k3b37mzsa-ue.a.run.app/world/map/generate',
+    method: 'POST',
+    data: JSON.stringify(world_info),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(response) {
+      console.log('World map fetch successful:', response);
+
+      const map_img_info = response["map_img_info"];
+      const blob_path = map_img_info["blob_path"];
+      const bucket_name = map_img_info["bucket_name"];
+      const signed_img_url = map_img_info["signed_img_url"];
+      const world_name = localStorage.getItem('selected_world_name');
+      const map_img_expiration = getImageExpirationTime();
+
+      //Save fetched info locally (blob path unique per world id)
+      localStorage.setItem('map_blob_path', blob_path);
+      localStorage.setItem('map_bucket_name', bucket_name);
+      localStorage.setItem('map_img_url', signed_img_url);
+      localStorage.setItem('map_img_expiration', map_img_expiration);
+
+      redirectToMapperPage(bucket_name, blob_path, world_name);
+    },
+    error: function(xhr, status, error) {
+      console.error('World map fetch failed:', error);
+    }
+  });
+}
+
+function redirectToMapperPage(bucket_name, blob_path, world_name) {
+  const queryParams = {
+    'bucket_name': bucket_name,
+    'blob_path': blob_path,
+    'world_name': world_name
+  };
+  const mapperUrl = "https://www.whollyaigame.com/mapper";
+  const modifiedMapperUrl = `${mapperUrl}?${new URLSearchParams(queryParams).toString()}`;
+
+  window.location.href = modifiedMapperUrl;
+}
+
+
+
+
+
+function presentRealmWorldSelection(realm_servers, uuid) {
+  const realm_servers_html = generateCardHtml(realm_servers, uuid);
+  const realm_servers_elements = $($.parseHTML(realm_servers_html));
+  $('body').append(realm_servers_elements);
+}
+
+
+function generateCardHtml(jsonArray, uuid) {
+  let htmlString = '';
+
+  // Sort the array so that objects with matching UUIDs are at the front
+  jsonArray.sort((a, b) => {
+    if (a.ownerUUID === uuid && b.ownerUUID !== uuid) {
+      return -1;
+    }
+    if (b.ownerUUID === uuid && a.ownerUUID !== uuid) {
+      return 1;
+    }
+    return 0;
+  });
+
+  jsonArray.forEach(jsonObj => {
+    console.log(`jsonObj.ownerUUID: ${jsonObj.ownerUUID}, uuid: ${uuid}`);
+    const isOwnerOfRealm = jsonObj.ownerUUID === uuid;
+    let notClickable = isOwnerOfRealm ? '' : 'cursor-not-allowed';
+    let notOwnerText = isOwnerOfRealm ? '' : '<div class="absolute bottom-0 left-0 bg-gray-300 text-gray-500 font-normal italic px-2 py-1 rounded-tr-md rounded-bl-md">Only owner can select</div>';
+    let buttonColorStyle = isOwnerOfRealm ? 'hover:bg-gray-300 text-black bg-gray-200' : 'text-gray-500 bg-gray-200'
+
+    htmlString += `
+      <button onClick="realmWorldSelected(this)" class="relative shadow-md w-full h-32 p-4 rounded-lg font-bold ${buttonColorStyle} ${notClickable}" worldId="${jsonObj.id}" uuid="${jsonObj.ownerUUID}" host="${jsonObj.owner}" activeSlot="${jsonObj.activeSlot}" worldName="${jsonObj.name}">
+        <div class="text-xl font-bold">${jsonObj.name}</div>
+        <div class="mt-2 font-normal">Hosted by ${jsonObj.owner}</div>
+        ${notOwnerText}
+      </button>
+    `;
+  });
+
+  return `
+  <div id="realWorldSelectionContainer" class="w-full h-full flex justify-center items-center">
+    <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow">
+      <h2 class="text-xl font-bold mb-10 text-center">Select a Realm World</h2>
+      <div class="grid grid-cols-1 gap-4 pb-4">
+        ${htmlString}
+      </div>
+    </div>
+  </div>
+  `;
 }

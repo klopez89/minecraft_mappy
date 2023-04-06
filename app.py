@@ -116,10 +116,10 @@ def world_map_generate():
 	access_token = request_json["access_token"]
 	username = request_json["username"]
 	uuid = request_json["uuid"]
-	worldId = request_json["worldId"]
-	activeSlot = request_json["activeSlot"]
+	world_id = request_json["world_id"]
+	active_slot = request_json["active_slot"]
 
-	map_img_info = get_world_map_img(access_token, username, uuid, worldId, activeSlot)
+	map_img_info = get_world_map_img(access_token, username, uuid, world_id, active_slot)
 
 	if map_img_info == None:
 		raise NotFound("Failed to fetch world_map url, look into why")
