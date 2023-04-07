@@ -34,7 +34,7 @@ def get_world_backups(access_token, username, uuid, world_id):
         return None
 
 
-def get_world_map_img(access_token, username, uuid, world_id, active_slot):
+def get_world_map_img(access_token, username, uuid, world_id, active_slot, latest_backup_id):
 	headers = {"Authorization": f"Bearer {access_token}", "User-Agent": "Java/1.6.0_27"}
 	cookies = {"sid": f"token:{access_token}:{uuid}", "user": f"{username}", "version": "1.19.4"}
 
@@ -47,7 +47,7 @@ def get_world_map_img(access_token, username, uuid, world_id, active_slot):
 	parent_backup_dir = os.path.dirname(os.path.abspath(backup_folder_path))
 
 	# Define the command for extracting the map image
-	output_map_path = f'{parent_backup_dir}/latest_map.png'
+	output_map_path = f'{parent_backup_dir}/latest_map_{latest_backup_id}.png'
 	cmd = f'unmined/unmined-cli image render --trim --world="{backup_folder_path}" --output="{output_map_path}"'
 
 	# Run the command and capture the output and error messages

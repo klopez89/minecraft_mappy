@@ -119,12 +119,21 @@ def world_map_generate():
 	world_id = request_json["world_id"]
 	active_slot = request_json["active_slot"]
 
-	map_img_info = get_world_map_img(access_token, username, uuid, world_id, active_slot)
+	backups_json = get_world_backups(access_token, username, uuid, worldId)
+	latest_backup_id = ""
+	if len(data["backups"]) > 0:
+		latest_backup_id = data["backups"][0]["backupId"]
+	else:
+		print("No backups found.")
+		raise NotFound("No backups found.")
+
+	latest_backup_date = convert_minecraft_date_to_est_str(latest_backup_id)
+	map_img_info = get_world_map_img(access_token, username, uuid, world_id, active_slot, latest_backup_id)
 
 	if map_img_info == None:
 		raise NotFound("Failed to fetch world_map url, look into why")
 
-	response = jsonify(map_img_info=map_img_info)
+	response = jsonify(map_img_info=map_img_info, latest_backup_id=latest_backup_id, latest_backup_date=latest_backup_date)
 	return _corsify_actual_response(response)
 
 
@@ -139,13 +148,15 @@ def world_map_retrieve():
 	request_json = request.get_json()
 	blob_path = request_json["blob_path"]
 	bucket_name = request_json["bucket_name"]
+	# latest_backup_id = request_json["latest_backup_id"]
 
 	map_img_url = get_latest_map_img_url(bucket_name, blob_path)
+	latest_backup_date = "" # convert_minecraft_date_to_est_str(latest_backup_id)
 
 	if map_img_url == None:
 		raise NotFound("Failed to get signed url to latest map img, look into why")
 
-	response = jsonify(map_img_url=map_img_url)
+	response = jsonify(map_img_url=map_img_url, latest_backup_date=latest_backup_date)
 	return _corsify_actual_response(response)
 
 

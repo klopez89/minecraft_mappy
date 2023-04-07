@@ -1,5 +1,7 @@
 
+
 $(document).ready(function() {
+  document.body.style.height = "100%";
   checkForAuthRedirect()
   configurePage()
 });
@@ -140,6 +142,7 @@ function realmWorldSelected(event) {
   localStorage.setItem('selected_world_id', worldId);
   localStorage.setItem('selected_world_name', worldName);
   localStorage.setItem('selected_world_slot', activeSlot);
+  localStorage.setItem('selected_world_owner_uuid', uuid);
 
   console.log(`Selected Realm World: UUID=${uuid}, Host=${username}, Active Slot=${activeSlot}, worldId=${worldId}, worldName=${worldName}`);
 
@@ -167,10 +170,12 @@ function generateNewMapImage(world_info) {
       console.log('World map fetch successful:', response);
 
       const map_img_info = response["map_img_info"];
+      const latest_backup_id = response["latest_backup_id"];
+      const latest_backup_date = response["latest_backup_date"];
+
       const blob_path = map_img_info["blob_path"];
       const bucket_name = map_img_info["bucket_name"];
       const signed_img_url = map_img_info["signed_img_url"];
-      const world_name = localStorage.getItem('selected_world_name');
       const map_img_expiration = getImageExpirationTime();
 
       //Save fetched info locally (blob path unique per world id)
@@ -178,8 +183,15 @@ function generateNewMapImage(world_info) {
       localStorage.setItem('map_bucket_name', bucket_name);
       localStorage.setItem('map_img_url', signed_img_url);
       localStorage.setItem('map_img_expiration', map_img_expiration);
+      localStorage.setItem('latest_backup_id', latest_backup_id);
+      localStorage.setItem('latest_backup_date', latest_backup_date);
 
-      redirectToMapperPage(bucket_name, blob_path, world_name);
+      const world_name = localStorage.getItem('selected_world_name');
+      const world_id = localStorage.getItem('selected_world_id');
+      const world_slot = localStorage.getItem('selected_world_slot');
+      const world_owner_uuid = localStorage.getItem('selected_world_owner_uuid');
+
+      redirectToMapperPage(bucket_name, blob_path, world_name, world_id, world_slot, world_owner_uuid);
     },
     error: function(xhr, status, error) {
       console.error('World map fetch failed:', error);
@@ -187,11 +199,14 @@ function generateNewMapImage(world_info) {
   });
 }
 
-function redirectToMapperPage(bucket_name, blob_path, world_name) {
+function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, world_slot, world_owner_uuid) {
   const queryParams = {
     'bucket_name': bucket_name,
     'blob_path': blob_path,
-    'world_name': world_name
+    'world_name': world_name,
+    'world_id': world_id,
+    'world_slot': world_slot,
+    'world_owner_uuid': world_owner_uuid,
   };
   const mapperUrl = "https://www.whollyaigame.com/mapper";
   const modifiedMapperUrl = `${mapperUrl}?${new URLSearchParams(queryParams).toString()}`;
@@ -199,7 +214,12 @@ function redirectToMapperPage(bucket_name, blob_path, world_name) {
   window.location.href = modifiedMapperUrl;
 }
 
+function getImageExpirationTime() {
+  const currentTime = Math.floor(Date.now() / 1000);
 
+  // Set the expiration time for the signed map URL (14.5 mins from now)
+  const expirationTime = currentTime + 870;
+}
 
 
 
