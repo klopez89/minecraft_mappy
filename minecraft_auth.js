@@ -143,6 +143,7 @@ function realmWorldSelected(event) {
   localStorage.setItem('selected_world_name', worldName);
   localStorage.setItem('selected_world_slot', activeSlot);
   localStorage.setItem('selected_world_owner_uuid', uuid);
+  localStorage.setItem('selected_world_owner_username', username);
 
   console.log(`Selected Realm World: UUID=${uuid}, Host=${username}, Active Slot=${activeSlot}, worldId=${worldId}, worldName=${worldName}`);
 
@@ -183,8 +184,8 @@ function generateNewMapImage(world_info) {
       localStorage.setItem('map_bucket_name', bucket_name);
       localStorage.setItem('map_img_url', signed_img_url);
       localStorage.setItem('map_img_expiration', map_img_expiration);
-      localStorage.setItem('latest_backup_id', latest_backup_id);
-      localStorage.setItem('latest_backup_date', latest_backup_date);
+      localStorage.setItem('map_backup_id', latest_backup_id);
+      localStorage.setItem('map_backup_date', latest_backup_date);
 
       const world_name = localStorage.getItem('selected_world_name');
       const world_id = localStorage.getItem('selected_world_id');

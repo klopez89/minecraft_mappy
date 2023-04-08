@@ -12,8 +12,8 @@ from datetime import datetime
 from pytz import timezone
 
 from login import get_microsoft_login_data, get_minecraft_login_data
-from realms import get_realms_info, get_world_map_img, get_world_backups, get_latest_map_img_url
-from helperFunctions import convert_minecraft_date_to_est_str
+from realms import get_realms_info, get_world_map_img, get_world_backups, get_latest_map_img_url, check_latest_map_blob_path
+from helperFunctions import convert_minecraft_date_to_est_str, backup_id_from_blob_path
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app, resources={r"/*": {"origins": ["https://www.whollyaigame.com", "https://api.replicate.com"]}})
@@ -93,8 +93,8 @@ def latest_backup_info():
 	worldId = request_json["worldId"]
 
 	backups_json = get_world_backups(access_token, username, uuid, worldId)
-	if len(data["backups"]) > 0:
-		latest_backup_id = data["backups"][0]["backupId"]
+	if len(backups_json["backups"]) > 0:
+		latest_backup_id = backups_json["backups"][0]["backupId"]
 		latest_backup_date = convert_minecraft_date_to_est_str(latest_backup_id)
 		response = jsonify(latest_backup_id=latest_backup_id, latest_backup_date=latest_backup_date)
 		return _corsify_actual_response(response)
@@ -119,10 +119,10 @@ def world_map_generate():
 	world_id = request_json["world_id"]
 	active_slot = request_json["active_slot"]
 
-	backups_json = get_world_backups(access_token, username, uuid, worldId)
+	backups_json = get_world_backups(access_token, username, uuid, world_id)
 	latest_backup_id = ""
-	if len(data["backups"]) > 0:
-		latest_backup_id = data["backups"][0]["backupId"]
+	if len(backups_json["backups"]) > 0:
+		latest_backup_id = backups_json["backups"][0]["backupId"]
 	else:
 		print("No backups found.")
 		raise NotFound("No backups found.")
@@ -148,15 +148,37 @@ def world_map_retrieve():
 	request_json = request.get_json()
 	blob_path = request_json["blob_path"]
 	bucket_name = request_json["bucket_name"]
-	# latest_backup_id = request_json["latest_backup_id"]
+	backup_id = backup_id_from_blob_path(blob_path)
+	backup_date = convert_minecraft_date_to_est_str(backup_id)
 
-	map_img_url = get_latest_map_img_url(bucket_name, blob_path)
-	latest_backup_date = "" # convert_minecraft_date_to_est_str(latest_backup_id)
+	map_img_url = None
+	latest_map_img_url = None
 
-	if map_img_url == None:
-		raise NotFound("Failed to get signed url to latest map img, look into why")
+	latest_blob_check = check_latest_map_blob_path(bucket_name, blob_path)
+	is_referred_blob_path_available = latest_blob_check["is_referred_blob_path_available"]
+	is_referred_blob_path_the_latest = latest_blob_check["is_referred_blob_path_the_latest"]
+	latest_blob_path = latest_blob_check["latest_blob_path"]
 
-	response = jsonify(map_img_url=map_img_url, latest_backup_date=latest_backup_date)
+	if is_referred_blob_path_available {
+		map_img_url = get_signed_url(bucket_name, blob_path)
+	}
+
+	if (is_referred_blob_path_the_latest == False) {
+		latest_map_img_url = get_signed_url(bucket_name, latest_blob_path)
+	}
+
+	if map_img_url == None and latest_map_img_url == None:
+		raise NotFound("Failed to get any image url so likely that this world folder was deleted from record")
+
+	response_obj = {
+		'map_img_url': map_img_url,
+		'backup_id': backup_id,
+		'backup_date': backup_date,
+		'latest_map_img_url': latest_map_img_url,
+		'latest_blob_path': latest_blob_path,
+	}
+
+	response = jsonify(response_obj)
 	return _corsify_actual_response(response)
 
 

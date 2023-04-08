@@ -24,14 +24,16 @@ def get_realms_info(access_token, username, uuid):
 
 
 def get_world_backups(access_token, username, uuid, world_id):
-    realm_backups_url = f"https://pc.realms.minecraft.net/worlds/{world_id}/backups"
-    response = requests.get(realm_backups_url, headers=headers, cookies=cookies)
-    
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"Error getting world_backups, status code: {response.status_code}, response text: {response.text}")
-        return None
+	headers = {"Authorization": f"Bearer {access_token}", "User-Agent": "Java/1.6.0_27"}
+	cookies = {"sid": f"token:{access_token}:{uuid}", "user": f"{username}", "version": "1.19.4"}
+	realm_backups_url = f"https://pc.realms.minecraft.net/worlds/{world_id}/backups"
+	response = requests.get(realm_backups_url, headers=headers, cookies=cookies)
+	
+	if response.status_code == 200:
+		return response.json()
+	else:
+		print(f"Error getting world_backups, status code: {response.status_code}, response text: {response.text}")
+		return None
 
 
 def get_world_map_img(access_token, username, uuid, world_id, active_slot, latest_backup_id):
@@ -103,3 +105,45 @@ def download_extract_backup(url):
 	print(f'the extracted_folder_name: {extracted_folder_name}, extracted_folder_path: {folder_path}')
 
 	return folder_path
+
+
+
+def check_latest_map_blob_path(bucket_name, referred_blob_path):
+	blob_directory = referred_blob_path.split('/')[0]
+
+	client = storage.Client()
+	bucket = client.get_bucket(bucket_name)
+
+	# List the blobs in the directory
+	blobs = bucket.list_blobs(prefix=blob_directory)
+
+	# Filter the blobs by their name
+	filtered_blobs = [blob for blob in blobs if "latest_map" in blob.name]
+
+	# Sort the blobs by their modification time, in descending order
+	sorted_blobs = sorted(filtered_blobs, key=lambda blob: blob.updated, reverse=True)
+
+	# Determine whether or not the referred_blob_path is still available
+	is_referred_blob_path_available = False
+	for blob in sorted_blobs:
+    if blob.name == referred_blob_path:
+        # the blob's name matches the referred blob_path
+        is_referred_blob_path_available = True
+        break  # exit the loop, since we've found a match
+
+    # Get the latest blob path based on modification time
+    last_modified_blob_path = sorted_blobs[0].name
+
+    # Determine if the referred_blob_path is the latest
+    is_referred_blob_path_the_latest = last_modified_blob_path == referred_blob_path
+    latest_blob_path = last_modified_blob_path if is_referred_blob_path_the_latest == False else None
+
+    return {
+	    'is_referred_blob_path_available': is_referred_blob_path_available,
+    	'is_referred_blob_path_the_latest': is_referred_blob_path_available,
+    	'latest_blob_path': latest_blob_path
+    }
+
+print(f'The sorted_blobs: {sorted_blobs}')
+# Return the blob path of the most recently modified blob
+# return sorted_blobs[0].name
