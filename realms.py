@@ -126,24 +126,24 @@ def check_latest_map_blob_path(bucket_name, referred_blob_path):
 	# Determine whether or not the referred_blob_path is still available
 	is_referred_blob_path_available = False
 	for blob in sorted_blobs:
-    if blob.name == referred_blob_path:
-        # the blob's name matches the referred blob_path
-        is_referred_blob_path_available = True
-        break  # exit the loop, since we've found a match
+		if blob.name == referred_blob_path:
+			# the blob's name matches the referred blob_path
+			is_referred_blob_path_available = True
+			break  # exit the loop, since we've found a match
 
-    # Get the latest blob path based on modification time
-    last_modified_blob_path = sorted_blobs[0].name
+	# Get the latest blob path based on modification time
+	last_modified_blob_path = sorted_blobs[0].name
 
-    # Determine if the referred_blob_path is the latest
-    is_referred_blob_path_the_latest = last_modified_blob_path == referred_blob_path
-    latest_blob_path = last_modified_blob_path if is_referred_blob_path_the_latest == False else None
+	# Determine if the referred_blob_path is the latest
+	is_referred_blob_path_the_latest = last_modified_blob_path == referred_blob_path
+	latest_blob_path = last_modified_blob_path if is_referred_blob_path_the_latest == False else None
 
-    return {
-	    'is_referred_blob_path_available': is_referred_blob_path_available,
-    	'is_referred_blob_path_the_latest': is_referred_blob_path_available,
-    	'latest_blob_path': latest_blob_path
-    }
+	return {
+		'is_referred_blob_path_available': is_referred_blob_path_available,
+		'is_referred_blob_path_the_latest': is_referred_blob_path_available,
+		'latest_blob_path': latest_blob_path
+	}
 
-print(f'The sorted_blobs: {sorted_blobs}')
+# print(f'The sorted_blobs: {sorted_blobs}')
 # Return the blob path of the most recently modified blob
 # return sorted_blobs[0].name

@@ -33,3 +33,8 @@ def convert_minecraft_date_to_est_str(minecraft_date_str):
 
 	return date_formatted
 
+# 	using the blob path to the latest map img of png type
+def backup_id_from_blob_path(string):
+    last_underscore = string.rfind('_')  # find the index of the last underscore
+    png_index = string.find('.png')  # find the index of the ".png" text
+    return string[last_underscore + 1 : png_index]  # extract the portion of the string between the two indices
