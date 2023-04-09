@@ -16,10 +16,8 @@ def timestamp_string():
 	return time_string
 
 def convert_minecraft_date_to_est_str(minecraft_date_str):
-	date_str = "2023-03-30T05:03:50.7487117Z"
-
 	# Parse the date string into a datetime object using dateutil.parser
-	date = parse(date_str)
+	date = parse(minecraft_date_str)
 
 	# Convert to Eastern Time
 	eastern = pytz.timezone('US/Eastern')
