@@ -128,13 +128,12 @@ def world_map_generate():
 		print("No backups found.")
 		raise NotFound("No backups found.")
 
-	latest_backup_date = convert_minecraft_date_to_est_str(latest_backup_id)
 	map_img_info = get_world_map_img(access_token, username, uuid, world_id, active_slot, latest_backup_id)
 
 	if map_img_info == None:
 		raise NotFound("Failed to fetch world_map url, look into why")
 
-	response = jsonify(map_img_info=map_img_info, latest_backup_id=latest_backup_id, latest_backup_date=latest_backup_date)
+	response = jsonify(map_img_info)
 	return _corsify_actual_response(response)
 
 
@@ -159,22 +158,19 @@ def world_map_retrieve():
 	is_referred_blob_path_available = latest_blob_check["is_referred_blob_path_available"]
 	is_referred_blob_path_the_latest = latest_blob_check["is_referred_blob_path_the_latest"]
 	latest_blob_path = latest_blob_check["latest_blob_path"]
+	latest_backup_id = None if latest_blob_path == None else backup_id_from_blob_path(latest_blob_path)
+	latest_backup_date = None if latest_backup_id == None else convert_minecraft_date_to_est_str(latest_backup_id) 
 
 	if is_referred_blob_path_available:
 		map_img_url = get_signed_url(bucket_name, blob_path)
-
-	if (is_referred_blob_path_the_latest == False):
-		latest_map_img_url = get_signed_url(bucket_name, latest_blob_path)
-
-	if map_img_url == None and latest_map_img_url == None:
-		raise NotFound("Failed to get any image url so likely that this world folder was deleted from record")
 
 	response_obj = {
 		'map_img_url': map_img_url,
 		'backup_id': backup_id,
 		'backup_date': backup_date,
-		'latest_map_img_url': latest_map_img_url,
 		'latest_blob_path': latest_blob_path,
+		'latest_backup_id': latest_backup_id,
+		'latest_backup_date': latest_backup_date
 	}
 
 	response = jsonify(response_obj)

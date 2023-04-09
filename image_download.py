@@ -30,16 +30,10 @@ def save_image_to_bucket(bucket_name: str, folder_path: str, image_path: str) ->
     with open(image_path, 'rb') as f:
         blob.upload_from_file(f, content_type=f'image/{extension}')
 
-    expires_at_ms = datetime.now() + timedelta(minutes=15)
-    auth_request = grequests.Request()
-    signing_credentials = compute_engine.IDTokenCredentials(auth_request, "")
-    signed_url = blob.generate_signed_url(expires_at_ms, credentials=signing_credentials)
-
     # Return the bucket_name, blob_path of the uploaded image, and signed img url
     return {
         'bucket_name': bucket_name,
         'blob_path': f'{folder_path}/{blob_name}',
-        'signed_img_url': signed_url
     }
 
 def get_signed_url(bucket_name: str, blob_path: str) -> str:
