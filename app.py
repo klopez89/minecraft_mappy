@@ -91,9 +91,9 @@ def latest_backup_info():
 	access_token = request_json["access_token"]
 	username = request_json["username"]
 	uuid = request_json["uuid"]
-	worldId = request_json["worldId"]
+	world_id = request_json["world_id"]
 
-	backups_json = get_world_backups(access_token, username, uuid, worldId)
+	backups_json = get_world_backups(access_token, username, uuid, world_id)
 	if len(backups_json["backups"]) > 0:
 		latest_backup_id = backups_json["backups"][0]["backupId"]
 		latest_backup_date = convert_minecraft_date_to_est_str(latest_backup_id)
