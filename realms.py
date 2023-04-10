@@ -5,7 +5,6 @@ import os
 import subprocess
 from image_download import save_image_to_bucket, get_signed_url
 
-
 from google.cloud import storage
 
 
@@ -32,7 +31,7 @@ def get_world_backups(access_token, username, uuid, world_id):
 	if response.status_code == 200:
 		return response.json()
 	else:
-		print(f"Error getting world_backups, status code: {response.status_code}, response text: {response.text}")
+		print(f"Error getting world_backups, status code: {response.status_code}")
 		return None
 
 

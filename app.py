@@ -11,7 +11,7 @@ from helperFunctions import timestamp_string
 from datetime import datetime
 from pytz import timezone
 
-from login import get_microsoft_login_data, get_minecraft_login_data
+from login import get_microsoft_login_data, get_minecraft_login_data, check_access_token_via_game_ownership
 from realms import get_realms_info, get_world_map_img, get_world_backups, get_latest_map_img_url, check_latest_map_blob_path
 from helperFunctions import convert_minecraft_date_to_est_str, backup_id_from_blob_path
 from image_download import get_signed_url
@@ -57,6 +57,22 @@ def login_minecraft():
 	return _corsify_actual_response(response)
 
 
+@app.route("/login/validate_access_token", methods=['POST'])
+def validate_access_token():
+	if request.method == "OPTIONS": # CORS preflight
+		return _build_cors_preflight_response()
+	elif request.method != "POST":
+		raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+
+	request_json = request.get_json()
+	access_token = request_json["access_token"]
+	refresh_token = request_json["refresh_token"]
+	validation_result = check_access_token_via_game_ownership(access_token, refresh_token)
+
+	response = jsonify(validation_result)
+	return _corsify_actual_response(response)
+
+
 @app.route("/realms", methods=['POST'])
 def realms():
 
@@ -77,6 +93,9 @@ def realms():
 
 	response = jsonify(realms_info=realms_info)
 	return _corsify_actual_response(response)
+
+
+
 
 
 @app.route("/realms/latest_backup_info", methods=['POST'])

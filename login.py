@@ -71,18 +71,32 @@ def get_minecraft_login_data(redirected_url, auth_code_verifier, auth_state):
     }
     return minecraft_login_info
 
-def check_access_token_validation(access_token):
-    # Send a GET request to the Microsoft Graph API /me endpoint with the access token in the Authorization header
-    headers = {'Authorization': 'Bearer ' + access_token}
-    response = requests.get('https://graph.microsoft.com/v1.0/me', headers=headers)
 
-    # Check the status code of the response
+
+def check_access_token_via_game_ownership(access_token, refresh_token):
+    mcstore_url = f"https://api.minecraftservices.com/entitlements/mcstore"
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = requests.get(mcstore_url, headers=headers)
+    
     if response.status_code == 200:
-        # The access token is valid
-        print('Access token is valid')
+        return {
+        'valid': True,
+        'refresh_info': None
+        }
     else:
-        # The access token is not valid
-        print(f'Access token is not valid, response: {response}')
+        if response.status_code == 401:
+            print('Ran into auth 401 so going to attempt token refresh')
+            refresh_result = attempt_minecraft_auth_refresh(refresh_token)
+            return {
+                'valid': False,
+                'refresh_info': refresh_result
+            }
+        else:
+            print("Some other error getting mcstore occured:", response)
+            return {
+                'valid': False,
+                'refresh_info:': None
+            }
 
 def attempt_minecraft_auth_refresh(refresh_token):
     # Replace these values with your own, these need to be place in the google cloud service dedicated to this site
@@ -97,6 +111,14 @@ def attempt_minecraft_auth_refresh(refresh_token):
     login_data = minecraft_launcher_lib.microsoft_account.complete_refresh(CLIENT_ID, [client_secret], REDIRECT_URL, refresh_token)
 
     print(f'The resulting refreshed loggin data for minecraft: {login_data}')
+
+    if login_data == None:
+        return None
+    else:
+        return {
+            'access_token': login_data["access_token"],
+            'refresh_token': login_data["refresh_token"],
+        }
 
     # minecraft_login_info = {
     #     'access_token': login_data["access_token"],
@@ -174,14 +196,14 @@ def get_latest_backup_url(world_id, world_number, headers, cookies):
 
 
 # Replace these values with your own
-refresh_token = "M.R3_BAY.-CRbi2sxPrn7eI!TeNOnyFPYovOfivAlcT3ecF4i!vOjAHIhPvCkeFt2rpTuVQiDVhdS*dHWN4QjrL4M4YuDv11UocxowDuMehRhpO6aD3BfZ0jML1K3d*kMGKz85Nog*dQrp088JiLWuTZEcTd20hbbp4zPmLXk*6qf*mDqdURThI1trWNYi*lgYy98NlaLo2U1OcCpF5FwcrFetWMc!2ciDqI8oYvIoDvrJG4u!F1Dnta2wtrJXyFh70o5ggB*hthtotJQHZnZ2jSRalEE9tzsWcCRhe0ZrwICEo7s2Gd*Y3plhd9hHrV0ncN8GnSdplA$$"
-client_id = "5beeb873-aaa4-4fc9-90ea-d58811e59ff7"
-client_secret = "GIS8Q~NiwTfVrq1YJLrSpVuussbEGepIxhvy0c17"
-# redirect_uri = "https://www.whollyaigame.com/minecraftauth"
+# refresh_token = "M.R3_BAY.-CRbi2sxPrn7eI!TeNOnyFPYovOfivAlcT3ecF4i!vOjAHIhPvCkeFt2rpTuVQiDVhdS*dHWN4QjrL4M4YuDv11UocxowDuMehRhpO6aD3BfZ0jML1K3d*kMGKz85Nog*dQrp088JiLWuTZEcTd20hbbp4zPmLXk*6qf*mDqdURThI1trWNYi*lgYy98NlaLo2U1OcCpF5FwcrFetWMc!2ciDqI8oYvIoDvrJG4u!F1Dnta2wtrJXyFh70o5ggB*hthtotJQHZnZ2jSRalEE9tzsWcCRhe0ZrwICEo7s2Gd*Y3plhd9hHrV0ncN8GnSdplA$$"
+# client_id = "5beeb873-aaa4-4fc9-90ea-d58811e59ff7"
+# client_secret = "GIS8Q~NiwTfVrq1YJLrSpVuussbEGepIxhvy0c17"
+# # redirect_uri = "https://www.whollyaigame.com/minecraftauth"
 
-access_token = "eyJraWQiOiJhYzg0YSIsImFsZyI6IkhTMjU2In0.eyJ4dWlkIjoiMjUzNTQ2ODYyMzA2NjU4OSIsImFnZyI6IkFkdWx0Iiwic3ViIjoiZDFjZTY3YjAtN2MxNC00OTM3LWFmZGUtMzM0MDdmNzNiODU5IiwiYXV0aCI6IlhCT1giLCJucyI6ImRlZmF1bHQiLCJyb2xlcyI6W10sImlzcyI6ImF1dGhlbnRpY2F0aW9uIiwicGxhdGZvcm0iOiJVTktOT1dOIiwieXVpZCI6IjczNGQyNzZlNzllMTU2MWRkYjc3ZmY4ZTY5MWJiNDM5IiwibmJmIjoxNjgxMDk1ODgyLCJleHAiOjE2ODExODIyODIsImlhdCI6MTY4MTA5NTg4Mn0.u0ZT4_KuPYaGMnTfEXCDF6QYSX9IN4gnO5IciCfTizs"
-# attempt_minecraft_auth_refresh(refresh_token)
-check_access_token_validation(access_token)
+# access_token = "eyJraWQiOiJhYzg0YSIsImFsZyI6IkhTMjU2In0.eyJ4dWlkIjoiMjUzNTQ2ODYyMzA2NjU4OSIsImFnZyI6IkFkdWx0Iiwic3ViIjoiZDFjZTY3YjAtN2MxNC00OTM3LWFmZGUtMzM0MDdmNzNiODU5IiwiYXV0aCI6IlhCT1giLCJucyI6ImRlZmF1bHQiLCJyb2xlcyI6W10sImlzcyI6ImF1dGhlbnRpY2F0aW9uIiwicGxhdGZvcm0iOiJVTktOT1dOIiwieXVpZCI6IjczNGQyNzZlNzllMTU2MWRkYjc3ZmY4ZTY5MWJiNDM5IiwibmJmIjoxNjgxMDk1ODgyLCJleHAiOjE2ODExODIyODIsImlhdCI6MTY4MTA5NTg4Mn0.u0ZT4_KuPYaGMnTfEXCDF6QYSX9IN4gnO5IciCfTizs"
+# # attempt_minecraft_auth_refresh(refresh_token)
+# check_access_token_validation(access_token)
 
 # payload = {
 #     'client_id': client_id,
