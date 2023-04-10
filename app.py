@@ -93,6 +93,8 @@ def latest_backup_info():
 	uuid = request_json["uuid"]
 	world_id = request_json["world_id"]
 
+	print(f'The latest_backup_info request data is: {request_json}')
+
 	backups_json = get_world_backups(access_token, username, uuid, world_id)
 	if len(backups_json["backups"]) > 0:
 		latest_backup_id = backups_json["backups"][0]["backupId"]
