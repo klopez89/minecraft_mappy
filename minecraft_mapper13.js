@@ -158,7 +158,7 @@ function validateAccessToken() {
 			contentType: "application/json",
 			dataType: "json",
 			success: function(response) {
-				console.log('Latest backup info fetch successful:', response);
+				console.log('Validate_access_token endpoint hit was successful:', response);
 
 				const has_new_auth_info = response["refresh_info"] != null;
 				if (has_new_auth_info) {
@@ -220,7 +220,7 @@ function checkForNewBackup() {
 			if (backup_id_to_compare_to == latest_backup_id) {
 				console.log('We already have the latest backup map');
 			} else {
-				console.log('We will need to fetch the latest world map');
+				console.log(`We can generate a newer world map, latest_backup_date: ${latest_backup_date}, so show generate button`);
 			}
 		},
 		error: function(xhr, status, error) {
