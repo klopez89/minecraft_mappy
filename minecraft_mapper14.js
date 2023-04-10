@@ -261,10 +261,18 @@ function map_html(map_img_url) {
 			<img id="panzoom-element" src="${map_img_url}" alt="Your image description" class="panzoom-element panzoom-img" ondragstart="return false;">
 		</div>
 		<div id="menu-overlay-element" class="menu-overlay">
-			<button class="zoom-reset bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-				<i class="fas fa-search-minus"></i>
-				Reset Zoom
-			</button>
+			<div class="menu-button-container w-full pt-2 pb-2 px-4">
+				<button class="zoom-reset bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+		      <i class="fas fa-search-minus"></i>
+		      Reset Zoom
+		    </button>
+				<button class="load-map bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+		      Load Latest Map
+		    </button>
+		    <button class="generate-map bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+		      Generate New Map
+		    </button>
+	    </div>
 		</div>
 	</div>
 	`;
