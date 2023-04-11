@@ -264,7 +264,8 @@ function map_html(map_img_url) {
 		</div>
 		<div id="menu-overlay-element" class="menu-overlay">
 			<div class="menu-button-container w-full pt-2 pb-2 px-4">
-				<button id="zoom-in-button" class="zoom-in text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-2 px-4 rounded mr-2">&nbsp;Zoom In&nbsp;</button>
+				<button id="zoom-in-button" class="zoom-button text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-2 px-4 rounded mr-2" style="cursor: pointer; pointer-events: auto;"><i class="fa fa-plus"></i></button>
+				<button id="zoom-out-button" class="zoom-button text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-2 px-4 rounded mr-2" style="cursor: pointer; pointer-events: auto;"><i class="fa fa-minus"></i></button>
 				<button class="zoom-reset text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-2 px-4 rounded mr-2">&nbsp;Reset&nbsp;</button>
 				<button class="load-latest-map text-xs bg-yellow-500 hover:bg-yellow-700 text-white font-extrabold py-2 px-4 rounded mr-2">
 		      Load Latest Map
@@ -290,7 +291,9 @@ function configureMap() {
 	});
 	
 	const zoomInButton = document.getElementById('zoom-in-button');
-	zoomInButton.addEventListener('click', panzoomInstance.zoomIn)
+	const zoomOutButton = document.getElementById('zoom-out-button');
+	zoomInButton.addEventListener('click', panzoomInstance.zoomIn);
+	zoomOutButton.addEventListener('click', panzoomInstance.zoomOut);
 
 	// Enable click and drag to pan
 	let isPanning = false;
