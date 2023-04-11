@@ -1,6 +1,8 @@
 
 $(document).ready(function() {
 
+	document.body.style.fontFamily = "Minecrafty";
+
 	// Get the current page URL
 	const url = new URL(window.location.href);
 
@@ -266,10 +268,10 @@ function map_html(map_img_url) {
 		      <i class="fas fa-search-minus"></i>
 		      Reset Zoom
 		    </button>
-				<button class="load-map bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+				<button class="load-latest-map bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
 		      Load Latest Map
 		    </button>
-		    <button class="generate-map bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+		    <button class="generate-new-map bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
 		      Generate New Map
 		    </button>
 	    </div>
