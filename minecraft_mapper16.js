@@ -264,14 +264,11 @@ function map_html(map_img_url) {
 		</div>
 		<div id="menu-overlay-element" class="menu-overlay">
 			<div class="menu-button-container w-full pt-2 pb-2 px-4">
-				<button class="zoom-reset bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
-		      <i class="fas fa-search-minus"></i>
-		      Reset Zoom
-		    </button>
-				<button class="load-latest-map bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+				<button class="zoom-reset text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-2 px-4 rounded mr-2">&nbsp;Reset&nbsp;</button>
+				<button class="load-latest-map text-xs bg-yellow-500 hover:bg-yellow-700 text-white font-extrabold py-2 px-4 rounded mr-2">
 		      Load Latest Map
 		    </button>
-		    <button class="generate-new-map bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+		    <button class="generate-new-map text-xs bg-orange-500 hover:bg-orange-700 text-white font-extrabold py-2 px-4 rounded">
 		      Generate New Map
 		    </button>
 	    </div>
