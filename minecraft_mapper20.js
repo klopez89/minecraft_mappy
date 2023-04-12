@@ -265,8 +265,8 @@ function map_html(map_img_url) {
 		<div id="menu-overlay-element" class="menu-overlay">
 
 
-			<div class="zoom-reset-zoom-container w-full pt-2 pb-2 px-4 flex justify-end">
-     		<div class="zoom-hugging-container" style="max-width: 100px;">
+			<div class="zoom-reset-zoom-container w-full pt-2 pb-4 px-4 flex justify-end">
+     		<div class="zoom-hugging-container" style="min-width: 150px;">
         	<div class="zoom-buttons flex flex-row">
 					  <button id="zoom-in-button" class="zoom-button text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-2 px-4 rounded mr-1" style="cursor: pointer; pointer-events: auto; width: 50%;">
 					    <i class="fa fa-plus"></i>
@@ -284,12 +284,19 @@ function map_html(map_img_url) {
       </div>
 
 			<div class="menu-button-container w-full pt-2 pb-2 px-4">
-				<button class="load-latest-map text-xs bg-yellow-500 hover:bg-yellow-700 text-white font-extrabold py-2 px-4 rounded mr-2">
-		      Load Latest Map
-		    </button>
-		    <button class="generate-new-map text-xs bg-orange-500 hover:bg-orange-700 text-white font-extrabold py-2 px-4 rounded">
-		      Generate New Map
-		    </button>
+				<div class="world-info" style="color: white;">
+    			<div class="world-name text-xl">World Name</div>
+			    <p class="hosted-by text-xs">hosted by klopez89</p>
+			    <p class="backup-date-label text-xs text-slate-400">Last backup: &nbsp;April 11, 2023</p>
+			  </div>
+			  <div class="button-container flex justify-end" style="display: flex; align-items: center;">
+		    	<button class="load-latest-map text-xs bg-yellow-500 hover:bg-yellow-700 text-white font-extrabold py-2 px-4 rounded mr-2">
+		      	Load Latest Map
+		    	</button>
+		    	<button class="generate-new-map text-xs bg-orange-500 hover:bg-orange-700 text-white font-extrabold py-2 px-4 rounded">
+		      	Generate New Map
+		    	</button>
+	  		</div>
 	    </div>
 		</div>
 	</div>
