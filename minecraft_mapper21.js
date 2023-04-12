@@ -262,21 +262,20 @@ function map_html(map_img_url) {
 		<div id="panzoom-container-element" class="panzoom-container" style="overflow: hidden; touch-action: none;">
 			<img id="panzoom-element" src="${map_img_url}" alt="Your image description" class="panzoom-element panzoom-img" ondragstart="return false;">
 		</div>
+		
 		<div id="menu-overlay-element" class="menu-overlay">
-
-
 			<div class="zoom-reset-zoom-container w-full pt-2 pb-4 px-4 flex justify-end">
      		<div class="zoom-hugging-container" style="min-width: 150px;">
         	<div class="zoom-buttons flex flex-row">
-					  <button id="zoom-in-button" class="zoom-button text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-2 px-4 rounded mr-1" style="cursor: pointer; pointer-events: auto; width: 50%;">
+					  <button id="zoom-in-button" class="zoom-button text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-3 px-4 rounded mr-1" style="cursor: pointer; pointer-events: auto; width: 50%;">
 					    <i class="fa fa-plus"></i>
 					  </button>
-					  <button id="zoom-out-button" class="zoom-button text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-2 px-4 rounded ml-1" style="cursor: pointer; pointer-events: auto; width: 50%;">
+					  <button id="zoom-out-button" class="zoom-button text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-3 px-4 rounded ml-1" style="cursor: pointer; pointer-events: auto; width: 50%;">
 					    <i class="fa fa-minus"></i>
 					  </button>
 					</div>
 					<div class="reset-button flex flex-row mt-2">
-					  <button class="zoom-reset text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-2 px-4 rounded" style="width: 100%;">
+					  <button class="zoom-reset text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-3 px-4 rounded" style="width: 100%;">
 					    &nbsp;Reset&nbsp;
 					  </button>
 					</div>
@@ -290,15 +289,16 @@ function map_html(map_img_url) {
 			    <p class="backup-date-label text-xs text-slate-400">Last backup: &nbsp;April 11, 2023</p>
 			  </div>
 			  <div class="button-container flex justify-end" style="display: flex; align-items: center;">
-		    	<button class="load-latest-map text-xs bg-yellow-500 hover:bg-yellow-700 text-white font-extrabold py-2 px-4 rounded mr-2">
+		    	<button class="load-latest-map text-xs bg-yellow-500 hover:bg-yellow-700 text-white font-extrabold py-3 px-4 rounded mr-2">
 		      	Load Latest Map
 		    	</button>
-		    	<button class="generate-new-map text-xs bg-orange-500 hover:bg-orange-700 text-white font-extrabold py-2 px-4 rounded">
+		    	<button class="generate-new-map text-xs bg-orange-500 hover:bg-orange-700 text-white font-extrabold py-3 px-4 rounded">
 		      	Generate New Map
 		    	</button>
 	  		</div>
 	    </div>
 		</div>
+
 	</div>
 	`;
 	return htmlString
