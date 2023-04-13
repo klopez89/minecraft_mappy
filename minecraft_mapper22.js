@@ -282,23 +282,37 @@ function map_html(map_img_url) {
         </div>
       </div>
 
-			<div class="menu-button-container w-full pt-2 pb-2 px-4">
-				<div class="world-info" style="color: white;">
-    			<div class="world-name text-xl">World Name</div>
-			    <p class="hosted-by text-xs">hosted by klopez89</p>
-			    <p class="backup-date-label text-xs text-slate-400">Last backup: &nbsp;April 11, 2023</p>
-			  </div>
-			  <div class="button-container flex justify-end" style="display: flex; align-items: center;">
-		    	<button class="load-latest-map text-xs bg-yellow-500 hover:bg-yellow-700 text-white font-extrabold py-3 px-4 rounded mr-2">
-		      	Load Latest Map
-		    	</button>
-		    	<button class="generate-new-map text-xs bg-orange-500 hover:bg-orange-700 text-white font-extrabold py-3 px-4 rounded">
-		      	Generate New Map
-		    	</button>
-	  		</div>
-	    </div>
-		</div>
+      <div class="menu-wrapper">
 
+				<div class="menu-button-container w-full pt-2 pb-2 px-4">
+
+					<div class="hidden-button flex justify-end">
+			      <button class="show-menu bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+			        Menu
+			      </button>
+			    </div>
+
+					<div class="world-info" style="color: white;">
+	    			<div class="world-name text-xl">World Name</div>
+				    <p class="hosted-by text-xs">hosted by klopez89</p>
+				    <p class="backup-date-label text-xs text-slate-400">Last backup: &nbsp;April 11, 2023</p>
+				  </div>
+
+				  <div class="button-container flex justify-end" style="display: flex; align-items: center;">
+			    	<button class="load-latest-map text-xs bg-yellow-500 hover:bg-yellow-700 text-white font-extrabold py-3 px-4 rounded mr-2">
+			      	Load Latest Map
+			    	</button>
+			    	<button class="generate-new-map text-xs bg-orange-500 hover:bg-orange-700 text-white font-extrabold py-3 px-4 rounded">
+			      	Generate New Map
+			    	</button>
+		  		</div>
+
+		    </div>
+
+	    </div>
+
+
+		</div>
 	</div>
 	`;
 	return htmlString
@@ -309,7 +323,7 @@ function configureMap() {
 	const panzoomInstance = Panzoom(element, {
 		maxScale: 5,
 		minScale: 0.75,
-		smoothScroll: false,
+		smoothScroll: true,
 		roundPixels: true,
 		origin: "0%, 0%",
 	});
@@ -361,6 +375,13 @@ function configureMap() {
 	}, { passive: false });
 	
 	element.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel)
+
+	const menuWrapper = document.querySelector('.menu-wrapper');
+  const hiddenButton = document.querySelector('.hidden-button');
+  hiddenButton.addEventListener('click', () => {
+    menuWrapper.classList.toggle('hidden');
+    menuWrapper.classList.toggle('show-menu');
+	});
 }
 
 function getImageExpirationTime() {
