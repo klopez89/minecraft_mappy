@@ -266,12 +266,14 @@ function map_html(map_img_url) {
 		<div id="menu-overlay-element" class="menu-overlay">
 
 			<div class="relative">
-			  <button class="fixed bottom-0 right-0 m-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" id="slide-button">
-			    Slide Up
-			  </button>
-			  <div class="fixed bottom-0 left-0 right-0 bg-white p-4 transform transition-transform duration-500 ease-in-out translate-y-full" id="slide-up-div">
-			    <h1 class="text-lg font-bold mb-2">Slide Up Div</h1>
-			    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi commodo vehicula ante, id facilisis leo consectetur sit amet. Nullam euismod sapien ac bibendum fringilla.</p>
+			  <div class="slide-up-container">
+			    <button class="absolute top-0 right-0 m-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" id="slide-button" style="cursor: pointer; pointer-events: auto; z-index: 30;">
+			      Slide Up
+			    </button>
+			    <div class="fixed bottom-0 left-0 right-0 bg-white p-4 transform transition-transform duration-500 ease-in-out translate-y-full" id="slide-up-div">
+			      <h1 class="text-lg font-bold mb-2">Slide Up Div</h1>
+			      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi commodo vehicula ante, id facilisis leo consectetur sit amet. Nullam euismod sapien ac bibendum fringilla.</p>
+			    </div>
 			  </div>
 			</div>
 
@@ -394,10 +396,20 @@ function configureMap() {
     menuWrapper.classList.toggle('show-menu');
 	});
 
-	const slideButton = document.getElementById('slide-button');
+  const slideButton = document.getElementById('slide-button');
+  const slideUpContainer = document.querySelector('.slide-up-container');
   const slideUpDiv = document.getElementById('slide-up-div');
   slideButton.addEventListener('click', () => {
+    const containerHeight = slideUpDiv.clientHeight;
+    slideUpContainer.style.height = containerHeight + 'px';
     slideUpDiv.classList.toggle('translate-y-full');
+    slideButton.classList.toggle('absolute');
+    slideButton.classList.toggle('fixed');
+    slideButton.classList.toggle('top-0');
+    slideButton.classList.toggle('bottom-0');
+    if (slideButton.classList.contains('fixed')) {
+      slideUpContainer.style.height = 0;
+    }
   });
 }
 
