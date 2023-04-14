@@ -15,11 +15,10 @@ function add_slide_over_menu() {
 
   const slideOutMenuHTML = menu_html(loadLatestMapHTML, generateNewMapHTML);
 
-  const parser = new DOMParser();
-  const slideOutMenu_element = parser.parseFromString(slideOutMenuHTML, 'text/html').body.firstChild;
+  const slideOutMenu_element = $($.parseHTML(slideOutMenuHTML));
 
-  slideOutMenu_element.classList.toggle('translate-x-full');
-  document.body.appendChild(slideOutMenu_element);
+  slideOutMenu_element.toggleClass('translate-x-full'); //sets the menu to be initially hidden
+  $('body').append(slideOutMenu_element);
   configure_slide_over_menu();
 }
 

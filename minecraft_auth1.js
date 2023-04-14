@@ -168,31 +168,18 @@ function generateNewMapImage(world_info) {
     contentType: "application/json",
     dataType: "json",
     success: function(response) {
-      console.log('World map fetch successful:', response);
+      console.log('World map generation successful:', response);
 
-      const map_img_info = response["map_img_info"];
-      const latest_backup_id = response["latest_backup_id"];
-      const latest_backup_date = response["latest_backup_date"];
-
-      const blob_path = map_img_info["blob_path"];
-      const bucket_name = map_img_info["bucket_name"];
-      const signed_img_url = map_img_info["signed_img_url"];
-      const map_img_expiration = getImageExpirationTime();
-
-      //Save fetched info locally (blob path unique per world id)
-      localStorage.setItem('map_blob_path', blob_path);
-      localStorage.setItem('map_bucket_name', bucket_name);
-      localStorage.setItem('map_img_url', signed_img_url);
-      localStorage.setItem('map_img_expiration', map_img_expiration);
-      localStorage.setItem('map_backup_id', latest_backup_id);
-      localStorage.setItem('map_backup_date', latest_backup_date);
+      const blob_path = response["blob_path"];
+      const bucket_name = response["bucket_name"];
 
       const world_name = localStorage.getItem('selected_world_name');
       const world_id = localStorage.getItem('selected_world_id');
       const world_slot = localStorage.getItem('selected_world_slot');
       const world_owner_uuid = localStorage.getItem('selected_world_owner_uuid');
+      const world_owner = localStorage.getItem('selected_world_owner_username');
 
-      redirectToMapperPage(bucket_name, blob_path, world_name, world_id, world_slot, world_owner_uuid);
+      redirectToMapperPage(bucket_name, blob_path, world_name, world_id, world_slot, world_owner_uuid, world_owner);
     },
     error: function(xhr, status, error) {
       console.error('World map fetch failed:', error);
@@ -200,7 +187,7 @@ function generateNewMapImage(world_info) {
   });
 }
 
-function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, world_slot, world_owner_uuid) {
+function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, world_slot, world_owner_uuid, world_owner) {
   const queryParams = {
     'bucket_name': bucket_name,
     'blob_path': blob_path,
@@ -208,6 +195,7 @@ function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, worl
     'world_id': world_id,
     'world_slot': world_slot,
     'world_owner_uuid': world_owner_uuid,
+    'world_owner': world_owner
   };
   const mapperUrl = "https://www.whollyaigame.com/mapper";
   const modifiedMapperUrl = `${mapperUrl}?${new URLSearchParams(queryParams).toString()}`;
