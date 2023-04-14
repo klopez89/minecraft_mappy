@@ -16,10 +16,9 @@ function add_slide_over_menu() {
   const slideOutMenuHTML = menu_html(loadLatestMapHTML, generateNewMapHTML);
 
   const slideOutMenu_element = $($.parseHTML(slideOutMenuHTML));
+  const slideOutPanel_element = slideOutMenu_element.find('#slide-over-panel');
 
-  console.log(`The slideOutMenu_element is: ${JSON.stringify(slideOutMenu_element)}`);
-
-  slideOutMenu_element.toggleClass('translate-x-full'); //sets the menu to be initially hidden
+  slideOutPanel_element.toggleClass('translate-x-full'); //sets the panel of the menu to be initially hidden
   $('body').append(slideOutMenu_element);
   configure_slide_over_menu();
 }
