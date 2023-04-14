@@ -13,7 +13,7 @@ function add_slide_over_menu() {
   const loadLatestMapHTML = load_latest_map_html(has_newer_map_to_load);
   const generateNewMapHTML = generate_new_map_html(has_new_map_to_generate, is_auth_user_host, host);
 
-  const slideOutMenuHTML = menu_html(worldName, worldOwner, loadLatestMapHTML, backupDate, generateNewMapHTML);
+  const slideOutMenuHTML = menu_html(worldName, worldOwner, backupDate, loadLatestMapHTML, generateNewMapHTML);
 
   const slideOutMenu_element = $($.parseHTML(slideOutMenuHTML));
   const slideOutPanel_element = slideOutMenu_element.find('#slide-over-panel');
@@ -49,7 +49,7 @@ function configure_slide_over_menu() {
 function toggleSlideMenu(slideOverPanel, slideMenuBg) {
   const tapCloseLayer = document.getElementById('tap-close-layer');
   tapCloseLayer.classList.toggle('pointer-events-auto');
-  
+
   slideOverPanel.classList.toggle('translate-x-full');
   slideOverPanel.classList.toggle('showing');
   if (slideMenuBg.classList.contains('bg-opacity-0')) {
@@ -102,10 +102,10 @@ function generate_new_map_html(has_new_map_to_generate, is_auth_user_host, host)
   }
 }
 
-function menu_html(worldName, worldOwner, loadLatestMapHTML, backupDate, load_latest_html, generate_new_html) {
+function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate_new_html) {
   htmlString = `
 
-  <div id="slide-out-menu" class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+  <div id="slide-out-menu" class="relative z-50 pointer-events-none" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
 
 
     <!--
