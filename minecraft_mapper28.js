@@ -265,7 +265,7 @@ function map_html(map_img_url) {
 		
 		<div id="menu-overlay-element" class="menu-overlay">
 
-			<div class="zoom-reset-zoom-container w-full pt-2 pb-4 px-4 flex justify-end">
+			<div class="zoom-reset-zoom-container w-full pt-2 pb-4 px-4 flex justify-start">
      		<div class="zoom-hugging-container" style="min-width: 150px;">
         	<div class="zoom-buttons flex flex-row">
 					  <button id="zoom-in-button" class="zoom-button text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-3 px-4 rounded mr-1" style="cursor: pointer; pointer-events: auto; width: 50%;">

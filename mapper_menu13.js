@@ -29,7 +29,7 @@ function configure_slide_over_menu() {
   const menuButton = document.getElementById('menu-button');
   const menuUnderlay = document.getElementById('menu-underlay');
   const tapCloseContainer = document.getElementById('tap-close-layer');
-  const slideMenuBg = document.getElementById('slide_menu-bg');
+  const slideMenuBg = document.getElementById('slide-menu-bg');
 
   exitMenuPanelButton.addEventListener('click', function() {
     toggleSlideMenu(slideOverPanel, slideMenuBg);
@@ -47,6 +47,9 @@ function configure_slide_over_menu() {
 }
 
 function toggleSlideMenu(slideOverPanel, slideMenuBg) {
+  const tapCloseLayer = document.getElementById('tap-close-layer');
+  tapCloseLayer.classList.toggle('pointer-events-auto');
+  
   slideOverPanel.classList.toggle('translate-x-full');
   slideOverPanel.classList.toggle('showing');
   if (slideMenuBg.classList.contains('bg-opacity-0')) {
@@ -115,7 +118,7 @@ function menu_html(worldName, worldOwner, loadLatestMapHTML, backupDate, load_la
         From: "opacity-100"
         To: "opacity-0"
     -->
-    <div id="slide_menu-bg" class="fixed inset-0 bg-gray-500 bg-opacity-0 transition-opacity ease-in-out duration-500"></div>
+    <div id="slide-menu-bg" class="fixed inset-0 bg-gray-500 bg-opacity-0 transition-bg-opacity ease-in-out duration-500"></div>
 
 
 
