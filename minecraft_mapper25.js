@@ -16,8 +16,9 @@ $(document).ready(function() {
 	const worldId = params.get("world_id");
 	const worldSlot = params.get("world_slot");
 	const worldOwnerUUID = params.get("world_owner_uuid");
+	const worldOwner = params.get("world_owner");
 
-	const mapperHasMinReq = bucketName != null && blobPath != null && worldName != null && worldId != null && worldSlot != null && worldOwnerUUID != null;
+	const mapperHasMinReq = bucketName != null && blobPath != null && worldName != null && worldId != null && worldSlot != null && worldOwnerUUID != null && worldOwner != null;
 
 	if (mapperHasMinReq) {
 		localStorage.setItem("map_bucket_name", bucketName)
@@ -29,6 +30,7 @@ $(document).ready(function() {
 		localStorage.setItem("selected_world_id", worldId);
 		localStorage.setItem("selected_world_slot", worldSlot);
 		localStorage.setItem("selected_world_owner_uuid", worldOwnerUUID);
+		localStorage.setItem("selected_world_owner_username", worldOwner);
 		continueToLoadMapper();
 	} else {
 		console.log('Mapper doesnt have min requirements so we should route user to home page, or auth page. TBD')
@@ -117,10 +119,7 @@ function fetchNewSignedMapImageULR(img_info) {
 	});
 }
 
-	// access_token = request_json["access_token"]
-	// username = request_json["username"]
-	// uuid = request_json["uuid"]
-	// worldId = request_json["worldId"]
+
 
 function get_auth_info() {
 	const access_token = localStorage.getItem('access_token');
@@ -245,8 +244,9 @@ function presentMapExplorer(signed_img_url) {
   $('body').append(map_explorer_element);
 
   // Configure then fade in the map explorer
-  configureMap()
+  configureMap();
   map_explorer_element.fadeIn(500);
+  add_slide_over_menu();
 
   //Check for new map to generate, reserved only for authenticated user w/ a matching uuid to the owner_uuid of the current world map
 	if (get_auth_info() != null) {
