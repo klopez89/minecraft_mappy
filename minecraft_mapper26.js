@@ -265,18 +265,6 @@ function map_html(map_img_url) {
 		
 		<div id="menu-overlay-element" class="menu-overlay">
 
-			<div class="relative">
-			  <div class="slide-up-container">
-			    <button class="absolute top-0 right-0 m-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" id="slide-button" style="cursor: pointer; pointer-events: auto; z-index: 30;">
-			      Slide Up
-			    </button>
-			    <div class="fixed bottom-0 left-0 right-0 bg-white p-4 transform transition-transform duration-500 ease-in-out translate-y-full" id="slide-up-div">
-			      <h1 class="text-lg font-bold mb-2">Slide Up Div</h1>
-			      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi commodo vehicula ante, id facilisis leo consectetur sit amet. Nullam euismod sapien ac bibendum fringilla.</p>
-			    </div>
-			  </div>
-			</div>
-
 			<div class="zoom-reset-zoom-container w-full pt-2 pb-4 px-4 flex justify-end">
      		<div class="zoom-hugging-container" style="min-width: 150px;">
         	<div class="zoom-buttons flex flex-row">
@@ -294,36 +282,6 @@ function map_html(map_img_url) {
 					</div>
         </div>
       </div>
-
-      <div class="menu-wrapper">
-
-				<div class="menu-button-container w-full pt-2 pb-2 px-4">
-
-					<div class="hidden-button flex justify-end">
-			      <button class="show-menu bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-			        Menu
-			      </button>
-			    </div>
-
-					<div class="world-info" style="color: white;">
-	    			<div class="world-name text-xl">World Name</div>
-				    <p class="hosted-by text-xs">hosted by klopez89</p>
-				    <p class="backup-date-label text-xs text-slate-400">Last backup: &nbsp;April 11, 2023</p>
-				  </div>
-
-				  <div class="button-container flex justify-end" style="display: flex; align-items: center;">
-			    	<button class="load-latest-map text-xs bg-yellow-500 hover:bg-yellow-700 text-white font-extrabold py-3 px-4 rounded mr-2">
-			      	Load Latest Map
-			    	</button>
-			    	<button class="generate-new-map text-xs bg-orange-500 hover:bg-orange-700 text-white font-extrabold py-3 px-4 rounded">
-			      	Generate New Map
-			    	</button>
-		  		</div>
-
-		    </div>
-
-	    </div>
-
 
 		</div>
 	</div>
