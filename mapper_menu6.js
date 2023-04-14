@@ -190,4 +190,5 @@ function menu_html(load_latest_html, generate_new_html) {
   </div>
 
   `;
+  return htmlString;
 }
