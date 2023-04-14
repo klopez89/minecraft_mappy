@@ -346,29 +346,6 @@ function configureMap() {
 	}, { passive: false });
 	
 	element.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel)
-
-	const menuWrapper = document.querySelector('.menu-wrapper');
-  const hiddenButton = document.querySelector('.hidden-button');
-  hiddenButton.addEventListener('click', () => {
-    menuWrapper.classList.toggle('hidden');
-    menuWrapper.classList.toggle('show-menu');
-	});
-
-  const slideButton = document.getElementById('slide-button');
-  const slideUpContainer = document.querySelector('.slide-up-container');
-  const slideUpDiv = document.getElementById('slide-up-div');
-  slideButton.addEventListener('click', () => {
-    const containerHeight = slideUpDiv.clientHeight;
-    slideUpContainer.style.height = containerHeight + 'px';
-    slideUpDiv.classList.toggle('translate-y-full');
-    slideButton.classList.toggle('absolute');
-    slideButton.classList.toggle('fixed');
-    slideButton.classList.toggle('top-0');
-    slideButton.classList.toggle('bottom-0');
-    if (slideButton.classList.contains('fixed')) {
-      slideUpContainer.style.height = 0;
-    }
-  });
 }
 
 function getImageExpirationTime() {
