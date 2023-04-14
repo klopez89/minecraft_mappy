@@ -17,6 +17,8 @@ function add_slide_over_menu() {
 
   const slideOutMenu_element = $($.parseHTML(slideOutMenuHTML));
 
+  console.log(`The slideOutMenu_element is: ${slideOutMenu_element}`);
+
   slideOutMenu_element.toggleClass('translate-x-full'); //sets the menu to be initially hidden
   $('body').append(slideOutMenu_element);
   configure_slide_over_menu();
