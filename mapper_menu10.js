@@ -13,7 +13,7 @@ function add_slide_over_menu() {
   const loadLatestMapHTML = load_latest_map_html(has_newer_map_to_load);
   const generateNewMapHTML = generate_new_map_html(has_new_map_to_generate, is_auth_user_host, host);
 
-  const slideOutMenuHTML = menu_html(loadLatestMapHTML, generateNewMapHTML);
+  const slideOutMenuHTML = menu_html(worldName, worldOwner, loadLatestMapHTML, backupDate, generateNewMapHTML);
 
   const slideOutMenu_element = $($.parseHTML(slideOutMenuHTML));
   const slideOutPanel_element = slideOutMenu_element.find('#slide-over-panel');
@@ -31,21 +31,28 @@ function configure_slide_over_menu() {
   const tapCloseContainer = document.getElementById('tap-close-layer');
 
   exitMenuPanelButton.addEventListener('click', function() {
-    slideOverPanel.classList.toggle('translate-x-full');
-    slideOverPanel.classList.toggle('showing');
+    toggleSlideMenu(slideOverPanel);
   });
 
   menuButton.addEventListener('click', function() {
-    slideOverPanel.classList.toggle('translate-x-full');
-    slideOverPanel.classList.toggle('showing');
+    toggleSlideMenu(slideOverPanel);
   });
 
   tapCloseContainer.addEventListener('click', function(event) {
     if (event.target === tapCloseContainer && slideOverPanel.classList.contains('showing')) {
-        slideOverPanel.classList.toggle('translate-x-full');
-        slideOverPanel.classList.toggle('showing');
+      toggleSlideMenu(slideOverPanel);
     }
   });
+}
+
+function toggleSlideMenu(slideOverPanel) {
+  slideOverPanel.classList.toggle('translate-x-full');
+  slideOverPanel.classList.toggle('showing');
+  if (slideOverPanel.classList.contains('bg-opacity-0')) {
+    slideOverPanel.classList.replace('bg-opacity-0','bg-opacity-80');
+  } else {
+    slideOverPanel.classList.replace('bg-opacity-80','bg-opacity-0');
+  }
 }
 
 
@@ -91,7 +98,7 @@ function generate_new_map_html(has_new_map_to_generate, is_auth_user_host, host)
   }
 }
 
-function menu_html(load_latest_html, generate_new_html) {
+function menu_html(worldName, worldOwner, loadLatestMapHTML, backupDate, load_latest_html, generate_new_html) {
   htmlString = `
 
   <div id="slide-out-menu" class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
@@ -107,7 +114,7 @@ function menu_html(load_latest_html, generate_new_html) {
         From: "opacity-100"
         To: "opacity-0"
     -->
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-in-out duration-500"></div>
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-0 transition-opacity ease-in-out duration-500"></div>
 
 
 
@@ -135,9 +142,9 @@ function menu_html(load_latest_html, generate_new_html) {
                 <div class="flex items-start justify-between">
 
                   <div class="world-info">
-                    <div class="world-name text-slate-300 text-xl">World Name</div>
-                    <p class="hosted-by small-mapper-font text-slate-300 mt-1">hosted by klopez89</p>
-                    <p class="backup-date-label text-slate-500 mt-1">Last backup: &nbsp;April 11, 2023</p>
+                    <div class="world-name text-slate-300 text-xl">${worldName}</div>
+                    <p class="hosted-by small-mapper-font text-slate-300 mt-1">hosted by ${worldOwner}</p>
+                    <p class="backup-date-label text-slate-500 mt-1">Last backup: &nbsp;${backupDate}</p>
                   </div>
 
 
