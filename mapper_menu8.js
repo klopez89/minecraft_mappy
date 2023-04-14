@@ -32,10 +32,12 @@ function configure_slide_over_menu() {
 
   exitMenuPanelButton.addEventListener('click', function() {
     slideOverPanel.classList.toggle('translate-x-full');
+    slideOverPanel.classList.toggle('showing');
   });
 
   menuButton.addEventListener('click', function() {
     slideOverPanel.classList.toggle('translate-x-full');
+    slideOverPanel.classList.toggle('showing');
   });
 
   tapCloseContainer.addEventListener('click', function(event) {
@@ -92,7 +94,7 @@ function generate_new_map_html(has_new_map_to_generate, is_auth_user_host, host)
 function menu_html(load_latest_html, generate_new_html) {
   htmlString = `
 
-  <div id="slide-out-menu" class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+  <div id="slide-out-menu" class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
 
 
     <!--
