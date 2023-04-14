@@ -129,7 +129,7 @@ function menu_html(load_latest_html, generate_new_html) {
 
 
 
-          <div id="slide-over-panel" class="pointer-events-auto w-screen max-w-md transform transition ease-in-out duration-500 sm:duration-700 showing">
+          <div id="slide-over-panel" class="pointer-events-auto w-screen max-w-md transform transition ease-in-out duration-500 sm:duration-700">
             <div class="slider-over-bg flex h-full flex-col overflow-y-scroll py-6 shadow-xl">
               <div class="px-4 sm:px-6 mb-2">
                 <div class="flex items-start justify-between">
