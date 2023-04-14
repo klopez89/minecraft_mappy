@@ -20,6 +20,30 @@ function add_slide_over_menu() {
 
   slideOutMenu_element.classList.toggle('translate-x-full');
   document.body.appendChild(slideOutMenu_element);
+  configure_slide_over_menu();
+}
+
+function configure_slide_over_menu() {
+  const exitMenuPanelButton = document.getElementById('exit-menu-button');
+  const slideOverPanel = document.getElementById('slide-over-panel');
+  const menuButton = document.getElementById('menu-button');
+  const menuUnderlay = document.getElementById('menu-underlay');
+  const tapCloseContainer = document.getElementById('tap-close-layer');
+
+  exitMenuPanelButton.addEventListener('click', function() {
+    slideOverPanel.classList.toggle('translate-x-full');
+  });
+
+  menuButton.addEventListener('click', function() {
+    slideOverPanel.classList.toggle('translate-x-full');
+  });
+
+  tapCloseContainer.addEventListener('click', function(event) {
+    if (event.target === tapCloseContainer && slideOverPanel.classList.contains('showing')) {
+        slideOverPanel.classList.toggle('translate-x-full');
+        slideOverPanel.classList.toggle('showing');
+    }
+  });
 }
 
 
