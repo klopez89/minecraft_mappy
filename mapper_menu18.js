@@ -30,6 +30,8 @@ function configure_slide_over_menu() {
   const loadLatestMapButton = document.getElementById('load-latest-button');
   const genMapButton = document.getElementById('gen-map-button');
 
+
+
   exitMenuPanelButton.addEventListener('click', function() {
     toggleSlideMenu(slideOverPanel, slideMenuBg);
   });
@@ -48,9 +50,25 @@ function configure_slide_over_menu() {
     redirectToLatestMap();
   });
 
-  genMapButton.addEventListener('click', function(event) {
+  genMapButton.addEventListener('click', function() {
+    genMapButton.disabled = true;
+    genMapButton.innerHTML = 'Generating <i class="fa fa-spinner fa-spin"></i>';
+    genMapButton.classList.remove('hover:bg-orange-700');
     triggerMapGeneration();
   });
+}
+
+function revertGenMapButtonState() {
+  const button = document.getElementById('gen-map-button');
+  button.disabled = false;
+  button.innerHTML = 'Generate New Map';
+  button.classList.add('hover:bg-orange-700');
+}
+
+function changeGenMapButtonStateToSuccess() {
+  const button = document.getElementById('gen-map-button');
+  button.innerHTML = 'Generated!';
+  button.classList.replace('bg-orange-500','bg-green-700');
 }
 
 function triggerMapGeneration() {
@@ -77,10 +95,14 @@ function triggerMapGeneration() {
     success: function(response) {
       console.log('World map generation successful:', response);
       const new_blob_path = response["blob_path"];
-      redirectToLatestMap(new_blob_path);
+      changeGenMapButtonStateToSuccess();
+      setTimeout(function() {
+        redirectToLatestMap(new_blob_path);
+      }, 500);
     },
     error: function(xhr, status, error) {
       console.error('World map fetch failed:', error);
+      revertGenMapButtonState();
     }
   });
 }
