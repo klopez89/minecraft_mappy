@@ -111,6 +111,10 @@ function fetchNewSignedMapImageULR(img_info) {
 				localStorage.setItem('latest_blob_path', latest_blob_path);
 				localStorage.setItem('latest_backup_id',latest_backup_id);
 				localStorage.setItem('latest_backup_date', latest_backup_date);
+			} else {
+				localStorage.removeItem('latest_blob_path');
+				localStorage.removeItem('latest_backup_id');
+				localStorage.removeItem('latest_backup_date');
 			}
 		},
 		error: function(xhr, status, error) {
@@ -213,7 +217,7 @@ function checkForNewBackup() {
 			const latest_backup_id = response["latest_backup_id"];
 			const latest_backup_date = response["latest_backup_date"];
 
-			const stored_latest_backup_id = localStorage.getItem('latest_backup_id');
+			const stored_latest_backup_id = localStorage.getItem('latest_backup_id'); // comes from the context of checking for a newer map
 			const stored_current_backup_id = localStorage.getItem('map_backup_id');
 
 			const backup_id_to_compare_to = stored_latest_backup_id != null ? stored_latest_backup_id : stored_current_backup_id;

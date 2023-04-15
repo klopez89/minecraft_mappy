@@ -4,14 +4,11 @@ function add_slide_over_menu() {
   const worldName = localStorage.getItem('selected_world_name');
   const worldOwner = localStorage.getItem('selected_world_owner_username');
   const backupDate = localStorage.getItem('map_backup_date');
+  const authUser = localStorage.getItem('username');
+  const is_auth_user_host = worldOwner === authUser;
 
-  const has_newer_map_to_load = false;
-  const has_new_map_to_generate = false;
-  const is_auth_user_host = false;
-  const host = "";
-
-  const loadLatestMapHTML = load_latest_map_html(has_newer_map_to_load);
-  const generateNewMapHTML = generate_new_map_html(has_new_map_to_generate, is_auth_user_host, host);
+  const loadLatestMapHTML = load_latest_map_html();
+  const generateNewMapHTML = generate_new_map_html(is_auth_user_host, worldOwner);
 
   const slideOutMenuHTML = menu_html(worldName, worldOwner, backupDate, loadLatestMapHTML, generateNewMapHTML);
 
@@ -59,47 +56,49 @@ function toggleSlideMenu(slideOverPanel, slideMenuBg) {
   }
 }
 
-
-function load_latest_map_html(has_newer_map_to_load) {
-  if (has_newer_map_to_load) {
-    const latestBlobPath = localStorage.getItem('latest_blob_path');
-    const latestBackupDate = localStorage.getItem('map_backup_date');
-    return `
-      <button id="load-latest-button" latestBlobPath="${latestBlobPath}" class="block load-latest-map text-xs bg-yellow-500 hover:bg-yellow-700 text-white font-extrabold py-3 px-4 rounded mr-2 mb-1 mt-8">
-        Load Latest Map
-      </button>
-      <p class="small-mapper-font text-slate-300 mb-5 text-slate-500 pl-1">Latest map from ${latestBackupDate} is available.</p>
-                
-    `;
-  } else {
-    return `
-      <button id="load-latest-button" class="block load-latest-map text-xs bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mr-2 mb-1 mt-8">
-        Load Latest Map
-      </button>
-      <p class="small-mapper-font text-slate-300 mb-5 text-slate-500 pl-1">No new map found. Refresh page to check again.</p>    
-    `;
-  }
+function enable_load_latest_map() {
+  // Modify the button
+  const loadLatestMapButton = document.getElementById('load-latest-button');
+  loadLatestMapButton.classList.replace('bg-gray-500', 'bg-yellow-500');
+  loadLatestMapButton.classList.replace('text-gray-400', 'text-white');
+  loadLatestMapButton.classList.add('hover:bg-yellow-700');
+  loadLatestMapButton.disabled = true;
+  // Modify the text
+  const latestBackupDate = localStorage.getItem('map_backup_date');
+  latestBackupDate.textContent = `Latest map from ${latestBackupDate} is available.`;
 }
 
-function generate_new_map_html(has_new_map_to_generate, is_auth_user_host, host) {
-  if (has_new_map_to_generate) {
-    return `
-      <button id="gen-map-button" class="block generate-new-map text-xs bg-orange-500 hover:bg-orange-700 text-white font-extrabold py-3 px-4 rounded mb-1">
-        Generate New Map
-      </button>
-      <p class="small-mapper-font text-slate-300 mb-0 text-slate-500 pl-1">If new backup is found, world host can generate a new map.</p>
-    `;
-  } else {
-    const no_new_backup_txt = 'No new backup found. Refresh page to check again.';
-    const not_authorized_txt = `Only ${host} can generate a new map, if newer backup is available.`;
-    const subtext = is_auth_user_host ? no_new_backup_txt : not_authorized_txt;
-    return `
-      <button id="gen-map-button" class="block generate-new-map text-xs bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mb-1">
-        Generate New Map
-      </button>
-      <p class="small-mapper-font text-slate-300 mb-0 text-slate-500 pl-1">${subtext}</p>
-    `;
-  }
+function load_latest_map_html() {
+  return `
+    <button id="load-latest-button" class="block load-latest-map text-xs bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mr-2 mb-1 mt-8" disabled>
+      Load Latest Map
+    </button>
+    <p class="small-mapper-font text-slate-300 mb-5 text-slate-500 pl-1">No new map found. Refresh page to check again.</p>    
+  `;
+}
+
+function enable_generate_new(latestBackupDate) {
+  // Modify the button
+  const loadLatestMapButton = document.getElementById('gen-map-button');
+  loadLatestMapButton.classList.replace('bg-gray-500', 'bg-orange-500');
+  loadLatestMapButton.classList.replace('text-gray-400', 'text-white');
+  loadLatestMapButton.classList.add('hover:bg-orange-700');
+  loadLatestMapButton.disabled = true;
+  // Modify the text
+  const latestBackupTextElement = document.getElementById('gen-map-button');
+  latestBackupTextElement.textContent = `New map can be generated w/ latest backup from: ${latestBackupDate}.`;
+}
+
+function generate_new_map_html(is_auth_user_host, host) {
+  const no_new_backup_txt = 'No new backup found. Refresh page to check again.';
+  const not_authorized_txt = `Only ${host} can generate a new map, if newer backup is available.`;
+  const subtext = is_auth_user_host ? no_new_backup_txt : not_authorized_txt;
+  return `
+    <button id="gen-map-button" class="block generate-new-map text-xs bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mb-1">
+      Generate New Map
+    </button>
+    <p class="small-mapper-font text-slate-300 mb-0 text-slate-500 pl-1">${subtext}</p>
+  `;
 }
 
 function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate_new_html) {
