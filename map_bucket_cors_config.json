@@ -1,0 +1,8 @@
+[
+    {
+      "origin": ["https://www.whollyaigame.com/mapper","https://www.whollyaigame.com"],
+      "method": ["GET"],
+      "responseHeader": ["Content-Type", "Accept-Ranges", "Content-Range", "Content-Encoding", "Content-Length","Access-Control-Allow-Origin","Access-Control-Allow-Methods","Range"],
+      "maxAgeSeconds": 3600
+    }
+]

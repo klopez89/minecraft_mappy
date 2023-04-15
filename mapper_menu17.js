@@ -125,8 +125,9 @@ function enable_load_latest_map() {
   loadLatestMapButton.classList.add('hover:bg-yellow-700');
   loadLatestMapButton.disabled = true;
   // Modify the text
+  const loadLatestTextElement = document.getElementById('load-latest-text');
   const latestBackupDate = localStorage.getItem('latest_backup_date');
-  latestBackupDate.textContent = `Latest map from ${latestBackupDate} is available.`;
+  loadLatestTextElement.textContent = `Latest map from ${latestBackupDate} is available.`;
 }
 
 function load_latest_map_html() {
@@ -134,7 +135,7 @@ function load_latest_map_html() {
     <button id="load-latest-button" class="block load-latest-map text-xs bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mr-2 mb-1 mt-8" disabled>
       Load Latest Map
     </button>
-    <p class="small-mapper-font text-slate-300 mb-5 text-slate-500 pl-1">No new map found. Refresh page to check again.</p>    
+    <p id="load-latest-text" class="small-mapper-font text-slate-300 mb-5 text-slate-500 pl-1">No new map found. Refresh page to check again.</p>    
   `;
 }
 
@@ -146,7 +147,7 @@ function enable_generate_new(latestBackupDate) {
   genMapButton.classList.add('hover:bg-orange-700');
   genMapButton.disabled = true;
   // Modify the text
-  const latestBackupTextElement = document.getElementById('gen-map-button');
+  const latestBackupTextElement = document.getElementById('gen-map-text');
   latestBackupTextElement.textContent = `New map can be generated w/ latest backup from: ${latestBackupDate}.`;
 }
 
@@ -158,7 +159,7 @@ function generate_new_map_html(is_auth_user_host, host) {
     <button id="gen-map-button" class="block generate-new-map text-xs bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mb-1">
       Generate New Map
     </button>
-    <p class="small-mapper-font text-slate-300 mb-0 text-slate-500 pl-1">${subtext}</p>
+    <p id="gen-map-text" class="small-mapper-font text-slate-300 mb-0 text-slate-500 pl-1">${subtext}</p>
   `;
 }
 
