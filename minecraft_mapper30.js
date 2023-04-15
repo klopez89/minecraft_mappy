@@ -111,6 +111,7 @@ function fetchNewSignedMapImageULR(img_info) {
 				localStorage.setItem('latest_blob_path', latest_blob_path);
 				localStorage.setItem('latest_backup_id',latest_backup_id);
 				localStorage.setItem('latest_backup_date', latest_backup_date);
+				enable_load_latest_map();
 			} else {
 				localStorage.removeItem('latest_blob_path');
 				localStorage.removeItem('latest_backup_id');
@@ -226,6 +227,7 @@ function checkForNewBackup() {
 				console.log('We already have the latest backup map');
 			} else {
 				console.log(`We can generate a newer world map, latest_backup_date: ${latest_backup_date}, so show generate button`);
+				enable_generate_new(latest_backup_date);
 			}
 		},
 		error: function(xhr, status, error) {

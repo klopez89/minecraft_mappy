@@ -27,6 +27,8 @@ function configure_slide_over_menu() {
   const menuUnderlay = document.getElementById('menu-underlay');
   const tapCloseContainer = document.getElementById('tap-close-layer');
   const slideMenuBg = document.getElementById('slide-menu-bg');
+  const loadLatestMapButton = document.getElementById('load-latest-button');
+  const genMapButton = document.getElementById('gen-map-button');
 
   exitMenuPanelButton.addEventListener('click', function() {
     toggleSlideMenu(slideOverPanel, slideMenuBg);
@@ -41,7 +43,66 @@ function configure_slide_over_menu() {
       toggleSlideMenu(slideOverPanel, slideMenuBg);
     }
   });
+
+  loadLatestMapButton.addEventListener('click', function(event) {
+    redirectToLatestMap();
+  });
+
+  genMapButton.addEventListener('click', function(event) {
+    triggerMapGeneration();
+  });
 }
+
+function triggerMapGeneration() {
+  let uuid = localStorage.getItem('uuid');
+  let username = localStorage.getItem('username');
+  let activeSlot = localStorage.getItem("selected_world_slot");
+  let worldId = localStorage.getItem("selected_world_id");
+  let accessToken = localStorage.getItem('access_token');
+
+  world_info = {
+    'uuid': uuid,
+    'username': username,
+    'active_slot': activeSlot,
+    'world_id': worldId,
+    'access_token': accessToken
+  }
+
+  $.ajax({
+    url: 'https://minecraftmappy-5k3b37mzsa-ue.a.run.app/world/map/generate',
+    method: 'POST',
+    data: JSON.stringify(world_info),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(response) {
+      console.log('World map generation successful:', response);
+      const new_blob_path = response["blob_path"];
+      redirectToLatestMap(new_blob_path);
+    },
+    error: function(xhr, status, error) {
+      console.error('World map fetch failed:', error);
+    }
+  });
+}
+
+function redirectToLatestMap(new_blob_path) {
+  const latest_blob_path = localStorage.getItem('latest_blob_path');
+  // Get the current URL
+  const currentUrl = new URL(window.location.href);
+
+  // Get the search params from the URL
+  const searchParams = new URLSearchParams(currentUrl.search);
+
+  // Update the "blob_path" parameter to a new value
+  searchParams.set('blob_path', '');
+
+  // Set the new search params on the URL
+  currentUrl.search = searchParams.toString();
+
+  // Reload the page with the updated URL
+  window.location.href = currentUrl.href;
+}
+
 
 function toggleSlideMenu(slideOverPanel, slideMenuBg) {
   const tapCloseLayer = document.getElementById('tap-close-layer');
@@ -64,7 +125,7 @@ function enable_load_latest_map() {
   loadLatestMapButton.classList.add('hover:bg-yellow-700');
   loadLatestMapButton.disabled = true;
   // Modify the text
-  const latestBackupDate = localStorage.getItem('map_backup_date');
+  const latestBackupDate = localStorage.getItem('latest_backup_date');
   latestBackupDate.textContent = `Latest map from ${latestBackupDate} is available.`;
 }
 
@@ -79,11 +140,11 @@ function load_latest_map_html() {
 
 function enable_generate_new(latestBackupDate) {
   // Modify the button
-  const loadLatestMapButton = document.getElementById('gen-map-button');
-  loadLatestMapButton.classList.replace('bg-gray-500', 'bg-orange-500');
-  loadLatestMapButton.classList.replace('text-gray-400', 'text-white');
-  loadLatestMapButton.classList.add('hover:bg-orange-700');
-  loadLatestMapButton.disabled = true;
+  const genMapButton = document.getElementById('gen-map-button');
+  genMapButton.classList.replace('bg-gray-500', 'bg-orange-500');
+  genMapButton.classList.replace('text-gray-400', 'text-white');
+  genMapButton.classList.add('hover:bg-orange-700');
+  genMapButton.disabled = true;
   // Modify the text
   const latestBackupTextElement = document.getElementById('gen-map-button');
   latestBackupTextElement.textContent = `New map can be generated w/ latest backup from: ${latestBackupDate}.`;
