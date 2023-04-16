@@ -192,10 +192,10 @@ function enable_load_latest_map() {
 
 function load_latest_map_html() {
   return `
-    <button id="load-latest-button" class="block load-latest-map text-xs bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mr-2 mb-1 mt-8" disabled>
+    <button id="load-latest-button" class="block load-latest-map text-sm bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mr-2 mb-1 mt-8" disabled>
       Load Latest Map
     </button>
-    <p id="load-latest-text" class="small-mapper-font text-slate-300 mb-5 text-slate-500 pl-1">No new map found. Refresh page to check again.</p>    
+    <p id="load-latest-text" class="text-xs text-slate-400 mb-5 pl-1">No new map found. Refresh page to check again.</p>    
   `;
 }
 
@@ -216,10 +216,10 @@ function generate_new_map_html(is_auth_user_host, host) {
   const not_authorized_txt = `Only ${host} can generate a new map, if newer backup is available.`;
   const subtext = is_auth_user_host ? no_new_backup_txt : not_authorized_txt;
   return `
-    <button id="gen-map-button" class="block generate-new-map text-xs bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mb-1" disabled>
+    <button id="gen-map-button" class="block generate-new-map text-sm bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mb-1" disabled>
       Generate New Map
     </button>
-    <p id="gen-map-text" class="small-mapper-font text-slate-300 mb-0 text-slate-500 pl-1">${subtext}</p>
+    <p id="gen-map-text" class="text-xs text-slate-400 mb-0 pl-1">${subtext}</p>
   `;
 }
 
@@ -267,9 +267,9 @@ function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate
                 <div class="flex items-start justify-between">
 
                   <div class="world-info">
-                    <div class="world-name text-slate-300 text-xl">${worldName}</div>
-                    <p class="hosted-by small-mapper-font text-slate-300 mt-1">hosted by ${worldOwner}</p>
-                    <p class="backup-date-label text-slate-500 mt-1">Last backup: &nbsp;${backupDate}</p>
+                    <div class="world-name text-slate-300 text-2xl">${worldName}</div>
+                    <p class="hosted-by text-xs text-slate-300 mt-1">hosted by ${worldOwner}</p>
+                    <p class="backup-date-label text-slate-400 mt-1">Last backup: &nbsp;${backupDate}</p>
                   </div>
 
 
@@ -302,7 +302,7 @@ function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate
                       <img class="max-h-16" src="https://storage.googleapis.com/minecraft_maps/bnw_mappy_logo.png" alt="Image description">
                     </div>
                     <div class="flex justify-center">
-                      <p class="small-mapper-font text-slate-300 mb-0 text-slate-500 pl-1">Minecraft Mapper, 2023</p>
+                      <p class="text-xs text-slate-400 mb-0 pl-1">Minecraft Mapper, 2023</p>
                     </div>
                   </div>
                 </div>
@@ -310,7 +310,7 @@ function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate
               </div>
 
               <div class="mt-6 flex justify-end px-5">
-                <button class="generate-new-map text-xs bg-blue-500 hover:bg-blue-700 text-white font-extrabold py-3 px-4 rounded">
+                <button class="generate-new-map text-sm bg-blue-500 hover:bg-blue-700 text-white font-extrabold py-3 px-4 rounded">
                   Sign in with Microsoft
                 </button>
               </div>
