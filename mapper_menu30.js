@@ -86,7 +86,7 @@ function configureAuthButton() {
       location.reload();
     } else {
       // sign them in
-      console.log('Time to sign them in by taking them to the current auth page');
+      window.location.href = "https://www.whollyaigame.com/minecraftauth"
     }
   });
 }
