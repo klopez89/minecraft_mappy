@@ -75,6 +75,12 @@ function checkForMinecraftAuthInfo() {
 	}
 }
 
+function clearAuthInfo() {
+	localStorage.removeItem('username');
+	localStorage.removeItem('uuid');
+	localStorage.removeItem('access_token');
+}
+
 // minecraft_auth_info = checkForMinecraftAuthInfo()
 
 // if (minecraft_auth_info != null) {
