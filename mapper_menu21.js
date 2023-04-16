@@ -177,7 +177,7 @@ function generate_new_map_html(is_auth_user_host, host) {
   const not_authorized_txt = `Only ${host} can generate a new map, if newer backup is available.`;
   const subtext = is_auth_user_host ? no_new_backup_txt : not_authorized_txt;
   return `
-    <button id="gen-map-button" class="block generate-new-map text-xs bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mb-1">
+    <button id="gen-map-button" class="block generate-new-map text-xs bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mb-1" disabled>
       Generate New Map
     </button>
     <p id="gen-map-text" class="small-mapper-font text-slate-300 mb-0 text-slate-500 pl-1">${subtext}</p>
