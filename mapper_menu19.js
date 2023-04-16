@@ -145,7 +145,7 @@ function enable_load_latest_map() {
   loadLatestMapButton.classList.replace('bg-gray-500', 'bg-yellow-500');
   loadLatestMapButton.classList.replace('text-gray-400', 'text-white');
   loadLatestMapButton.classList.add('hover:bg-yellow-700');
-  loadLatestMapButton.disabled = true;
+  loadLatestMapButton.disabled = false;
   // Modify the text
   const loadLatestTextElement = document.getElementById('load-latest-text');
   const latestBackupDate = localStorage.getItem('latest_backup_date');
@@ -167,7 +167,7 @@ function enable_generate_new(latestBackupDate) {
   genMapButton.classList.replace('bg-gray-500', 'bg-orange-500');
   genMapButton.classList.replace('text-gray-400', 'text-white');
   genMapButton.classList.add('hover:bg-orange-700');
-  genMapButton.disabled = true;
+  genMapButton.disabled = false;
   // Modify the text
   const latestBackupTextElement = document.getElementById('gen-map-text');
   latestBackupTextElement.textContent = `New map can be generated w/ latest backup from: ${latestBackupDate}.`;
