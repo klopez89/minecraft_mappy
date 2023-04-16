@@ -47,7 +47,13 @@ function configure_slide_over_menu() {
   });
 
   loadLatestMapButton.addEventListener('click', function(event) {
-    redirectToLatestMap();
+    loadLatestMapButton.disabled = true;
+    loadLatestMapButton.innerHTML = 'Loading <i class="fa fa-spinner fa-spin"></i>';
+    loadLatestMapButton.classList.remove('hover:bg-yellow-700');
+    latest_blob_path = localStorage.getItem('latest_blob_path');
+    setTimeout(function() {
+      redirectToLatestMap(latest_blob_path);
+    }, 500);
   });
 
   genMapButton.addEventListener('click', function() {
