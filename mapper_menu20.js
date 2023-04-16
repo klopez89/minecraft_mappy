@@ -108,7 +108,6 @@ function triggerMapGeneration() {
 }
 
 function redirectToLatestMap(new_blob_path) {
-  const latest_blob_path = localStorage.getItem('latest_blob_path');
   // Get the current URL
   const currentUrl = new URL(window.location.href);
 
@@ -116,7 +115,7 @@ function redirectToLatestMap(new_blob_path) {
   const searchParams = new URLSearchParams(currentUrl.search);
 
   // Update the "blob_path" parameter to a new value
-  searchParams.set('blob_path', '');
+  searchParams.set('blob_path', new_blob_path);
 
   // Set the new search params on the URL
   currentUrl.search = searchParams.toString();
