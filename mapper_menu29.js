@@ -76,6 +76,19 @@ function configureAuthButton() {
     authButton.textContent = 'Sign in';
     authButton.setAttribute('signedIn', 'false');
   }
+
+  authButton.addEventListener('click', function() {
+    authButton.disabled = true;
+
+    if (authButton.getAttribute('signedIn') === 'true') {
+      // sign them out
+      clearAuthInfo();
+      location.reload();
+    } else {
+      // sign them in
+      console.log('Time to sign them in by taking them to the current auth page');
+    }
+  });
 }
 
 function dismissSlideOutMenu() {
