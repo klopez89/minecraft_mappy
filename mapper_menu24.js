@@ -53,6 +53,7 @@ function configure_slide_over_menu() {
     latest_blob_path = localStorage.getItem('latest_blob_path');
     setTimeout(function() {
       revertLoadLatestMapButtonState();
+      dismissSlideOutMenu();
       redirectToLatestMap(latest_blob_path);
     }, 500);
   });
@@ -63,6 +64,10 @@ function configure_slide_over_menu() {
     genMapButton.classList.remove('hover:bg-orange-700');
     triggerMapGeneration();
   });
+}
+
+function dismissSlideOutMenu() {
+  document.getElementById('tap-close-layer').click();
 }
 
 function revertLoadLatestMapButtonState() {
@@ -83,6 +88,24 @@ function changeGenMapButtonStateToSuccess() {
   const button = document.getElementById('gen-map-button');
   button.innerHTML = 'Generated!';
   button.classList.replace('bg-orange-500','bg-green-700');
+}
+
+function disableGenMapButton() {
+  const button = document.getElementById('gen-map-button');
+  const textElement = document.getElementById('gen-map-text');
+ 
+  button.disabled = false;
+  button.innerHTML = 'Generate New Map';
+  button.classList.replace('bg-green-700','bg-gray-500');
+  button.classList.replace('text-white', 'text-gray-400');
+
+  const worldOwner = localStorage.getItem('selected_world_owner_username');
+  const authUser = localStorage.getItem('username');
+  const is_auth_user_host = worldOwner === authUser;
+  const no_new_backup_txt = 'No new backup found. Refresh page to check again.';
+  const not_authorized_txt = `Only ${worldOwner} can generate a new map, if newer backup is available.`;
+  const subtext = is_auth_user_host ? no_new_backup_txt : not_authorized_txt;
+  textElement.textContent = subtext;
 }
 
 function triggerMapGeneration() {
@@ -111,6 +134,8 @@ function triggerMapGeneration() {
       const new_blob_path = response["blob_path"];
       changeGenMapButtonStateToSuccess();
       setTimeout(function() {
+        disableGenMapButton();
+        dismissSlideOutMenu();
         redirectToLatestMap(new_blob_path);
       }, 500);
     },
