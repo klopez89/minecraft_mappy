@@ -18,6 +18,7 @@ function add_slide_over_menu() {
   slideOutPanel_element.toggleClass('translate-x-full'); //sets the panel of the menu to be initially hidden
   $('body').append(slideOutMenu_element);
   configure_slide_over_menu();
+  configureAuthButton();
 }
 
 function configure_slide_over_menu() {
@@ -29,8 +30,6 @@ function configure_slide_over_menu() {
   const slideMenuBg = document.getElementById('slide-menu-bg');
   const loadLatestMapButton = document.getElementById('load-latest-button');
   const genMapButton = document.getElementById('gen-map-button');
-
-
 
   exitMenuPanelButton.addEventListener('click', function() {
     toggleSlideMenu(slideOverPanel, slideMenuBg);
@@ -64,6 +63,19 @@ function configure_slide_over_menu() {
     genMapButton.classList.remove('hover:bg-orange-700');
     triggerMapGeneration();
   });
+}
+
+function configureAuthButton() {
+  const minecraft_auth_info = checkForMinecraftAuthInfo();
+  const authButton = document.getElementById('auth-button');
+
+  if (minecraft_auth_info != null) {
+    authButton.textContent = 'Sign out';
+    authButton.setAttribute('signedIn', 'true');
+  } else {
+    authButton.textContent = 'Sign in';
+    authButton.setAttribute('signedIn', 'false');
+  }
 }
 
 function dismissSlideOutMenu() {
@@ -310,7 +322,7 @@ function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate
               </div>
 
               <div class="mt-6 flex justify-end px-5">
-                <button class="generate-new-map text-sm bg-blue-500 hover:bg-blue-700 text-white font-extrabold py-3 px-4 rounded">
+                <button id="auth-button" class="generate-new-map text-sm bg-green-700 hover:bg-green-900 text-white font-extrabold py-3 px-4 rounded">
                   Sign in with Microsoft
                 </button>
               </div>
