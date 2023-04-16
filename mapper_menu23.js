@@ -52,6 +52,7 @@ function configure_slide_over_menu() {
     loadLatestMapButton.classList.remove('hover:bg-yellow-700');
     latest_blob_path = localStorage.getItem('latest_blob_path');
     setTimeout(function() {
+      revertLoadLatestMapButtonState();
       redirectToLatestMap(latest_blob_path);
     }, 500);
   });
@@ -62,6 +63,13 @@ function configure_slide_over_menu() {
     genMapButton.classList.remove('hover:bg-orange-700');
     triggerMapGeneration();
   });
+}
+
+function revertLoadLatestMapButtonState() {
+  const button = document.getElementById('load-latest-button');
+  button.disabled = false;
+  button.innerHTML = 'Load Latest Map';
+  button.classList.add('hover:bg-yellow-700');
 }
 
 function revertGenMapButtonState() {
