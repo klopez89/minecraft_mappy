@@ -52,8 +52,6 @@ function configure_slide_over_menu() {
     loadLatestMapButton.classList.remove('hover:bg-yellow-700');
     latest_blob_path = localStorage.getItem('latest_blob_path');
     setTimeout(function() {
-      revertLoadLatestMapButtonState();
-      dismissSlideOutMenu();
       redirectToLatestMap(latest_blob_path);
     }, 500);
   });
@@ -134,8 +132,6 @@ function triggerMapGeneration() {
       const new_blob_path = response["blob_path"];
       changeGenMapButtonStateToSuccess();
       setTimeout(function() {
-        disableGenMapButton();
-        dismissSlideOutMenu();
         redirectToLatestMap(new_blob_path);
       }, 500);
     },
