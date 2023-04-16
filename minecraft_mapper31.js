@@ -37,6 +37,14 @@ $(document).ready(function() {
 	}
 });
 
+// Forces a page refresh when user hits back in browser. This forces the local sotrage data to be accurate for that map context
+window.onpageshow = function(event) {
+  if (event.persisted) {
+    location.reload(true);
+  }
+};
+
+
 function continueToLoadMapper() {
 	requestData = {
 		'bucket_name': localStorage.getItem('map_bucket_name'),
