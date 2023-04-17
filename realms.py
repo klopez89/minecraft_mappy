@@ -106,7 +106,6 @@ def download_extract_backup(url):
 	return folder_path
 
 
-
 def check_latest_map_blob_path(bucket_name, referred_blob_path):
 	blob_directory = referred_blob_path.split('/')[0]
 
@@ -143,6 +142,26 @@ def check_latest_map_blob_path(bucket_name, referred_blob_path):
 		'latest_blob_path': latest_blob_path
 	}
 
-# print(f'The sorted_blobs: {sorted_blobs}')
-# Return the blob path of the most recently modified blob
-# return sorted_blobs[0].name
+
+def get_latest_maps(world_ids):
+    storage_client = storage.Client()
+    bucket_name = "minecraft_maps"
+    bucket = storage_client.bucket(bucket_name)
+    latest_maps = {}
+    
+    for world_id in world_ids:
+        blob_prefix = f"{world_id}/latest_map"
+        blobs = bucket.list_blobs(prefix=blob_prefix)
+        latest_blob = None
+        for blob in blobs:
+            if latest_blob is None or blob.updated > latest_blob.updated:
+                latest_blob = blob
+        if latest_blob is not None:
+            latest_maps[world_id] = latest_blob.path
+        else:
+            latest_maps[world_id] = None
+    
+    return latest_maps
+
+
+

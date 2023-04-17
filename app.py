@@ -12,7 +12,7 @@ from datetime import datetime
 from pytz import timezone
 
 from login import get_microsoft_login_data, get_minecraft_login_data, check_access_token_via_game_ownership
-from realms import get_realms_info, get_world_map_img, get_world_backups, get_latest_map_img_url, check_latest_map_blob_path
+from realms import get_realms_info, get_world_map_img, get_world_backups, get_latest_map_img_url, check_latest_map_blob_path, get_latest_maps
 from helperFunctions import convert_minecraft_date_to_est_str, backup_id_from_blob_path
 from image_download import get_signed_url
 
@@ -88,15 +88,22 @@ def realms():
 
 	realms_info = get_realms_info(access_token, username, uuid)
 
+	# Get latest blob_paths to help determine navigation route on client
+	world_ids = [server['id'] for server in realms_info['servers']]
+	latest_maps_dictionary = get_latest_maps(world_ids)
+
+	# Update realms info w/ blob_path if it exists
+	for server in realms_info['servers']:
+	    server_id = server['id']
+	    if server_id in latest_maps_dictionary and latest_maps_dictionary[server_id] is not None:
+	        server['blob_path'] = latest_maps_dictionary[server_id]
+
 	if realms_info == None:
 		raise NotFound("Failed to fetch realms info, look into why")
 
 	response = jsonify(realms_info=realms_info)
 	return _corsify_actual_response(response)
-
-
-
-
+	
 
 @app.route("/realms/latest_backup_info", methods=['POST'])
 def latest_backup_info():
@@ -196,6 +203,8 @@ def world_map_retrieve():
 
 	response = jsonify(response_obj)
 	return _corsify_actual_response(response)
+
+
 
 
 @app.route("/generate", methods=['POST'])
