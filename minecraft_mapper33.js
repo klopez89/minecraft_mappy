@@ -97,7 +97,7 @@ function clearAuthInfo() {
 
 function fetchNewSignedMapImageULR(img_info) {
 	$.ajax({
-		url: 'https://minecraftmappy-5k3b37mzsa-ue.a.run.app/world/map/retrieve',
+		url: `${base_server_url}/world/map/retrieve`,
 		method: 'POST',
 		data: JSON.stringify(img_info),
 		contentType: "application/json",
@@ -163,7 +163,7 @@ function get_auth_info() {
 function validateAccessToken() {
 	const access_token = localStorage.getItem('access_token');
 	const refresh_token = localStorage.getItem('refresh_token');
-	const url = 'https://minecraftmappy-5k3b37mzsa-ue.a.run.app/login/validate_access_token';
+	const url = `${base_server_url}/login/validate_access_token`;
 
   json_obj = {
   	'access_token': access_token,
@@ -222,7 +222,7 @@ function checkForNewBackup() {
 	}
 
 	$.ajax({
-		url: 'https://minecraftmappy-5k3b37mzsa-ue.a.run.app/realms/latest_backup_info',
+		url: `${base_server_url}/realms/latest_backup_info`,
 		method: 'POST',
 		data: JSON.stringify(auth_info),
 		contentType: "application/json",

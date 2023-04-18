@@ -1,6 +1,7 @@
 
 
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function() {
+  document.body.style.fontFamily = 'Minecrafty';
   document.body.style.height = "100%";
   checkForAuthRedirect()
   configurePage()
@@ -236,23 +237,32 @@ function generateCardHtml(jsonArray, uuid) {
   jsonArray.forEach(jsonObj => {
     console.log(`jsonObj.ownerUUID: ${jsonObj.ownerUUID}, uuid: ${uuid}`);
     const isOwnerOfRealm = jsonObj.ownerUUID === uuid;
-    let notClickable = isOwnerOfRealm ? '' : 'cursor-not-allowed';
-    let notOwnerText = isOwnerOfRealm ? '' : '<div class="absolute bottom-0 left-0 bg-gray-300 text-gray-500 font-normal italic px-2 py-1 rounded-tr-md rounded-bl-md">Only owner can select</div>';
-    let buttonColorStyle = isOwnerOfRealm ? 'hover:bg-gray-300 text-black bg-gray-200' : 'text-gray-500 bg-gray-200'
+    const blobPathExists = jsonObj.blobPath != null;
+    const isNotClickable = isOwnerOfRealm === false && blobPathExists === false;
+    const cursorType = isNotClickable ? 'cursor-not-allowed' : '';
+    const notOwnerText = isNotClickable ?
+      `<div class="bg-[#FFF5] text-gray-700 font-normal text-sm px-3 pb-3 pt-2 mt-4" style="text-align: left;">
+          <span style="display: inline-block; text-shadow:none;">Owner needs to generate a map first.</span>
+      </div>` : '';
+    const textClassAddIfNotClickable = isNotClickable ? 'text-gray-400' : '';
 
     htmlString += `
-      <button onClick="realmWorldSelected(this)" class="relative shadow-md w-full h-32 p-4 rounded-lg font-bold ${buttonColorStyle} ${notClickable}" worldId="${jsonObj.id}" uuid="${jsonObj.ownerUUID}" host="${jsonObj.owner}" activeSlot="${jsonObj.activeSlot}" worldName="${jsonObj.name}">
-        <div class="text-xl font-bold">${jsonObj.name}</div>
-        <div class="mt-2 font-normal">Hosted by ${jsonObj.owner}</div>
+      <button onClick="realmWorldSelected(this)" class="minecraft-style text-shadow-style relative w-full pt-4 font-bold ${cursorType}" worldId="${jsonObj.id}" uuid="${jsonObj.ownerUUID}" host="${jsonObj.owner}" activeSlot="${jsonObj.activeSlot}" worldName="${jsonObj.name}" blobPath="${jsonObj.blobPath}">
+        <div class="text-xl font-bold ${textClassAddIfNotClickable}">${jsonObj.name}</div>
+        <div class="mt-2 font-normal ${textClassAddIfNotClickable}">Hosted by ${jsonObj.owner}</div>
         ${notOwnerText}
       </button>
     `;
   });
 
   return `
-  <div id="realWorldSelectionContainer" class="w-full h-full flex justify-center items-center">
+  <div class="w-full h-full absolute z-0">
+    <img src="https://storage.googleapis.com/minecraft_maps/minecraft_mappy_bg1.png" alt="Minecraft map" class="w-full h-full object-cover">
+  </div>
+
+  <div id="realWorldSelectionContainer" class="w-full h-full flex justify-center items-center bg-gray-950 bg-opacity-90 relative z-10">
     <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow">
-      <h2 class="text-xl font-bold mb-10 text-center">Select a Realm World</h2>
+      <h2 class="text-2xl font-bold mb-20 text-center text-shadow-style">Select a Realm World</h2>
       <div class="grid grid-cols-1 gap-4 pb-4">
         ${htmlString}
       </div>

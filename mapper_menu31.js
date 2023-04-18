@@ -149,7 +149,7 @@ function triggerMapGeneration() {
   }
 
   $.ajax({
-    url: 'https://minecraftmappy-5k3b37mzsa-ue.a.run.app/world/map/generate',
+    url: `${base_server_url}/world/map/generate`,
     method: 'POST',
     data: JSON.stringify(world_info),
     contentType: "application/json",

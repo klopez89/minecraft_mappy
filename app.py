@@ -94,9 +94,9 @@ def realms():
 
 	# Update realms info w/ blob_path if it exists
 	for server in realms_info['servers']:
-	    server_id = server['id']
-	    if server_id in latest_maps_dictionary and latest_maps_dictionary[server_id] is not None:
-	        server['blob_path'] = latest_maps_dictionary[server_id]
+		server_id = server['id']
+		if server_id in latest_maps_dictionary and latest_maps_dictionary[server_id] is not None:
+			server['blobPath'] = latest_maps_dictionary[server_id]
 
 	if realms_info == None:
 		raise NotFound("Failed to fetch realms info, look into why")
