@@ -92,6 +92,8 @@ def realms():
 	world_ids = [server['id'] for server in realms_info['servers']]
 	latest_maps_dictionary = get_latest_maps(world_ids)
 
+	print(f'latest_maps_dictionary: {latest_maps_dictionary}')
+
 	# Update realms info w/ blob_path if it exists
 	for server in realms_info['servers']:
 		server_id = server['id']

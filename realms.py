@@ -157,11 +157,13 @@ def get_latest_maps(world_ids):
 			if latest_blob is None or blob.updated > latest_blob.updated:
 				latest_blob = blob
 		if latest_blob is not None:
-			latest_maps[world_id] = latest_blob.path
+			latest_maps[world_id] = latest_blob.name
 		else:
 			latest_maps[world_id] = None
 	
 	return latest_maps
+
+
 
 
 

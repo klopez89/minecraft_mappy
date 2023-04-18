@@ -29,7 +29,7 @@ function configurePage() {
 
 function beginMicrosoftLogin() {
   $.ajax({
-    url: 'https://minecraftmappy-5k3b37mzsa-ue.a.run.app/login/microsoft',
+    url: `${base_server_url}/login/microsoft`,
     method: 'POST',
     data: JSON.stringify({}),
     contentType: "application/json",
@@ -73,7 +73,7 @@ function beginMinecraftLogin() {
   console.log(`the json obj for minecraft login is: ${jsonObj}`);
 
   $.ajax({
-    url: 'https://minecraftmappy-5k3b37mzsa-ue.a.run.app/login/minecraft',
+    url: `${base_server_url}/login/minecraft`,
     method: 'POST',
     data: JSON.stringify(jsonObj),
     contentType: "application/json",
@@ -112,7 +112,7 @@ function fetchRealmsInfo(username, uuid, access_token) {
     'access_token': access_token
   }
   $.ajax({
-    url: 'https://minecraftmappy-5k3b37mzsa-ue.a.run.app/realms',
+    url: `${base_server_url}/realms`,
     method: 'POST',
     data: JSON.stringify(minecraft_auth_info),
     contentType: "application/json",
@@ -130,8 +130,6 @@ function fetchRealmsInfo(username, uuid, access_token) {
 }
 
 
-
-
 function realmWorldSelected(event) {
   let accessToken = localStorage.getItem('access_token');
   let uuid = event.getAttribute('uuid');
@@ -139,6 +137,7 @@ function realmWorldSelected(event) {
   let activeSlot = event.getAttribute('activeSlot');
   let worldId = event.getAttribute('worldId');
   let worldName = event.getAttribute('worldName');
+  let blobPath = event.getAttribute('blobPath');
 
   localStorage.setItem('selected_world_id', worldId);
   localStorage.setItem('selected_world_name', worldName);
@@ -156,14 +155,31 @@ function realmWorldSelected(event) {
     'access_token': accessToken
   }
 
-  generateNewMapImage(world_info)
+  if (blobPath != null) {
+    const bucketName = "minecraft_maps";
+    showMessageAfterWorldSelection(true);
+    setTimeout(function() {
+      redirectToMapperPage(bucketName, blobPath, worldName, worldId, activeSlot, uuid, username);
+    }, 500);
+  } else if (access_token != null) {
+    showMessageAfterWorldSelection(false);
+    generateNewMapImage(world_info)
+  } else {
+    console.log('ran into error navigating user to a map from realm world selection');
+  }
+}
+
+function showMessageAfterWorldSelection(hasBlobPath) {
+  const selectionTitleElement = document.getElementById('selection-title');
+  const routingTypeText = hasBlobPath ? 'Loading map' : 'Generating 1st map';
+  selectionTitleElement.innerHTML = `${routingTypeText}  &nbsp; <i class="fa fa-spinner fa-spin"></i>`;
 }
 
 // world info has: uuid, username, active_slot, world_id, access_token
 function generateNewMapImage(world_info) {
 
   $.ajax({
-    url: 'https://minecraftmappy-5k3b37mzsa-ue.a.run.app/world/map/generate',
+    url: `${base_server_url}/world/map/generate`,
     method: 'POST',
     data: JSON.stringify(world_info),
     contentType: "application/json",
@@ -239,9 +255,9 @@ function generateCardHtml(jsonArray, uuid) {
     const isOwnerOfRealm = jsonObj.ownerUUID === uuid;
     const blobPathExists = jsonObj.blobPath != null;
     const isNotClickable = isOwnerOfRealm === false && blobPathExists === false;
-    const cursorType = isNotClickable ? 'cursor-not-allowed' : '';
+    const cursorType = isNotClickable ? 'cursor-not-allowed not-clickable' : '';
     const notOwnerText = isNotClickable ?
-      `<div class="bg-[#FFF5] text-gray-700 font-normal text-sm px-3 pb-3 pt-2 mt-4" style="text-align: left;">
+      `<div class="bg-[#FFF5] text-gray-700 font-normal text-sm px-3 pb-3 pt-2" style="text-align: left;">
           <span style="display: inline-block; text-shadow:none;">Owner needs to generate a map first.</span>
       </div>` : '';
     const textClassAddIfNotClickable = isNotClickable ? 'text-gray-400' : '';
@@ -249,7 +265,7 @@ function generateCardHtml(jsonArray, uuid) {
     htmlString += `
       <button onClick="realmWorldSelected(this)" class="minecraft-style text-shadow-style relative w-full pt-4 font-bold ${cursorType}" worldId="${jsonObj.id}" uuid="${jsonObj.ownerUUID}" host="${jsonObj.owner}" activeSlot="${jsonObj.activeSlot}" worldName="${jsonObj.name}" blobPath="${jsonObj.blobPath}">
         <div class="text-xl font-bold ${textClassAddIfNotClickable}">${jsonObj.name}</div>
-        <div class="mt-2 font-normal ${textClassAddIfNotClickable}">Hosted by ${jsonObj.owner}</div>
+        <div class="mt-2 font-normal pl-4 pr-4 pb-4 ${textClassAddIfNotClickable}">Hosted by ${jsonObj.owner}</div>
         ${notOwnerText}
       </button>
     `;
@@ -262,7 +278,7 @@ function generateCardHtml(jsonArray, uuid) {
 
   <div id="realWorldSelectionContainer" class="w-full h-full flex justify-center items-center bg-gray-950 bg-opacity-90 relative z-10">
     <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow">
-      <h2 class="text-2xl font-bold mb-20 text-center text-shadow-style">Select a Realm World</h2>
+      <h2 id="selection-title" class="text-2xl font-bold mb-20 text-center text-shadow-style">Select a Realm World</h2>
       <div class="grid grid-cols-1 gap-4 pb-4">
         ${htmlString}
       </div>
