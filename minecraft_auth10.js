@@ -271,13 +271,14 @@ function transitionToWorldSelection() {
   signInContainer.classList.replace('z-30','z-10'); 
   realWorldSelectionContainer.classList.replace('opacity-0','opacity-100');
   realWorldSelectionContainer.classList.replace('z-10','z-30'); 
-}
+}//https://storage.googleapis.com/minecraft_maps/minecraft_mappy_bg1.png
+
 
 function backgroundDivHtml() {
   return `
   <div class="w-full h-full absolute z-0">
     <div class="w-full h-full bg-gray-950 bg-opacity-90 absolute z-1"></div>
-    <img src="https://storage.googleapis.com/minecraft_maps/minecraft_mappy_bg1.png" alt="Minecraft map" class="w-full h-full object-cover">
+    <img src="https://uploads-ssl.webflow.com/631503ba482ba7125c822249/644008dfdfe796295a331e3d_minecraft_mappy_bg1.png" alt="Minecraft map" class="w-full h-full object-cover">
   </div>
   `;
 }
