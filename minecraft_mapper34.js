@@ -20,11 +20,13 @@ $(document).ready(function() {
 
 	const mapperHasMinReq = bucketName != null && blobPath != null && worldName != null && worldId != null && worldSlot != null && worldOwnerUUID != null && worldOwner != null;
 
+	addLoadingDiv();
+
 	if (mapperHasMinReq) {
 		localStorage.setItem("map_bucket_name", bucketName)
 		localStorage.setItem("map_blob_path", blobPath);
 
-		console.log(`map_blob_path is: ${blobPath}`)
+		console.log(`map_blob_path is: ${blobPath}`);
 
 		localStorage.setItem("selected_world_name", worldName);
 		localStorage.setItem("selected_world_id", worldId);
@@ -44,6 +46,11 @@ window.onpageshow = function(event) {
   }
 };
 
+function addLoadingDiv() {
+	const loading_div_html = loading_html();
+	const loading_div_element = $($.parseHTML(loading_div_html));
+  $('body').append(loading_div_element);
+}
 
 function continueToLoadMapper() {
 	requestData = {
@@ -263,10 +270,10 @@ function presentMapExplorer(signed_img_url) {
 	const map_explorer_element = $($.parseHTML(map_explorer_html)).hide();
   $('body').append(map_explorer_element);
 
-  // Configure then fade in the map explorer
+  // Configure then transition to map explorer from the loading div
   configureMap();
-  map_explorer_element.fadeIn(500);
   add_slide_over_menu();
+  transitionToMapper()
 
   //Check for new map to generate, reserved only for authenticated user w/ a matching uuid to the owner_uuid of the current world map
 	if (get_auth_info() != null) {
@@ -274,13 +281,22 @@ function presentMapExplorer(signed_img_url) {
 	}
 }
 
+function transitionToMapper() {
+	const loadingDiv = document.getElementById('loadingContainer');
+  const mapperDiv = document.getElementById('mapContainer');
+  loadingDiv.classList.replace('opacity-100','opacity-0');
+  loadingDiv.classList.replace('z-50','z-1'); 
+  mapperDiv.classList.replace('opacity-0','opacity-100');
+  mapperDiv.classList.replace('z-1','z-50'); 
+}
+
 
 function map_html(map_img_url) {
 	htmlString = 
 	`
-	<div class="map-container" style="width: 100vw; height: 100vh; /* align-items: center; */">
-		<div id="panzoom-container-element" class="panzoom-container" style="overflow: hidden; touch-action: none;">
-			<img id="panzoom-element" src="${map_img_url}" alt="Your image description" class="panzoom-element panzoom-img" ondragstart="return false;">
+	<div id="mapContainer" class="map-container absolute opacity-0 transition-opacity duration-500 z-1" style="width: 100vw; height: 100vh;">
+		<div id="panzoom-container-element" class="panzoom-container custom-dark-gray-bg" style="overflow: hidden; touch-action: none;">
+			<img id="panzoom-element" src="${map_img_url}" alt="Your image description" class="panzoom-element panzoom-img custom-mid-gray-bg" ondragstart="return false;">
 		</div>
 		
 		<div id="menu-overlay-element" class="menu-overlay">
@@ -307,6 +323,16 @@ function map_html(map_img_url) {
 	</div>
 	`;
 	return htmlString
+}
+
+function loading_html() {
+	return `
+	<div id="loadingContainer" class="loading-container absolute w-full h-full flex justify-center items-center opacity-100 transition-opacity duration-500 z-50 custom-dark-gray-bg">
+	  <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow text-center">
+	   <i class="text-5xl text-white fa fa-spinner fa-spin"></i>
+	  </div>
+	</div>
+	`;
 }
 
 function configureMap() {
