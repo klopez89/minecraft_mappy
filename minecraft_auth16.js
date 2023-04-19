@@ -15,7 +15,8 @@ window.onpageshow = function(event) {
   const wasRedirected = microsoft_code != null;
 
   if (event.persisted && wasRedirected === false) {
-    location.reload(true);
+    resetSignInButton()
+    //location.reload(true);
   }
 };
 
