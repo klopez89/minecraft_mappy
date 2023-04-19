@@ -63,6 +63,7 @@ function beginMicrosoftLogin() {
       localStorage.setItem('auth_state', state);
 
       // Redirect the user to another URL
+      resetSignInButton();
       window.location.href = login_url;
 
     },
@@ -245,7 +246,8 @@ function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, worl
 function resetSignInButton() {
   const signInTextDiv = document.getElementById('signInTextDiv');
   signInTextDiv.innerHTML = `Sign  in with Microsoft`;
-  button.disabled = false;
+  const signInButton = signInTextDiv.parentElement;
+  signInButton.disabled = false;
 }
 
 function getImageExpirationTime() {
