@@ -267,7 +267,7 @@ function presentMapExplorer(signed_img_url) {
 
 	// Add the map explorer to the body and hide it
 	const map_explorer_html = map_html(signed_img_url);
-	const map_explorer_element = $($.parseHTML(map_explorer_html)).hide();
+	const map_explorer_element = $($.parseHTML(map_explorer_html));
   $('body').append(map_explorer_element);
 
   // Configure then transition to map explorer from the loading div
