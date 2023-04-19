@@ -285,7 +285,7 @@ function backgroundDivHtml() {
 
 function signInContainerHtml() {
   return `
-  <div id="signInContainer" class="w-full h-full flex justify-center items-center  absolute opacity-100 transition-opacity duration-500 z-30">
+  <div id="signInContainer" class="custom-dark-gray-bg w-full h-full flex justify-center items-center absolute opacity-100 transition-opacity duration-500 z-30">
     <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow">
 
       <h2 id="selection-titlea" class="text-2xl font-bold mb-5 text-left text-shadow-style">Sign in</h2>
