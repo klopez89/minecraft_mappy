@@ -245,7 +245,14 @@ function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, worl
   const mapperUrl = "https://www.whollyaigame.com/mapper";
   const modifiedMapperUrl = `${mapperUrl}?${new URLSearchParams(queryParams).toString()}`;
 
+  resetSignInButton();
   window.location.href = modifiedMapperUrl;
+}
+
+function resetSignInButton() {
+  const signInTextDiv = document.getElementById('signInTextDiv');
+  signInTextDiv.innerHTML = `Signing in &nbsp; <i class="fa fa-spinner fa-spin">`;
+  button.disabled = true;
 }
 
 function getImageExpirationTime() {
