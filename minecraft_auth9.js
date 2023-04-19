@@ -7,12 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
   configurePage(wasRedirected);
 });
 
-window.onpageshow = function(event) {
-  if (event.persisted) {
-    location.reload(true);
-  }
-};
-
 
 function checkForAuthRedirect() {
   const queryString = window.location.search;
@@ -251,8 +245,8 @@ function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, worl
 
 function resetSignInButton() {
   const signInTextDiv = document.getElementById('signInTextDiv');
-  signInTextDiv.innerHTML = `Signing in &nbsp; <i class="fa fa-spinner fa-spin">`;
-  button.disabled = true;
+  signInTextDiv.innerHTML = `Sign  in with Microsoft`;
+  button.disabled = false;
 }
 
 function getImageExpirationTime() {
