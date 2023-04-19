@@ -239,7 +239,6 @@ function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, worl
   const mapperUrl = "https://www.whollyaigame.com/mapper";
   const modifiedMapperUrl = `${mapperUrl}?${new URLSearchParams(queryParams).toString()}`;
 
-  resetSignInButton();
   window.location.href = modifiedMapperUrl;
 }
 
@@ -262,6 +261,7 @@ function presentRealmWorldSelection(realm_servers, uuid) {
   const realm_servers_elements = $($.parseHTML(realm_servers_html));
   $('.world-card-container').append(realm_servers_elements);
   transitionToWorldSelection();
+  resetSignInButton();
 }
 
 function transitionToWorldSelection() {
