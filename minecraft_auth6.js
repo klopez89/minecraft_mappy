@@ -30,7 +30,7 @@ function configurePage(wasRedirectedFromMicrosoft) {
   const sign_in_container_html = signInContainerHtml();
   const sing_in_container_div = $($.parseHTML(sign_in_container_html));
   if (wasRedirectedFromMicrosoft) {
-    sing_in_container_div.html(`Signing in &nbsp; <i class="fa fa-spinner fa-spin">`);
+    sing_in_container_div.find('#signInTextDiv').html(`Signing in &nbsp; <i class="fa fa-spinner fa-spin">`);
   }
   $('body').append(sing_in_container_div);
 
