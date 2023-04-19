@@ -7,6 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
   configurePage(wasRedirected);
 });
 
+window.onpageshow = function(event) {
+  if (event.persisted) {
+    location.reload(true);
+  }
+};
 
 
 function checkForAuthRedirect() {
