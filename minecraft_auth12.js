@@ -278,14 +278,14 @@ function backgroundDivHtml() {
   return `
   <div class="w-full h-full absolute z-0">
     <div class="w-full h-full bg-gray-950 bg-opacity-90 absolute z-1"></div>
-    <img src="https://uploads-ssl.webflow.com/631503ba482ba7125c822249/644008dfdfe796295a331e3d_minecraft_mappy_bg1.png" alt="Minecraft map" class="w-full h-full object-cover">
+    <img src="https://storage.googleapis.com/minecraft_maps/minecraft_mappy_bg1_compressed.png" alt="Minecraft map" class="w-full h-full object-cover">
   </div>
   `;
 }
 
 function signInContainerHtml() {
   return `
-  <div id="signInContainer" class="custom-dark-gray-bg w-full h-full flex justify-center items-center absolute opacity-100 transition-opacity duration-500 z-30">
+  <div id="signInContainer" class="w-full h-full flex justify-center items-center absolute opacity-100 transition-opacity duration-500 z-30">
     <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow">
 
       <h2 id="selection-titlea" class="text-2xl font-bold mb-5 text-left text-shadow-style">Sign in</h2>
