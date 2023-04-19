@@ -22,9 +22,24 @@ function checkForAuthRedirect() {
 }
 
 function configurePage() {
-  $('#login-microsoft').click(function() {
-    beginMicrosoftLogin()
-  });
+  const bg_div_html = backgroundDivHtml();
+  const bg_div = $($.parseHTML(bg_div_html));
+  $('body').append(bg_div);
+
+  const sign_in_container_html = signInContainerHtml();
+  const sing_in_container_div = $($.parseHTML(sign_in_container_html));
+  $('body').append(sing_in_container_div);
+
+  const world_selection_html = realmWorldSelectionContainerHtml();
+  const world_selection_div = $($.parseHTML(world_selection_html));
+  $('body').append(world_selection_div);
+}
+
+function clickedSignInWithMicrosoft(button) {
+  const signInTextDiv = document.getElementById('signInTextDiv');
+  signInTextDiv.innerHTML = `Signing in &nbsp; <i class="fa fa-spinner fa-spin">`;
+  button.disabled = true;
+  beginMicrosoftLogin();
 }
 
 function beginMicrosoftLogin() {
@@ -92,9 +107,6 @@ function beginMinecraftLogin() {
       localStorage.setItem('username', username);
       localStorage.setItem('uuid', uuid);
 
-      // const mapper_url = `https://www.whollyaigame.com/mapper`
-      // window.location.href = mapper_url
-
       fetchRealmsInfo(username, uuid, access_token);
     },
     error: function(xhr, status, error) {
@@ -130,14 +142,14 @@ function fetchRealmsInfo(username, uuid, access_token) {
 }
 
 
-function realmWorldSelected(event) {
+function realmWorldSelected(button) {
   let accessToken = localStorage.getItem('access_token');
-  let uuid = event.getAttribute('uuid');
-  let username = event.getAttribute('host');
-  let activeSlot = event.getAttribute('activeSlot');
-  let worldId = event.getAttribute('worldId');
-  let worldName = event.getAttribute('worldName');
-  let blobPath = event.getAttribute('blobPath');
+  let uuid = button.getAttribute('uuid');
+  let username = button.getAttribute('host');
+  let activeSlot = button.getAttribute('activeSlot');
+  let worldId = button.getAttribute('worldId');
+  let worldName = button.getAttribute('worldName');
+  let blobPath = button.getAttribute('blobPath');
 
   localStorage.setItem('selected_world_id', worldId);
   localStorage.setItem('selected_world_name', worldName);
@@ -155,24 +167,31 @@ function realmWorldSelected(event) {
     'access_token': accessToken
   }
 
-  if (blobPath != null) {
+  const hasBlobPath = blobPath != null;
+
+  if (hasBlobPath) {
     const bucketName = "minecraft_maps";
-    showMessageAfterWorldSelection(true);
+    showMessageAfterWorldSelection(hasBlobPath, button);
     setTimeout(function() {
       redirectToMapperPage(bucketName, blobPath, worldName, worldId, activeSlot, uuid, username);
-    }, 500);
+    }, 800);
   } else if (access_token != null) {
-    showMessageAfterWorldSelection(false);
+    showMessageAfterWorldSelection(hasBlobPath, button);
     generateNewMapImage(world_info)
   } else {
     console.log('ran into error navigating user to a map from realm world selection');
   }
 }
 
-function showMessageAfterWorldSelection(hasBlobPath) {
-  const selectionTitleElement = document.getElementById('selection-title');
+function showMessageAfterWorldSelection(hasBlobPath, button) {
+  const worldNameTextElement = button.querySelector('div.world-name-txt');
+  const worldHostTextElement = button.querySelector('div.world-host-txt');
   const routingTypeText = hasBlobPath ? 'Loading map' : 'Generating 1st map';
-  selectionTitleElement.innerHTML = `${routingTypeText}  &nbsp; <i class="fa fa-spinner fa-spin"></i>`;
+
+  worldNameTextElement.innerHTML = `${routingTypeText}  &nbsp; <i class="fa fa-spinner fa-spin"></i>`;
+  worldHostTextElement.innerHTML = '';
+  button.disabled = true;
+  button.style.pointerEvents = 'none';
 }
 
 // world info has: uuid, username, active_slot, world_id, access_token
@@ -228,13 +247,59 @@ function getImageExpirationTime() {
 }
 
 
-
 function presentRealmWorldSelection(realm_servers, uuid) {
   const realm_servers_html = generateCardHtml(realm_servers, uuid);
   const realm_servers_elements = $($.parseHTML(realm_servers_html));
-  $('body').append(realm_servers_elements);
+  $('.world-card-container').append(realm_servers_elements);
+  transitionToWorldSelection();
 }
 
+function transitionToWorldSelection() {
+  const signInContainer = document.getElementById('signInContainer');
+  const realWorldSelectionContainer = document.getElementById('realWorldSelectionContainer');
+  signInContainer.classList.replace('opacity-100','opacity-0');
+  signInContainer.classList.replace('z-30','z-10'); 
+  realWorldSelectionContainer.classList.replace('opacity-0','opacity-100');
+  realWorldSelectionContainer.classList.replace('z-10','z-30'); 
+}
+
+function backgroundDivHtml() {
+  return `
+  <div class="w-full h-full absolute z-0">
+    <div class="w-full h-full bg-gray-950 bg-opacity-90 absolute z-1"></div>
+    <img src="https://storage.googleapis.com/minecraft_maps/minecraft_mappy_bg1.png" alt="Minecraft map" class="w-full h-full object-cover">
+  </div>
+  `;
+}
+
+function signInContainerHtml() {
+  return `
+  <div id="signInContainer" class="w-full h-full flex justify-center items-center  absolute opacity-100 transition-opacity duration-500 z-30">
+    <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow">
+
+      <h2 id="selection-titlea" class="text-2xl font-bold mb-5 text-left text-shadow-style">Sign in</h2>
+      <p class="text-md font-normal mb-20 text-left text-shadow-style">A Microsoft sign in is required to generate a Realm world map you host or find generated maps to Realm worlds you've joined.</p>
+
+      <button onclick="clickedSignInWithMicrosoft(this)" class="minecraft-style text-shadow-style relative w-full pt-4 pb-5 font-bold">
+        <div id="signInTextDiv" class="text-xl font-bold">Sign in with Microsoft</div>
+      </button>
+
+    </div>
+  </div>
+  `;
+}
+
+function realmWorldSelectionContainerHtml() {
+  return `
+  <div id="realWorldSelectionContainer" class="w-full h-full flex justify-center items-center relative opacity-0 transition-opacity duration-500 z-10">
+    <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow">
+      <h2 id="selection-title" class="text-2xl font-bold mb-20 text-center text-shadow-style">Select a Realm World</h2>
+      <div class="world-card-container grid grid-cols-1 gap-4 pb-4">
+      </div>
+    </div>
+  </div>
+  `;
+}
 
 function generateCardHtml(jsonArray, uuid) {
   let htmlString = '';
@@ -264,25 +329,12 @@ function generateCardHtml(jsonArray, uuid) {
 
     htmlString += `
       <button onClick="realmWorldSelected(this)" class="minecraft-style text-shadow-style relative w-full pt-4 font-bold ${cursorType}" worldId="${jsonObj.id}" uuid="${jsonObj.ownerUUID}" host="${jsonObj.owner}" activeSlot="${jsonObj.activeSlot}" worldName="${jsonObj.name}" blobPath="${jsonObj.blobPath}">
-        <div class="text-xl font-bold ${textClassAddIfNotClickable}">${jsonObj.name}</div>
-        <div class="mt-2 font-normal pl-4 pr-4 pb-4 ${textClassAddIfNotClickable}">Hosted by ${jsonObj.owner}</div>
+        <div class="world-name-txt text-xl font-bold ${textClassAddIfNotClickable}">${jsonObj.name}</div>
+        <div class="world-host-txt mt-2 font-normal pl-4 pr-4 pb-4 ${textClassAddIfNotClickable}">Hosted by ${jsonObj.owner}</div>
         ${notOwnerText}
       </button>
     `;
   });
 
-  return `
-  <div class="w-full h-full absolute z-0">
-    <img src="https://storage.googleapis.com/minecraft_maps/minecraft_mappy_bg1.png" alt="Minecraft map" class="w-full h-full object-cover">
-  </div>
-
-  <div id="realWorldSelectionContainer" class="w-full h-full flex justify-center items-center bg-gray-950 bg-opacity-90 relative z-10">
-    <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow">
-      <h2 id="selection-title" class="text-2xl font-bold mb-20 text-center text-shadow-style">Select a Realm World</h2>
-      <div class="grid grid-cols-1 gap-4 pb-4">
-        ${htmlString}
-      </div>
-    </div>
-  </div>
-  `;
+  return htmlString;
 }
