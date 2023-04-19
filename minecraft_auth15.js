@@ -7,6 +7,17 @@ document.addEventListener('DOMContentLoaded', function() {
   configurePage(wasRedirected);
 });
 
+window.onpageshow = function(event) {
+  const queryString = window.location.search;
+  console.log(`query string is: ${queryString}`);
+  const urlParams = new URLSearchParams(queryString);
+  const microsoft_code = urlParams.get('code');
+  const wasRedirected = microsoft_code != null;
+
+  if (event.persisted && wasRedirected === false) {
+    location.reload(true);
+  }
+};
 
 function checkForAuthRedirect() {
   const queryString = window.location.search;
@@ -63,7 +74,6 @@ function beginMicrosoftLogin() {
       localStorage.setItem('auth_state', state);
 
       // Redirect the user to another URL
-      resetSignInButton();
       window.location.href = login_url;
 
     },
