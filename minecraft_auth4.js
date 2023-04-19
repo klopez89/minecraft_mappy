@@ -3,8 +3,8 @@
 document.addEventListener('DOMContentLoaded', function() {
   document.body.style.fontFamily = 'Minecrafty';
   document.body.style.height = "100%";
-  checkForAuthRedirect()
-  configurePage()
+  const wasRedirected = checkForAuthRedirect();
+  configurePage(wasRedirected);
 });
 
 
@@ -14,20 +14,24 @@ function checkForAuthRedirect() {
   console.log(`query string is: ${queryString}`);
   const urlParams = new URLSearchParams(queryString);
   const microsoft_code = urlParams.get('code');
-  if (microsoft_code != null) {
-
+  const wasRedirected = microsoft_code != null;
+  if (wasRedirected) {
     console.log(`microsoft_code is ${microsoft_code}`);
-    beginMinecraftLogin()
+    beginMinecraftLogin();
   }
+  return wasRedirected;
 }
 
-function configurePage() {
+function configurePage(wasRedirectedFromMicrosoft) {
   const bg_div_html = backgroundDivHtml();
   const bg_div = $($.parseHTML(bg_div_html));
   $('body').append(bg_div);
 
   const sign_in_container_html = signInContainerHtml();
   const sing_in_container_div = $($.parseHTML(sign_in_container_html));
+  if (wasRedirectedFromMicrosoft) {
+    sing_in_container_div.html = `Signing in &nbsp; <i class="fa fa-spinner fa-spin">`;
+  }
   $('body').append(sing_in_container_div);
 
   const world_selection_html = realmWorldSelectionContainerHtml();
