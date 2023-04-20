@@ -71,14 +71,15 @@ function configure_slide_over_menu() {
 function configureAuthButton() {
   const minecraft_auth_info = checkForMinecraftAuthInfo();
   const authButton = document.getElementById('auth-button');
+  const buttonTitle = authButton.querySelector('.button-title');
 
   styleEnabledButton(authButton);
 
   if (minecraft_auth_info != null) {
-    authButton.textContent = 'Sign out';
+    buttonTitle.textContent = 'Sign out';
     authButton.setAttribute('signedIn', 'true');
   } else {
-    authButton.textContent = 'Sign in';
+    buttonTitle.textContent = 'Sign in';
     authButton.setAttribute('signedIn', 'false');
   }
 
