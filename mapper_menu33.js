@@ -212,7 +212,7 @@ function enable_load_latest_map() {
   const loadLatestMapButton = document.getElementById('load-latest-button');
   loadLatestMapButton.classList.toggle('bg-yellow-500');
   styleEnabledButton(loadLatestMapButton);
-  
+
   // Modify the text
   const loadLatestTextElement = document.getElementById('load-latest-text');
   const latestBackupDate = localStorage.getItem('latest_backup_date');
@@ -232,6 +232,7 @@ function enable_generate_new(latestBackupDate) {
   // Modify the button
   const genMapButton = document.getElementById('gen-map-button');
   genMapButton.classList.toggle('bg-orange-500');
+  console.log(`about to style gen map to be enabled: ${genMapButton}`);
   styleEnabledButton(genMapButton);
 
   // Modify the text
@@ -244,7 +245,7 @@ function generate_new_map_html(is_auth_user_host, host) {
   const not_authorized_txt = `Only ${host} can generate a new map, if newer backup is available.`;
   const subtext = is_auth_user_host ? no_new_backup_txt : not_authorized_txt;
   return `
-    <button id="gen-map-button" class="bg-orange-500 mb-1">
+    <button id="gen-map-button" class="mb-1">
       <div class="button-title text-sm">Generate New Map</div>
     </button>
     <p id="gen-map-text" class="text-xs text-slate-400 mb-0 pl-1">${subtext}</p>
