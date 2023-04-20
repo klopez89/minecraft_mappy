@@ -31,6 +31,9 @@ function configure_slide_over_menu() {
   const loadLatestMapButton = document.getElementById('load-latest-button');
   const genMapButton = document.getElementById('gen-map-button');
 
+  styleDisabledButton(loadLatestMapButton);
+  styleDisabledButton(genMapButton);
+
   exitMenuPanelButton.addEventListener('click', function() {
     toggleSlideMenu(slideOverPanel, slideMenuBg);
   });
@@ -68,6 +71,8 @@ function configure_slide_over_menu() {
 function configureAuthButton() {
   const minecraft_auth_info = checkForMinecraftAuthInfo();
   const authButton = document.getElementById('auth-button');
+
+  styleEnabledButton(authButton);
 
   if (minecraft_auth_info != null) {
     authButton.textContent = 'Sign out';
@@ -111,26 +116,26 @@ function revertGenMapButtonState() {
 
 function changeGenMapButtonStateToSuccess() {
   const button = document.getElementById('gen-map-button');
-  button.innerHTML = 'Generated!';
+  const buttonTitle = button.querySelector('button-title');
+  buttonTitle.innerHTML = 'Generated!';
   button.classList.replace('bg-orange-500','bg-green-700');
 }
 
-function disableGenMapButton() {
+function resetGenMapElements() {
+  // Reset the gen map button
   const button = document.getElementById('gen-map-button');
-  const textElement = document.getElementById('gen-map-text');
- 
-  button.disabled = false;
   button.innerHTML = 'Generate New Map';
-  button.classList.replace('bg-green-700','bg-gray-500');
-  button.classList.replace('text-white', 'text-gray-400');
+  styleDisabledButton(button);
 
+  // Reset the text under the button
+  const genMapAreaText = document.getElementById('gen-map-text');
   const worldOwner = localStorage.getItem('selected_world_owner_username');
   const authUser = localStorage.getItem('username');
   const is_auth_user_host = worldOwner === authUser;
   const no_new_backup_txt = 'No new backup found. Refresh page to check again.';
   const not_authorized_txt = `Only ${worldOwner} can generate a new map, if newer backup is available.`;
   const subtext = is_auth_user_host ? no_new_backup_txt : not_authorized_txt;
-  textElement.textContent = subtext;
+  genMapAreaText.textContent = subtext;
 }
 
 function triggerMapGeneration() {
@@ -159,7 +164,7 @@ function triggerMapGeneration() {
       const new_blob_path = response["blob_path"];
       changeGenMapButtonStateToSuccess();
       setTimeout(function() {
-        disableGenMapButton();
+        resetGenMapElements();
         dismissSlideOutMenu();
         redirectToLatestMap(new_blob_path);
       }, 500);
@@ -205,10 +210,9 @@ function toggleSlideMenu(slideOverPanel, slideMenuBg) {
 function enable_load_latest_map() {
   // Modify the button
   const loadLatestMapButton = document.getElementById('load-latest-button');
-  loadLatestMapButton.classList.replace('bg-gray-500', 'bg-yellow-500');
-  loadLatestMapButton.classList.replace('text-gray-400', 'text-white');
-  loadLatestMapButton.classList.add('hover:bg-yellow-700');
-  loadLatestMapButton.disabled = false;
+  loadLatestMapButton.classList.toggle('bg-yellow-500');
+  styleEnabledButton(loadLatestMapButton);
+  
   // Modify the text
   const loadLatestTextElement = document.getElementById('load-latest-text');
   const latestBackupDate = localStorage.getItem('latest_backup_date');
@@ -217,8 +221,8 @@ function enable_load_latest_map() {
 
 function load_latest_map_html() {
   return `
-    <button id="load-latest-button" class="block load-latest-map text-sm bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mr-2 mb-1 mt-8" disabled>
-      Load Latest Map
+    <button id="load-latest-button" class="load-latest-map mr-2 mb-1 mt-8">
+      <div class="button-title text-sm ">Load Latest Map</div>
     </button>
     <p id="load-latest-text" class="text-xs text-slate-400 mb-5 pl-1">No new map found. Refresh page to check again.</p>    
   `;
@@ -227,10 +231,9 @@ function load_latest_map_html() {
 function enable_generate_new(latestBackupDate) {
   // Modify the button
   const genMapButton = document.getElementById('gen-map-button');
-  genMapButton.classList.replace('bg-gray-500', 'bg-orange-500');
-  genMapButton.classList.replace('text-gray-400', 'text-white');
-  genMapButton.classList.add('hover:bg-orange-700');
-  genMapButton.disabled = false;
+  genMapButton.classList.toggle('bg-orange-500');
+  styleEnabledButton(genMapButton);
+
   // Modify the text
   const latestBackupTextElement = document.getElementById('gen-map-text');
   latestBackupTextElement.textContent = `New map can be generated w/ latest backup from: ${latestBackupDate}.`;
@@ -241,8 +244,8 @@ function generate_new_map_html(is_auth_user_host, host) {
   const not_authorized_txt = `Only ${host} can generate a new map, if newer backup is available.`;
   const subtext = is_auth_user_host ? no_new_backup_txt : not_authorized_txt;
   return `
-    <button id="gen-map-button" class="block generate-new-map text-sm bg-gray-500 text-gray-400 font-extrabold py-3 px-4 rounded mb-1" disabled>
-      Generate New Map
+    <button id="gen-map-button" class="bg-orange-500 mb-1">
+      <div class="button-title text-sm">Generate New Map</div>
     </button>
     <p id="gen-map-text" class="text-xs text-slate-400 mb-0 pl-1">${subtext}</p>
   `;
@@ -335,8 +338,8 @@ function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate
               </div>
 
               <div class="mt-6 flex justify-end px-5">
-                <button id="auth-button" class="generate-new-map text-sm bg-green-700 hover:bg-green-900 text-white font-extrabold py-3 px-4 rounded">
-                  Sign in with Microsoft
+                <button id="auth-button">
+                  <div class="button-title text-sm">Sign in</div>
                 </button>
               </div>
 
