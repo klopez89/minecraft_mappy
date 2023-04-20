@@ -5,7 +5,7 @@ function styleDisabledButton(button) {
   let buttonTitleElement = button.querySelector('.button-title');
   let originalButtonTitleClassName = buttonTitleElement.className;
 
-  	if (originalButtonClassName.contains('minecraft-style')) {
+  	if (originalButtonClassName.includes('minecraft-style')) {
 	  	button.classList.toggle('cursor-default');
 			button.classList.toggle('not-clickable');
 			buttonTitleElement.classList.replace('text-white','text-gray-400');
@@ -26,7 +26,7 @@ function styleEnabledButton(button) {
   let buttonTitleElement = button.querySelector('.button-title');
   let originalButtonTitleClassName = buttonTitleElement.className;
 
-	if (originalButtonClassName.contains('minecraft-style')) {
+	if (originalButtonClassName.includes('minecraft-style')) {
 		button.classList.toggle('cursor-default');
 		button.classList.toggle('not-clickable');
 		buttonTitleElement.classList.replace('text-gray-400','text-white');
