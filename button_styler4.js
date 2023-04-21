@@ -11,7 +11,7 @@ function styleDisabledButton(buttons) {
 				button.classList.toggle('not-clickable');
 				buttonTitleElement.classList.replace('text-white','text-gray-400');
 	  	} else {
-				button.className = originalButtonClassName + ' minecraft-style text-shadow-style relative pt-3 font-bold cursor-default not-clickable';
+				button.className = originalButtonClassName + ' minecraft-style text-shadow-style pt-3 font-bold cursor-default not-clickable';
 	  		buttonTitleElement.className = originalButtonTitleClassName + ' font-bold pl-4 pr-4 pb-4 text-gray-400';
 	  	}
 
@@ -34,7 +34,7 @@ function styleEnabledButton(buttons) {
 			button.classList.toggle('not-clickable');
 			buttonTitleElement.classList.replace('text-gray-400','text-white');
 		} else {
-			button.className = originalButtonClassName + ' minecraft-style text-shadow-style relative pt-3 font-bold';
+			button.className = originalButtonClassName + ' minecraft-style text-shadow-style pt-3 font-bold';
 			buttonTitleElement.className = originalButtonTitleClassName + ' font-bold pl-4 pr-4 pb-4 text-white';
 		}
 
