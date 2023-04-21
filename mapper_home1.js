@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function configureHomePage() {
 	addHomePageToDOM();
+	styleButtons();
+}
+
+function styleButtons() {
+	const getStartedButton = document.getElementById('get-started-button');
+  styleEnabledButton([getStartedButton]);
 }
 
 function takeUserToAuth() {
