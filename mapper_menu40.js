@@ -62,6 +62,7 @@ function configure_slide_over_menu() {
 
   genMapButton.addEventListener('click', function() {
     genMapButton.disabled = true;
+
     genMapButton.innerHTML = 'Generating <i class="fa fa-spinner fa-spin"></i>';
     genMapButton.classList.remove('hover:bg-orange-700');
     triggerMapGeneration();
@@ -120,14 +121,14 @@ function revertLoadLatestMapButtonState() {
 
 function revertGenMapButtonState() {
   const button = document.getElementById('gen-map-button');
+  const buttonTitle = button.querySelector('.button-title');
   button.disabled = false;
-  button.innerHTML = 'Generate New Map';
-  button.classList.add('hover:bg-orange-700');
+  buttonTitle.innerHTML = 'Generate New Map';
 }
 
 function changeGenMapButtonStateToSuccess() {
   const button = document.getElementById('gen-map-button');
-  const buttonTitle = button.querySelector('button-title');
+  const buttonTitle = button.querySelector('.button-title');
   buttonTitle.innerHTML = 'Generated!';
   button.classList.replace('bg-orange-500','bg-green-700');
 }
@@ -135,8 +136,10 @@ function changeGenMapButtonStateToSuccess() {
 function resetGenMapElements() {
   // Reset the gen map button
   const button = document.getElementById('gen-map-button');
-  button.innerHTML = 'Generate New Map';
+  const buttonTitle = button.querySelector('.button-title');
+  buttonTitle.innerHTML = 'Generate New Map';
   styleDisabledButton([button]);
+  button.disabled = true;
 
   // Reset the text under the button
   const genMapAreaText = document.getElementById('gen-map-text');
