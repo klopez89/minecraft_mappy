@@ -119,20 +119,22 @@ function fetchNewSignedMapImageULR(img_info) {
 
 			if (signed_img_url == null) {
 				console.log('Looks like this map image backup was removed from storage, add some placeholder UI instead');
-			} else {
-	      localStorage.setItem('map_backup_date', backup_date);
-	      localStorage.setItem('map_backup_id', backup_id);
-	      presentMapExplorer(signed_img_url);
+				return
 			}
 
-			if (latest_blob_path != null) {
+      localStorage.setItem('map_backup_date', backup_date);
+      localStorage.setItem('map_backup_id', backup_id);
+
+      const hasNewerMapToLoad = latest_blob_path != null;
+      presentMapExplorer(signed_img_url, hasNewerMapToLoad);
+
+			if (haveNewerMapToLoad) {
 				console.log(`We have a newer map to load into! Show the user this option as a button! New blob_path: ${latest_blob_path}`)
 				const latest_backup_id = response["latest_backup_id"];
 				const latest_backup_date = response["latest_backup_date"];
 				localStorage.setItem('latest_blob_path', latest_blob_path);
 				localStorage.setItem('latest_backup_id',latest_backup_id);
 				localStorage.setItem('latest_backup_date', latest_backup_date);
-				enable_load_latest_map();
 			} else {
 				localStorage.removeItem('latest_blob_path');
 				localStorage.removeItem('latest_backup_id');
@@ -258,7 +260,7 @@ function checkForNewBackup() {
 }
 
 
-function presentMapExplorer(signed_img_url) {
+function presentMapExplorer(signed_img_url, hasNewerMapToLoad) {
 	// Fade out the existing div
 	$('#realWorldSelectionContainer').fadeOut(500, function() {
 	  // After the fade out animation is complete, remove the div from the DOM
@@ -273,6 +275,9 @@ function presentMapExplorer(signed_img_url) {
   // Configure then transition to map explorer from the loading div
   configureMap();
   add_slide_over_menu();
+  if (hasNewerMapToLoad) { 
+  	enable_load_latest_map() 
+  }
   transitionToMapper()
 
   //Check for new map to generate, reserved only for authenticated user w/ a matching uuid to the owner_uuid of the current world map
