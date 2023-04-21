@@ -32,6 +32,7 @@ function configure_slide_over_menu() {
   const genMapButton = document.getElementById('gen-map-button');
 
   styleDisabledButton([loadLatestMapButton, genMapButton]);
+  styleEnabledButton([menuButton]);
 
   exitMenuPanelButton.addEventListener('click', function() {
     toggleSlideMenu(slideOverPanel, slideMenuBg);
@@ -292,9 +293,9 @@ function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate
 
 
 
-          <button id="menu-button" class="pointer-events-auto absolute bottom-4 right-4 py-3 px-4 bg-blue-500 hover:bg-blue-700 text-white rounded-md shadow-md">
-            Menu
-          </button>
+        <button id="menu-button" class="pointer-events-auto absolute bottom-4 right-4">
+          <div class="button-title text-sm">Menu</div>
+        </button>
 
 
 
