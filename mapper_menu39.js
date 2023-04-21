@@ -102,6 +102,7 @@ function configureAuthButton() {
 
 function showSignInButtonLoadingState() {
   const signInButton =  document.getElementById('auth-button');
+  signInButton.classList.add('not-clickable');
   const signInButtonTitle = signInButton.querySelector('.button-title');
   signInButtonTitle.innerHTML = 'Signing out &nbsp; <i class="fa fa-spinner fa-spin"></i>';
 }
