@@ -301,23 +301,23 @@ function map_html(map_img_url) {
 		
 		<div id="menu-overlay-element" class="menu-overlay">
 
-			<div class="zoom-reset-zoom-container w-full pt-2 pb-4 px-4 flex justify-start">
-     		<div class="zoom-hugging-container" style="min-width: 150px;">
-        	<div class="zoom-buttons flex flex-row">
-					  <button id="zoom-in-button" class="zoom-button text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-3 px-4 rounded mr-1" style="cursor: pointer; pointer-events: auto; width: 50%;">
-					    <i class="fa fa-plus"></i>
-					  </button>
-					  <button id="zoom-out-button" class="zoom-button text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-3 px-4 rounded ml-1" style="cursor: pointer; pointer-events: auto; width: 50%;">
-					    <i class="fa fa-minus"></i>
-					  </button>
-					</div>
-					<div class="reset-button flex flex-row mt-2">
-					  <button class="zoom-reset text-xs bg-green-700 hover:bg-green-900 text-white font-extrabold py-3 px-4 rounded" style="width: 100%;">
-					    &nbsp;Reset&nbsp;
-					  </button>
-					</div>
-        </div>
-      </div>
+	    <div class="zoom-reset-zoom-container w-full pt-2 pb-4 px-4 flex justify-start">
+	      <div class="zoom-hugging-container" style="min-width: 150px;">
+	        <div class="zoom-buttons flex flex-row">
+	          <button id="zoom-in-button" class="zoom-button text-xs bg-green-700 mr-1" style="cursor: pointer; pointer-events: auto; width: 50%;">
+	          <div class="button-title"><i class="fa fa-plus"></i></div>
+	          </button>
+	          <button id="zoom-out-button" class="zoom-button bg-green-700 text-xs ml-1" style="cursor: pointer; pointer-events: auto; width: 50%;">
+	            <div class="button-title"><i class="fa fa-minus"></i></div>
+	          </button>
+	        </div>
+	        <div class="reset-button flex flex-row mt-2">
+	          <button id="zoom-reset-button" class="zoom-reset text-xs bg-green-700" style="width: 100%;">
+	            <div class="button-title">&nbsp;Reset&nbsp;</div>
+	          </button>
+	        </div>
+	      </div>
+	    </div>
 
 		</div>
 	</div>
@@ -347,8 +347,14 @@ function configureMap() {
 	
 	const zoomInButton = document.getElementById('zoom-in-button');
 	const zoomOutButton = document.getElementById('zoom-out-button');
+  const zoomResetButton = document.getElementById('zoom-reset-button');
+  styleEnabledButton([zoomInButton, zoomOutButton, zoomResetButton]);
 	zoomInButton.addEventListener('click', panzoomInstance.zoomIn);
 	zoomOutButton.addEventListener('click', panzoomInstance.zoomOut);
+	zoomResetButton.addEventListener('click', () => {
+		panzoomInstance.pan(0, 0);
+		panzoomInstance.zoom(1, { animate: true })
+	});
 
 	// Enable click and drag to pan
 	let isPanning = false;
@@ -370,11 +376,6 @@ function configureMap() {
 
 	element.addEventListener('mouseleave', () => {
 		isPanning = false;
-	});
-	
-	document.querySelector('.zoom-reset').addEventListener('click', () => {
-		panzoomInstance.pan(0, 0);
-		panzoomInstance.zoom(1, { animate: true })
 	});
 	
  window.addEventListener('wheel', (event) => {

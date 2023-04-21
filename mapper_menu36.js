@@ -31,8 +31,7 @@ function configure_slide_over_menu() {
   const loadLatestMapButton = document.getElementById('load-latest-button');
   const genMapButton = document.getElementById('gen-map-button');
 
-  styleDisabledButton(loadLatestMapButton);
-  styleDisabledButton(genMapButton);
+  styleDisabledButton([loadLatestMapButton, genMapButton]);
 
   exitMenuPanelButton.addEventListener('click', function() {
     toggleSlideMenu(slideOverPanel, slideMenuBg);
@@ -73,13 +72,13 @@ function configureAuthButton() {
   const authButton = document.getElementById('auth-button');
   const buttonTitle = authButton.querySelector('.button-title');
 
-  styleEnabledButton(authButton);
+  styleEnabledButton([authButton]);
 
   if (minecraft_auth_info != null) {
-    buttonTitle.textContent = 'Sign out';
+    buttonTitle.innerHTML = 'Sign out';
     authButton.setAttribute('signedIn', 'true');
   } else {
-    buttonTitle.textContent = 'Sign in';
+    buttonTitle.innerHTML = 'Sign in';
     authButton.setAttribute('signedIn', 'false');
   }
 
@@ -88,13 +87,22 @@ function configureAuthButton() {
 
     if (authButton.getAttribute('signedIn') === 'true') {
       // sign them out
+      showSignInButtonLoadingState();
       clearAuthInfo();
-      location.reload();
+      setTimeout(function() {
+        location.reload();
+      }, 500);
     } else {
       // sign them in
       window.location.href = "https://www.whollyaigame.com/minecraftauth"
     }
   });
+}
+
+function showSignInButtonLoadingState() {
+  const signInButton =  document.getElementById('sign-in');
+  const signInButtonTitle = signInButton.querySelector('.button-title');
+  signInButtonTitle.innerHTML = 'Signing out &nbsp; <i class="fa fa-spinner fa-spin"></i>';
 }
 
 function dismissSlideOutMenu() {
@@ -126,7 +134,7 @@ function resetGenMapElements() {
   // Reset the gen map button
   const button = document.getElementById('gen-map-button');
   button.innerHTML = 'Generate New Map';
-  styleDisabledButton(button);
+  styleDisabledButton([button]);
 
   // Reset the text under the button
   const genMapAreaText = document.getElementById('gen-map-text');
@@ -212,7 +220,7 @@ function enable_load_latest_map() {
   // Modify the button
   const loadLatestMapButton = document.getElementById('load-latest-button');
   loadLatestMapButton.classList.toggle('bg-yellow-500');
-  styleEnabledButton(loadLatestMapButton);
+  styleEnabledButton([loadLatestMapButton]);
 
   // Modify the text
   const loadLatestTextElement = document.getElementById('load-latest-text');
@@ -234,7 +242,7 @@ function enable_generate_new(latestBackupDate) {
   const genMapButton = document.getElementById('gen-map-button');
   genMapButton.classList.toggle('bg-orange-500');
   console.log(`about to style gen map to be enabled: ${genMapButton}`);
-  styleEnabledButton(genMapButton);
+  styleEnabledButton([genMapButton]);
 
   // Modify the text
   const latestBackupTextElement = document.getElementById('gen-map-text');
