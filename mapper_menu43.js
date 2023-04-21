@@ -298,11 +298,9 @@ function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate
 
 
 
-        <button id="menu-button" class="pointer-events-auto absolute bottom-4 right-4">
+        <button id="menu-button" class="pointer-events-auto absolute bottom-4 right-4 z-0">
           <div class="button-title text-sm">Menu</div>
         </button>
-
-
 
 
           <div id="slide-over-panel" class="pointer-events-auto w-screen max-w-md transform transition ease-in-out duration-500 sm:duration-700">
@@ -342,11 +340,11 @@ function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate
 
                 <div class="flex-1 mt-10">
                   <div class="flex flex-col justify-end h-full">
-                    <div class="flex justify-center pb-1">
+                    <div class="flex justify-center pb-4">
                       <img class="max-h-16" src="https://storage.googleapis.com/minecraft_maps/bnw_mappy_logo.png" alt="Image description">
                     </div>
                     <div class="flex justify-center">
-                      <p class="text-xs text-slate-400 mb-0 pl-1">Minecraft Mapper, 2023</p>
+                      <p class="text-xs text-slate-400 mb-0 pl-1">Minecraft Mapper &nbsp; &nbsp; 2023</p>
                     </div>
                   </div>
                 </div>
