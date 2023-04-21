@@ -128,7 +128,7 @@ function fetchNewSignedMapImageULR(img_info) {
       const hasNewerMapToLoad = latest_blob_path != null;
       presentMapExplorer(signed_img_url, hasNewerMapToLoad);
 
-			if (haveNewerMapToLoad) {
+			if (hasNewerMapToLoad) {
 				console.log(`We have a newer map to load into! Show the user this option as a button! New blob_path: ${latest_blob_path}`)
 				const latest_backup_id = response["latest_backup_id"];
 				const latest_backup_date = response["latest_backup_date"];
