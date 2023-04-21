@@ -62,9 +62,8 @@ function configure_slide_over_menu() {
 
   genMapButton.addEventListener('click', function() {
     genMapButton.disabled = true;
-
-    genMapButton.innerHTML = 'Generating <i class="fa fa-spinner fa-spin"></i>';
-    genMapButton.classList.remove('hover:bg-orange-700');
+    const buttonTitle = genMapButton.querySelector('.button-title');
+    buttonTitle.innerHTML = 'Generating <i class="fa fa-spinner fa-spin"></i>';
     triggerMapGeneration();
   });
 }
