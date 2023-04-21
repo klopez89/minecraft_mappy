@@ -62,8 +62,9 @@ function configure_slide_over_menu() {
 
   genMapButton.addEventListener('click', function() {
     genMapButton.disabled = true;
+    genMapButton.classList.toggle('not-clickable');
     const buttonTitle = genMapButton.querySelector('.button-title');
-    buttonTitle.innerHTML = 'Generating <i class="fa fa-spinner fa-spin"></i>';
+    buttonTitle.innerHTML = 'Generating &nbsp; <i class="fa fa-spinner fa-spin"></i>';
     triggerMapGeneration();
   });
 }
@@ -122,6 +123,7 @@ function revertGenMapButtonState() {
   const button = document.getElementById('gen-map-button');
   const buttonTitle = button.querySelector('.button-title');
   button.disabled = false;
+  genMapButton.classList.toggle('not-clickable');
   buttonTitle.innerHTML = 'Generate New Map';
 }
 
