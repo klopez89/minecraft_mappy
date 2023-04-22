@@ -17,9 +17,9 @@ from helperFunctions import convert_minecraft_date_to_est_str, backup_id_from_bl
 from image_download import get_signed_url
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
-CORS(app, resources={r"/*": {"origins": ["https://www.whollyaigame.com", "https://api.replicate.com"]}})
+CORS(app, resources={r"/*": {"origins": ["https://www.whollyaigame.com", "https://www.minecraftmappy.com", "https://api.replicate.com"]}})
 
-SITE_DOMAIN = 'https://www.whollyaigame.com'
+
 
 @app.route("/")
 def index():

@@ -75,6 +75,7 @@ function beginMicrosoftLogin() {
       localStorage.setItem('auth_state', state);
 
       // Redirect the user to another URL
+      console.log(`The login url we should redirect to: ${login_url}`);
       window.location.href = login_url;
 
     },
@@ -248,7 +249,7 @@ function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, worl
     'world_owner_uuid': world_owner_uuid,
     'world_owner': world_owner
   };
-  const mapperUrl = base_site_url + "/mapper";
+  const mapperUrl = base_site_url + map_page; // Constants from webflow site
   const modifiedMapperUrl = `${mapperUrl}?${new URLSearchParams(queryParams).toString()}`;
 
   window.location.href = modifiedMapperUrl;
