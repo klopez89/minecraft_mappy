@@ -248,7 +248,7 @@ function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, worl
     'world_owner_uuid': world_owner_uuid,
     'world_owner': world_owner
   };
-  const mapperUrl = "https://www.whollyaigame.com/mapper";
+  const mapperUrl = base_site_url + "/mapper";
   const modifiedMapperUrl = `${mapperUrl}?${new URLSearchParams(queryParams).toString()}`;
 
   window.location.href = modifiedMapperUrl;
@@ -256,7 +256,7 @@ function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, worl
 
 function resetSignInButton() {
   const signInTextDiv = document.getElementById('signInTextDiv');
-  signInTextDiv.innerHTML = `Sign  in with Microsoft`;
+  signInTextDiv.innerHTML = `Sign in with Microsoft`;
   const signInButton = signInTextDiv.parentElement;
   signInButton.disabled = false;
 }

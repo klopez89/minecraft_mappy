@@ -88,19 +88,6 @@ function clearAuthInfo() {
 	localStorage.removeItem('access_token');
 }
 
-// minecraft_auth_info = checkForMinecraftAuthInfo()
-
-// if (minecraft_auth_info != null) {
-// 	fetchRealmsInfo(minecraft_auth_info)
-// } else {
-// 	console.log('Take user back to main auth page')
-// 	window.location.href = "https://www.whollyaigame.com/minecraftauth"
-// }
-
-
-
-
-
 
 function fetchNewSignedMapImageULR(img_info) {
 	$.ajax({

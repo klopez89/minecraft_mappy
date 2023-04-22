@@ -18,7 +18,7 @@ function styleButtons() {
 }
 
 function takeUserToAuth() {
-	window.location.href = "https://www.whollyaigame.com/minecraftauth";
+	window.location.href = base_site_url + auth_page; // Constants from webflow
 }
 
 function addHomePageToDOM() {

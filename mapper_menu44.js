@@ -96,7 +96,7 @@ function configureAuthButton() {
       }, 500);
     } else {
       // sign them in
-      window.location.href = "https://www.whollyaigame.com/minecraftauth"
+      window.location.href = base_site_url + auth_page; // Constants from webflow
     }
   });
 }
