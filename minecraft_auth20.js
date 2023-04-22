@@ -58,10 +58,11 @@ function clickedSignInWithMicrosoft(button) {
 }
 
 function beginMicrosoftLogin() {
+  const redirect_url = base_site_url + auth_page;
   $.ajax({
     url: `${base_server_url}/login/microsoft`,
     method: 'POST',
-    data: JSON.stringify({}),
+    data: JSON.stringify({'redirect_url': redirect_url}),
     contentType: "application/json",
     dataType: "json",
     success: function(response) {
@@ -76,8 +77,7 @@ function beginMicrosoftLogin() {
 
       // Redirect the user to another URL
       console.log(`The login url we should redirect to: ${login_url}`);
-      corrected_login_url = makeRedirectUrlCorrectForEnvironment(login_url);
-      window.location.href = corrected_login_url;
+      window.location.href = login_url;
 
     },
     error: function(xhr, status, error) {

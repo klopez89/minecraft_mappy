@@ -34,7 +34,8 @@ def login_microsoft():
 		raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
 
 	request_json = request.get_json()
-	login_data = get_microsoft_login_data()
+	redirect_url = request_json["redirect_url"];
+	login_data = get_microsoft_login_data(redirect_url)
 	response = jsonify(login_data=login_data)
 	return _corsify_actual_response(response)
 

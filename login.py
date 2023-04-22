@@ -10,15 +10,14 @@ from realms import download_extract_backup
 
 # uuid': 'ae66b652e508403a9c4587ff0f011760', 'name': 'klopez89'
 
-def get_microsoft_login_data():
+def get_microsoft_login_data(redirect_link):
     # Replace these values with your own, these need to be place in the google cloud service dedicated to this site
     client_id = "5beeb873-aaa4-4fc9-90ea-d58811e59ff7"
     client_secret = "GIS8Q~NiwTfVrq1YJLrSpVuussbEGepIxhvy0c17"
-    redirect_uri = "https://www.whollyaigame.com/minecraftauth"
 
     # Set the data for your Azure Application here. For more information look at the documentation.
     CLIENT_ID = client_id
-    REDIRECT_URL = redirect_uri
+    REDIRECT_URL = redirect_link
 
     start_time = time.time()
 
