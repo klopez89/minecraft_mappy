@@ -6,18 +6,12 @@ import sys
 import requests
 import time
 from realms import download_extract_backup
+from helperFunctions import azure_client_id, azure_client_secret, azure_redirect_url
 
 
-# uuid': 'ae66b652e508403a9c4587ff0f011760', 'name': 'klopez89'
-
-def get_microsoft_login_data(redirect_link):
-    # Replace these values with your own, these need to be place in the google cloud service dedicated to this site
-    client_id = "5beeb873-aaa4-4fc9-90ea-d58811e59ff7"
-    client_secret = "GIS8Q~NiwTfVrq1YJLrSpVuussbEGepIxhvy0c17"
-
-    # Set the data for your Azure Application here. For more information look at the documentation.
-    CLIENT_ID = client_id
-    REDIRECT_URL = redirect_link
+def get_microsoft_login_data(base_site_url):
+    CLIENT_ID = azure_client_id(base_site_url)
+    REDIRECT_URL = azure_redirect_url(base_site_url)
 
     start_time = time.time()
 
@@ -39,14 +33,9 @@ def get_microsoft_login_data(redirect_link):
 
 
 def get_minecraft_login_data(redirected_url, auth_code_verifier, auth_state):
-    # Replace these values with your own, these need to be place in the google cloud service dedicated to this site
-    client_id = "5beeb873-aaa4-4fc9-90ea-d58811e59ff7"
-    client_secret = "GIS8Q~NiwTfVrq1YJLrSpVuussbEGepIxhvy0c17"
-    redirect_uri = "https://www.whollyaigame.com/minecraftauth"
-
-    # Set the data for your Azure Application here. For more information look at the documentation.
-    CLIENT_ID = client_id
-    REDIRECT_URL = redirect_uri
+    CLIENT_ID = azure_client_id(redirected_url)
+    CLIEND_SECRET = azure_client_secret(redirected_url)
+    REDIRECT_URL = azure_redirect_url(redirected_url)
 
     # Get the code from the url
     try:
@@ -58,7 +47,7 @@ def get_minecraft_login_data(redirected_url, auth_code_verifier, auth_state):
         print("Url not valid")
         sys.exit(1)
 
-    login_data = minecraft_launcher_lib.microsoft_account.complete_login(CLIENT_ID, [client_secret], REDIRECT_URL, auth_code, auth_code_verifier)
+    login_data = minecraft_launcher_lib.microsoft_account.complete_login(CLIENT_ID, [CLIEND_SECRET], REDIRECT_URL, auth_code, auth_code_verifier)
 
     print(f'The resulting loggin data for minecraft: {login_data}')
 
@@ -72,7 +61,7 @@ def get_minecraft_login_data(redirected_url, auth_code_verifier, auth_state):
 
 
 
-def check_access_token_via_game_ownership(access_token, refresh_token):
+def check_access_token_via_game_ownership(access_token, refresh_token, base_site_url):
     mcstore_url = f"https://api.minecraftservices.com/entitlements/mcstore"
     headers = {"Authorization": f"Bearer {access_token}"}
     response = requests.get(mcstore_url, headers=headers)
@@ -85,7 +74,7 @@ def check_access_token_via_game_ownership(access_token, refresh_token):
     else:
         if response.status_code == 401:
             print('Ran into auth 401 so going to attempt token refresh')
-            refresh_result = attempt_minecraft_auth_refresh(refresh_token)
+            refresh_result = attempt_minecraft_auth_refresh(refresh_token, base_site_url)
             return {
                 'valid': False,
                 'refresh_info': refresh_result
@@ -97,17 +86,12 @@ def check_access_token_via_game_ownership(access_token, refresh_token):
                 'refresh_info:': None
             }
 
-def attempt_minecraft_auth_refresh(refresh_token):
-    # Replace these values with your own, these need to be place in the google cloud service dedicated to this site
-    client_id = "5beeb873-aaa4-4fc9-90ea-d58811e59ff7"
-    client_secret = "GIS8Q~NiwTfVrq1YJLrSpVuussbEGepIxhvy0c17"
-    redirect_uri = "https://www.whollyaigame.com/minecraftauth"
+def attempt_minecraft_auth_refresh(refresh_token, base_site_url):
+    CLIENT_ID = azure_client_id(base_site_url)
+    CLIEND_SECRET = azure_client_secret(base_site_url)
+    REDIRECT_URL = azure_redirect_url(base_site_url)
 
-    # Set the data for your Azure Application here. For more information look at the documentation.
-    CLIENT_ID = client_id
-    REDIRECT_URL = redirect_uri
-
-    login_data = minecraft_launcher_lib.microsoft_account.complete_refresh(CLIENT_ID, [client_secret], REDIRECT_URL, refresh_token)
+    login_data = minecraft_launcher_lib.microsoft_account.complete_refresh(CLIENT_ID, [CLIEND_SECRET], REDIRECT_URL, refresh_token)
 
     print(f'The resulting refreshed loggin data for minecraft: {login_data}')
 
@@ -118,15 +102,6 @@ def attempt_minecraft_auth_refresh(refresh_token):
             'access_token': login_data["access_token"],
             'refresh_token': login_data["refresh_token"],
         }
-
-    # minecraft_login_info = {
-    #     'access_token': login_data["access_token"],
-    #     'refresh_token': login_data["refresh_token"],
-    #     'uuid': login_data["id"],
-    #     'username': login_data["name"]
-    # }
-    # return minecraft_login_info
-
 
 def get_minecraft_profile(access_token):
     profile_url = f"https://api.minecraftservices.com/minecraft/profile"
@@ -151,17 +126,6 @@ def check_game_ownership(access_token):
     else:
         print("Error getting mcstore:", response)
         return None
-
-# def get_realms(headers, cookies):
-#     realms_url = f"https://pc.realms.minecraft.net/worlds"
-#     print(f'The realms url: {realms_url}')
-#     response = requests.get(realms_url, headers=headers, cookies=cookies)
-    
-#     if response.status_code == 200:
-#         return response.json()
-#     else:
-#         print(f"Error getting realms, status code: {response.status_code}, response text: {response.text}")
-#         return None
 
 
 def get_world_backups(world_id, headers, cookies):

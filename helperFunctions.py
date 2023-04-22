@@ -1,6 +1,8 @@
 from datetime import datetime
 import pytz
+import os
 from dateutil.parser import parse
+
 
 def convertAirtableDateToCustomFormat(created_date):
 	date = datetime.strptime(created_date, "%Y-%m-%dT%H:%M:%S.%fZ") # 2022-12-11T01:13:32.000Z (what comes back from airtable)
@@ -36,3 +38,22 @@ def backup_id_from_blob_path(string):
     last_underscore = string.rfind('_')  # find the index of the last underscore
     png_index = string.find('.png')  # find the index of the ".png" text
     return string[last_underscore + 1 : png_index]  # extract the portion of the string between the two indices
+
+
+def azure_client_id(base_site_url):
+	if base_site_url.contains('whollyaigame.com'):
+		return os.environ.get('azure_client_id_dev')
+	else:
+		return os.environ.get('azure_client_id_prod')
+
+def azure_client_secret(base_site_url):
+	if base_site_url.contains('whollyaigame.com'):
+		return os.environ.get('azure_client_secret_dev')
+	else:
+		return os.environ.get('azure_client_secret_prod')
+
+def azure_redirect_url(base_site_url):
+	if base_site_url.contains('whollyaigame.com'):
+		return os.environ.get('azure_redirect_url_dev')
+	else:
+		return os.environ.get('azure_redirect_url_prod')

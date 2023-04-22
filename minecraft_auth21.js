@@ -58,11 +58,10 @@ function clickedSignInWithMicrosoft(button) {
 }
 
 function beginMicrosoftLogin() {
-  const redirect_url = base_site_url + auth_page;
   $.ajax({
     url: `${base_server_url}/login/microsoft`,
     method: 'POST',
-    data: JSON.stringify({'redirect_url': redirect_url}),
+    data: JSON.stringify({}),
     contentType: "application/json",
     dataType: "json",
     success: function(response) {

@@ -34,8 +34,7 @@ def login_microsoft():
 		raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
 
 	request_json = request.get_json()
-	redirect_url = request_json["redirect_url"];
-	login_data = get_microsoft_login_data(redirect_url)
+	login_data = get_microsoft_login_data(request.url)
 	response = jsonify(login_data=login_data)
 	return _corsify_actual_response(response)
 
@@ -68,7 +67,7 @@ def validate_access_token():
 	request_json = request.get_json()
 	access_token = request_json["access_token"]
 	refresh_token = request_json["refresh_token"]
-	validation_result = check_access_token_via_game_ownership(access_token, refresh_token)
+	validation_result = check_access_token_via_game_ownership(access_token, refresh_token, request.url)
 
 	response = jsonify(validation_result)
 	return _corsify_actual_response(response)
