@@ -76,7 +76,8 @@ function beginMicrosoftLogin() {
 
       // Redirect the user to another URL
       console.log(`The login url we should redirect to: ${login_url}`);
-      window.location.href = login_url;
+      corrected_login_url = makeRedirectUrlCorrectForEnvironment(login_url);
+      window.location.href = corrected_login_url;
 
     },
     error: function(xhr, status, error) {
