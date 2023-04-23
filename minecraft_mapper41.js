@@ -114,6 +114,7 @@ function fetchNewSignedMapImageULR(img_info) {
 
       const hasNewerMapToLoad = latest_blob_path != null;
       presentMapExplorer(signed_img_url, hasNewerMapToLoad);
+      configureWorldSelectionUI();
 
 			if (hasNewerMapToLoad) {
 				console.log(`We have a newer map to load into! Show the user this option as a button! New blob_path: ${latest_blob_path}`)

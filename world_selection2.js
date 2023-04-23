@@ -1,7 +1,4 @@
 
-document.addEventListener('DOMContentLoaded', function() {
-  configureWorldSelectionUI();
-});
 
 function fetchWorldList() {
   minecraft_auth_info = {
