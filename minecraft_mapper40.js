@@ -277,9 +277,9 @@ function transitionToMapper() {
 	const loadingDiv = document.getElementById('loadingContainer');
   const mapperDiv = document.getElementById('mapContainer');
   loadingDiv.classList.replace('opacity-100','opacity-0');
-  loadingDiv.classList.replace('z-50','z-1'); 
+  loadingDiv.classList.replace('z-40','z-1'); 
   mapperDiv.classList.replace('opacity-0','opacity-100');
-  mapperDiv.classList.replace('z-1','z-50'); 
+  mapperDiv.classList.replace('z-1','z-54'); 
 }
 
 
@@ -319,7 +319,7 @@ function map_html(map_img_url) {
 
 function loading_html() {
 	return `
-	<div id="loadingContainer" class="loading-container absolute w-full h-full flex justify-center items-center opacity-100 transition-opacity duration-500 z-50 custom-dark-gray-bg">
+	<div id="loadingContainer" class="loading-container absolute w-full h-full flex justify-center items-center opacity-100 transition-opacity duration-500 z-40 custom-dark-gray-bg">
 	  <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow text-center">
 	   <i class="text-5xl text-white fa fa-spinner fa-spin"></i>
 	  </div>

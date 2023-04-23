@@ -30,6 +30,8 @@ function configure_slide_over_menu() {
   const slideMenuBg = document.getElementById('slide-menu-bg');
   const loadLatestMapButton = document.getElementById('load-latest-button');
   const genMapButton = document.getElementById('gen-map-button');
+  const changeWorldButton = document.getElementById('change-world');
+  const exitWorldSelectionButton = document.getElementById('exit-world-selection-button');
 
   styleDisabledButton([loadLatestMapButton, genMapButton]);
   styleEnabledButton([menuButton]);
@@ -66,6 +68,14 @@ function configure_slide_over_menu() {
     const buttonTitle = genMapButton.querySelector('.button-title');
     buttonTitle.innerHTML = 'Generating &nbsp; <i class="fa fa-spinner fa-spin"></i>';
     triggerMapGeneration();
+  });
+
+  changeWorldButton.addEventListener('click', function() {
+    fetchWorldList();
+  });
+
+  exitWorldSelectionButton.addEventListener('click', function() {
+    transitionOutWorldSelection();
   });
 }
 
@@ -312,6 +322,9 @@ function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate
                     <div class="world-name text-slate-300 text-2xl">${worldName}</div>
                     <p class="hosted-by text-xs text-slate-300 mt-1">hosted by ${worldOwner}</p>
                     <p class="backup-date-label text-slate-400 mt-1">Last backup: &nbsp;${backupDate}</p>
+                    <button id="change-world" class="mt-4">
+                      <div class="button-title text-sm">Change World</div>
+                    </button>
                   </div>
 
 

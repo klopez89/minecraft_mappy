@@ -41,19 +41,19 @@ def backup_id_from_blob_path(string):
 
 
 def azure_client_id(base_site_url):
-	if base_site_url.contains('whollyaigame.com'):
+	if 'whollyaigame.com' in base_site_url:
 		return os.environ.get('azure_client_id_dev')
 	else:
 		return os.environ.get('azure_client_id_prod')
 
 def azure_client_secret(base_site_url):
-	if base_site_url.contains('whollyaigame.com'):
+	if 'whollyaigame.com' in base_site_url:
 		return os.environ.get('azure_client_secret_dev')
 	else:
 		return os.environ.get('azure_client_secret_prod')
 
 def azure_redirect_url(base_site_url):
-	if base_site_url.contains('whollyaigame.com'):
+	if 'whollyaigame.com' in base_site_url:
 		return os.environ.get('azure_redirect_url_dev')
 	else:
 		return os.environ.get('azure_redirect_url_prod')
