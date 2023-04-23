@@ -33,8 +33,10 @@ function configure_slide_over_menu() {
   const changeWorldButton = document.getElementById('change-world');
   const exitWorldSelectionButton = document.getElementById('exit-world-selection-button');
 
+  console.log(`the changeWorldButton is: ${changeWorldButton}`);
+
   styleDisabledButton([loadLatestMapButton, genMapButton]);
-  styleEnabledButton([menuButton]);
+  styleEnabledButton([menuButton, changeWorldButton]);
 
   exitMenuPanelButton.addEventListener('click', function() {
     toggleSlideMenu(slideOverPanel, slideMenuBg);
