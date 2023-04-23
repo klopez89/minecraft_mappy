@@ -16,7 +16,7 @@ function fetchWorldList() {
       console.log('Realms info fetch successful:', response);
       const realms_info = response["realms_info"];
       const realm_servers = realms_info["servers"];
-      presentRealmWorldSelection(realm_servers, uuid)
+      presentRealmWorldSelection(realm_servers, minecraft_auth_info['uuid'])
     },
     error: function(xhr, status, error) {
       console.error('Realms info fetch failed:', error);

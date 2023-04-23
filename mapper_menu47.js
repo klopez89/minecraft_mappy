@@ -1,6 +1,6 @@
 
 
-function add_slide_over_menu() {
+function add_slide_over_menu(is_authenticated) {
   const worldName = localStorage.getItem('selected_world_name');
   const worldOwner = localStorage.getItem('selected_world_owner_username');
   const backupDate = localStorage.getItem('map_backup_date');
@@ -10,7 +10,7 @@ function add_slide_over_menu() {
   const loadLatestMapHTML = load_latest_map_html();
   const generateNewMapHTML = generate_new_map_html(is_auth_user_host, worldOwner);
 
-  const slideOutMenuHTML = menu_html(worldName, worldOwner, backupDate, loadLatestMapHTML, generateNewMapHTML);
+  const slideOutMenuHTML = menu_html(worldName, worldOwner, backupDate, loadLatestMapHTML, generateNewMapHTML, is_authenticated);
 
   const slideOutMenu_element = $($.parseHTML(slideOutMenuHTML));
   const slideOutPanel_element = slideOutMenu_element.find('#slide-over-panel');
@@ -279,7 +279,15 @@ function generate_new_map_html(is_auth_user_host, host) {
   `;
 }
 
-function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate_new_html) {
+function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate_new_html, is_authenticated) {
+  change_world_button_html = `
+    <button id="change-world" class="mt-4">
+      <div class="button-title text-sm">Change World</div>
+    </button>
+  `;
+
+  final_change_world_html = is_authenticated ? change_world_button_html : '';
+
   htmlString = `
 
   <div id="slide-out-menu" class="relative z-50 pointer-events-none" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
@@ -324,9 +332,7 @@ function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate
                     <div class="world-name text-slate-300 text-2xl">${worldName}</div>
                     <p class="hosted-by text-xs text-slate-300 mt-1">hosted by ${worldOwner}</p>
                     <p class="backup-date-label text-slate-400 mt-1">Last backup: &nbsp;${backupDate}</p>
-                    <button id="change-world" class="mt-4">
-                      <div class="button-title text-sm">Change World</div>
-                    </button>
+                    ${final_change_world_html}
                   </div>
 
 
