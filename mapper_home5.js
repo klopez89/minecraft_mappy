@@ -1,5 +1,3 @@
-
-
 document.addEventListener('TailwindLoaded', function() {
   configureHomePage();
 });
