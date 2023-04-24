@@ -2,6 +2,7 @@ document.addEventListener('TailwindLoaded', function() {
   configureHomePage();
 });
 
+
 function configureHomePage() {
 	addHomePageToDOM();
 	styleButtons();
