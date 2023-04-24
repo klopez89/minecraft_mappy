@@ -89,7 +89,6 @@ def realms():
 	realms_info = get_realms_info(access_token, username, uuid)
 
 
-
 	# Begin to find out if we have a backup available. 
 	# Create an array of dictionaries with only id and activeSlot
 	new_dict_list = []
@@ -104,16 +103,14 @@ def realms():
 		world_id = new_dict["id"]
 		active_slot = new_dict["activeSlot"]
 		backup_url_response = get_latest_backup_url(world_id, active_slot, headers, cookies)
-		new_dict["has_a_backup"] = backup_url_response != None 
+		new_dict["hasABackup"] = backup_url_response != None 
 
 	# Update the original server list with the new "has_a_backup" key based on "id"
 	for server in realms_info["servers"]:
 	    for new_dict in new_dict_list:
 	        if server["id"] == new_dict["id"]:
-	            server["has_a_backup"] = new_dict["has_a_backup"]
+	            server["hasABackup"] = new_dict["hasABackup"]
 	            break
-
-
 
 	# Get latest blob_paths to help determine navigation route on client
 	world_ids = [server['id'] for server in realms_info['servers']]

@@ -49,7 +49,7 @@ function worldSelected(button) {
     'access_token': accessToken
   }
 
-  const hasBlobPath = blobPath != null || blobPath != undefined;
+  const hasBlobPath = blobPath != null || blobPath != "undefined";
   console.log(`The blob path upon world selection: ${blobPath}`);
 
   if (hasBlobPath) {
