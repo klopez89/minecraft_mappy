@@ -362,7 +362,9 @@ function menu_html(worldName, worldOwner, backupDate, load_latest_html, generate
                 <div class="flex-1 mt-10">
                   <div class="flex flex-col justify-end h-full">
                     <div class="flex justify-center pb-4">
-                      <img class="max-h-16" src="https://storage.googleapis.com/minecraft_maps/bnw_mappy_logo.png" alt="Image description">
+                      <a href="https://www.minecraftmappy.com">
+                        <img class="max-h-16" src="https://storage.googleapis.com/minecraft_maps/bnw_mappy_logo.png" alt="Image description">
+                      </a>
                     </div>
                     <div class="flex justify-center">
                       <p class="text-xs text-slate-400 mb-0 pl-1">Minecraft Mapper &nbsp; &nbsp; 2023</p>
