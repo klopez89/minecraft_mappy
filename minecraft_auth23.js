@@ -1,9 +1,13 @@
 
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('TailwindLoaded', function() {
   const wasRedirected = checkForAuthRedirect();
   configurePage(wasRedirected);
 });
+
+// document.addEventListener('DOMContentLoaded', function() {
+//   const wasRedirected = checkForAuthRedirect();
+//   configurePage(wasRedirected);
+// });
 
 window.onpageshow = function(event) {
   const queryString = window.location.search;
