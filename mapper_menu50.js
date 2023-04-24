@@ -1,6 +1,9 @@
 
 
 function add_slide_over_menu(is_authenticated) {
+
+  console.log(`is_authenticated value from add_slide_over_menu: ${is_authenticated}`);
+
   const worldName = localStorage.getItem('selected_world_name');
   const worldOwner = localStorage.getItem('selected_world_owner_username');
   const backupDate = localStorage.getItem('map_backup_date');
