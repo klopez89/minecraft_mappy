@@ -134,7 +134,9 @@ function fetchNewSignedMapImageULR(img_info) {
 	});
 }
 
-
+function is_authenticated() {
+	return get_auth_info() != null
+}
 
 function get_auth_info() {
 	const access_token = localStorage.getItem('access_token');
@@ -261,10 +263,10 @@ function presentMapExplorer(signed_img_url, hasNewerMapToLoad) {
 
   // Configure then transition to map explorer from the loading div
   configureMap();
+  add_slide_over_menu(is_authenticated());
   configureWorldSelectionUI();
-  add_slide_over_menu();
   if (hasNewerMapToLoad) { 
-  	enable_load_latest_map() 
+  	enable_load_latest_map();
   }
   transitionToMapper()
 
