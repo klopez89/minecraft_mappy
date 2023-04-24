@@ -371,10 +371,6 @@ function configureMap() {
 		isPanning = false;
 	});
 	
- window.addEventListener('wheel', (event) => {
-		// event.preventDefault();
-	}, { passive: false });
-	
 	menu_element = document.getElementById('menu-overlay-element');
 	menu_element.addEventListener('wheel', (event) => {
 		event.preventDefault();
