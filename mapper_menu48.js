@@ -31,12 +31,17 @@ function configure_slide_over_menu() {
   const loadLatestMapButton = document.getElementById('load-latest-button');
   const genMapButton = document.getElementById('gen-map-button');
   const changeWorldButton = document.getElementById('change-world');
-  const exitWorldSelectionButton = document.getElementById('exit-world-selection-button');
-
-  console.log(`the changeWorldButton is: ${changeWorldButton}`);
 
   styleDisabledButton([loadLatestMapButton, genMapButton]);
-  styleEnabledButton([menuButton, changeWorldButton]);
+  styleEnabledButton([menuButton]);
+
+  if (changeWorldButton != null) {
+    styleEnabledButton([changeWorldButton]);
+  }
+
+  changeWorldButton.addEventListener('click', function() {
+    fetchWorldList();
+  });
 
   exitMenuPanelButton.addEventListener('click', function() {
     toggleSlideMenu(slideOverPanel, slideMenuBg);
@@ -70,14 +75,6 @@ function configure_slide_over_menu() {
     const buttonTitle = genMapButton.querySelector('.button-title');
     buttonTitle.innerHTML = 'Generating &nbsp; <i class="fa fa-spinner fa-spin"></i>';
     triggerMapGeneration();
-  });
-
-  changeWorldButton.addEventListener('click', function() {
-    fetchWorldList();
-  });
-
-  exitWorldSelectionButton.addEventListener('click', function() {
-    transitionOutWorldSelection();
   });
 }
 
