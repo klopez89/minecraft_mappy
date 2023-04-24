@@ -176,19 +176,31 @@ function generateCardHtml(jsonArray, uuid) {
     console.log(`jsonObj.ownerUUID: ${jsonObj.ownerUUID}, uuid: ${uuid}`);
     const isOwnerOfRealm = jsonObj.ownerUUID === uuid;
     const blobPathExists = jsonObj.blobPath != null;
-    const isNotClickable = isOwnerOfRealm === false && blobPathExists === false;
+    const hasABackup = jsonObj.hasABackup === true;
+    const mapGenNeededFromOwner = blobPathExists === false && isOwnerOfRealm === false;
+    const doesOwnButNoBackupToGenMap = blobPathExists === false && isOwnerOfRealm === true && hasABackup === false
+    const isNotClickable = mapGenNeededFromOwner || doesOwnButNoBackupToGenMap;
     const cursorType = isNotClickable ? 'cursor-not-allowed not-clickable' : '';
-    const notOwnerText = isNotClickable ?
-      `<div class="bg-[#FFF5] text-gray-700 font-normal text-sm px-3 pb-3 pt-2" style="text-align: left;">
-          <span style="display: inline-block; text-shadow:none;">Owner needs to generate a map first.</span>
+    var notClickableText = '';
+
+    if (mapGenNeededFromOwner) {
+      notClickableText = 'Owner needs to generate a map first.';
+    } else if (doesOwnButNoBackupToGenMap) {
+      notClickableText = 'No backup available yet.';
+    }
+
+    const notClickableHtml = isNotClickable ? 
+    `<div class="bg-[#FFF5] text-gray-700 font-normal text-sm px-3 pb-3 pt-2" style="text-align: left;">
+          <span style="display: inline-block; text-shadow:none;">${notClickableText}</span>
       </div>` : '';
+
     const textClassAddIfNotClickable = isNotClickable ? 'text-gray-400' : '';
 
     htmlString += `
-      <button onClick="worldSelected(this)" class="minecraft-style text-shadow-style relative w-full pt-4 font-bold ${cursorType}" worldId="${jsonObj.id}" uuid="${jsonObj.ownerUUID}" host="${jsonObj.owner}" activeSlot="${jsonObj.activeSlot}" worldName="${jsonObj.name}" blobPath="${jsonObj.blobPath}">
+      <button onClick="worldSelected(this)" class="minecraft-style text-shadow-style relative w-full pt-4 font-bold ${cursorType}" worldId="${jsonObj.id}" uuid="${jsonObj.ownerUUID}" host="${jsonObj.owner}" activeSlot="${jsonObj.activeSlot}" worldName="${jsonObj.name}" blobPath="${jsonObj.blobPath}" hasABackup="${jsonObj.hasABackup}">
         <div class="world-name-txt text-xl font-bold ${textClassAddIfNotClickable}">${jsonObj.name}</div>
         <div class="world-host-txt mt-2 font-normal pl-4 pr-4 pb-4 ${textClassAddIfNotClickable}">Hosted by ${jsonObj.owner}</div>
-        ${notOwnerText}
+        ${notClickableHtml}
       </button>
     `;
   });
