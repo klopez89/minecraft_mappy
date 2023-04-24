@@ -38,9 +38,9 @@ function worldSelectionContainerHtml() {
     </div>
 
     <div class="w-full h-full flex justify-center items-center ">
-      <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow">
+      <div class="mx-auto my-auto grow">
         <h2 id="selection-title" class="text-2xl font-bold mb-20 text-center text-shadow-style">Select a Realm World</h2>
-        <div class="world-card-container grid grid-cols-1 gap-4 pb-4">
+        <div class="world-card-container grid grid-cols-1 gap-4 pb-4 overflow-y-auto max-h-80">
         </div>
       </div>
     </div>

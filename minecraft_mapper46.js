@@ -280,7 +280,7 @@ function transitionToMapper() {
   loadingDiv.classList.replace('opacity-100','opacity-0');
   loadingDiv.classList.replace('z-40','z-1'); 
   mapperDiv.classList.replace('opacity-0','opacity-100');
-  mapperDiv.classList.replace('z-1','z-54'); 
+  mapperDiv.classList.replace('z-1','z-40'); 
 }
 
 
