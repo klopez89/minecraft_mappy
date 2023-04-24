@@ -37,11 +37,11 @@ function configure_slide_over_menu() {
 
   if (changeWorldButton != null) {
     styleEnabledButton([changeWorldButton]);
-  }
 
-  changeWorldButton.addEventListener('click', function() {
+    changeWorldButton.addEventListener('click', function() {
     fetchWorldList();
-  });
+    });
+  }
 
   exitMenuPanelButton.addEventListener('click', function() {
     toggleSlideMenu(slideOverPanel, slideMenuBg);
