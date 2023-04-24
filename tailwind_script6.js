@@ -34,15 +34,13 @@ function setTailwindSource() {
 		tailwindScript.src = tailwindUrl;
 
 		// Add an event listener to the script element's load event
-		// tailwindScript.addEventListener('load', function() {
-		// 	// Fire the TailwindLoaded event to indicate that the Tailwind CSS script has finished loading
-		// 	document.dispatchEvent(new Event('TailwindLoaded'));
-		// });
+		tailwindScript.addEventListener('load', function() {
+			// Fire the TailwindLoaded event to indicate that the Tailwind CSS script has finished loading
+			document.dispatchEvent(new Event('TailwindLoaded'));
+		});
 
 		// Append the script element to the document's head
-		document.head.appendChild(tailwindScript);
-
-		document.dispatchEvent(new Event('TailwindLoaded'));	
+		document.head.appendChild(tailwindScript);	
 	}
 }
 
