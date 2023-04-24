@@ -176,7 +176,7 @@ function generateCardHtml(jsonArray, uuid) {
     console.log(`jsonObj.ownerUUID: ${jsonObj.ownerUUID}, uuid: ${uuid}`);
     const isOwnerOfRealm = jsonObj.ownerUUID === uuid;
     const blobPathExists = jsonObj.blobPath != null;
-    const hasABackup = jsonObj.hasABackup === true;
+    const hasABackup = jsonObj.hasABackup === "true";
     const mapGenNeededFromOwner = blobPathExists === false && isOwnerOfRealm === false;
     const doesOwnButNoBackupToGenMap = blobPathExists === false && isOwnerOfRealm === true && hasABackup === false
     const isNotClickable = mapGenNeededFromOwner || doesOwnButNoBackupToGenMap;
