@@ -372,7 +372,7 @@ function configureMap() {
 	});
 	
  window.addEventListener('wheel', (event) => {
-		event.preventDefault();
+		// event.preventDefault();
 	}, { passive: false });
 	
 	menu_element = document.getElementById('menu-overlay-element');
