@@ -1,8 +1,6 @@
 
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.body.style.fontFamily = 'Minecrafty';
-  document.body.style.height = "100%";
   const wasRedirected = checkForAuthRedirect();
   configurePage(wasRedirected);
 });
@@ -285,7 +283,7 @@ function transitionToWorldSelection() {
   signInContainer.classList.replace('z-30','z-10'); 
   realWorldSelectionContainer.classList.replace('opacity-0','opacity-100');
   realWorldSelectionContainer.classList.replace('z-10','z-30'); 
-}//https://storage.googleapis.com/minecraft_maps/minecraft_mappy_bg1.png
+}
 
 
 function backgroundDivHtml() {

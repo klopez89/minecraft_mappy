@@ -1,7 +1,5 @@
 
-$(document).ready(function() {
-
-	document.body.style.fontFamily = "Minecrafty";
+document.addEventListener('DOMContentLoaded', function() {
 
 	// Get the current page URL
 	const url = new URL(window.location.href);
