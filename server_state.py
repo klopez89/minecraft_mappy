@@ -74,69 +74,69 @@ def get_latest_backup_url(world_id, world_number, headers, cookies):
         return None
 
 
-# Replace these values with your own
-client_id = "5beeb873-aaa4-4fc9-90ea-d58811e59ff7"
-client_secret = "GIS8Q~NiwTfVrq1YJLrSpVuussbEGepIxhvy0c17"
-redirect_uri = "https://www.whollyaigame.com/minecraftauth"
+# # Replace these values with your own
+# client_id = "5beeb873-aaa4-4fc9-90ea-d58811e59ff7"
+# client_secret = "GIS8Q~NiwTfVrq1YJLrSpVuussbEGepIxhvy0c17"
+# redirect_uri = "https://www.whollyaigame.com/minecraftauth"
 
 
 
 
-# Set the data for your Azure Application here. For more information look at the documentation.
-CLIENT_ID = client_id
-REDIRECT_URL = redirect_uri
+# # Set the data for your Azure Application here. For more information look at the documentation.
+# CLIENT_ID = client_id
+# REDIRECT_URL = redirect_uri
 
-# Get latest version
-latest_version = minecraft_launcher_lib.utils.get_latest_version()["release"]
+# # Get latest version
+# latest_version = minecraft_launcher_lib.utils.get_latest_version()["release"]
 
-# Get Minecraft directory
-minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory()
+# # Get Minecraft directory
+# minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory()
 
-# # Make sure, the latest version of Minecraft is installed
-# minecraft_launcher_lib.install.install_minecraft_version(latest_version, minecraft_directory)
+# # # Make sure, the latest version of Minecraft is installed
+# # minecraft_launcher_lib.install.install_minecraft_version(latest_version, minecraft_directory)
 
-# Login
-login_url, state, code_verifier = minecraft_launcher_lib.microsoft_account.get_secure_login_data(CLIENT_ID, REDIRECT_URL)
+# # Login
+# login_url, state, code_verifier = minecraft_launcher_lib.microsoft_account.get_secure_login_data(CLIENT_ID, REDIRECT_URL)
 
-print(f"The state: {state}, code_verifier: {code_verifier}")
+# print(f"The state: {state}, code_verifier: {code_verifier}")
 
-print(f"Please open {login_url} in your browser and copy the url you are redirected into the prompt below.")
-code_url = input()
+# print(f"Please open {login_url} in your browser and copy the url you are redirected into the prompt below.")
+# code_url = input()
 
-# Get the code from the url
-try:
-    auth_code = minecraft_launcher_lib.microsoft_account.parse_auth_code_url(code_url, state)
-except AssertionError:
-    print("States do not match!")
-    sys.exit(1)
-except KeyError:
-    print("Url not valid")
-    sys.exit(1)
+# # Get the code from the url
+# try:
+#     auth_code = minecraft_launcher_lib.microsoft_account.parse_auth_code_url(code_url, state)
+# except AssertionError:
+#     print("States do not match!")
+#     sys.exit(1)
+# except KeyError:
+#     print("Url not valid")
+#     sys.exit(1)
 
-# Get the login data
+# # Get the login data
 
-print(f"the auth_code: {auth_code}")
+# print(f"the auth_code: {auth_code}")
 
-login_data = minecraft_launcher_lib.microsoft_account.complete_login(CLIENT_ID, [client_secret], REDIRECT_URL, auth_code, code_verifier)
-
-
-print(f"the login_data from complete login: {login_data}")
-
-access_token = login_data["access_token"]
-uuid = login_data["id"]
-username = login_data["name"]
+# login_data = minecraft_launcher_lib.microsoft_account.complete_login(CLIENT_ID, [client_secret], REDIRECT_URL, auth_code, code_verifier)
 
 
+# print(f"the login_data from complete login: {login_data}")
 
-headers = {"Authorization": f"Bearer {access_token}", "User-Agent": "Java/1.6.0_27"}
-cookies = {"sid": f"token:{access_token}:{uuid}", "user": f"{username}", "version": "1.19.4"}
+# access_token = login_data["access_token"]
+# uuid = login_data["id"]
+# username = login_data["name"]
 
-realms_info = get_realms(headers, cookies)
-print(f'The realsm info: {realms_info}')
 
-world_id = '12639791'
-world_backups = get_world_backups(world_id, headers, cookies)
-print(f'The world_backups: {world_backups}')
+
+# headers = {"Authorization": f"Bearer {access_token}", "User-Agent": "Java/1.6.0_27"}
+# cookies = {"sid": f"token:{access_token}:{uuid}", "user": f"{username}", "version": "1.19.4"}
+
+# realms_info = get_realms(headers, cookies)
+# print(f'The realsm info: {realms_info}')
+
+# world_id = '12639791'
+# world_backups = get_world_backups(world_id, headers, cookies)
+# print(f'The world_backups: {world_backups}')
 
 
 # latest_backup_download_info = get_latest_backup_url(world_id, 1, headers, cookies)

@@ -12,7 +12,7 @@ from datetime import datetime
 from pytz import timezone
 
 from login import get_microsoft_login_data, get_minecraft_login_data, check_access_token_via_game_ownership
-from realms import get_realms_info, get_world_map_img, get_world_backups, get_latest_map_img_url, check_latest_map_blob_path, get_latest_maps
+from realms import get_realms_info, get_world_map_img, get_world_backups, get_latest_map_img_url, check_latest_map_blob_path, get_latest_maps, get_latest_backup_url
 from helperFunctions import convert_minecraft_date_to_est_str, backup_id_from_blob_path
 from image_download import get_signed_url
 
@@ -87,6 +87,33 @@ def realms():
 	uuid = request_json["uuid"]
 
 	realms_info = get_realms_info(access_token, username, uuid)
+
+
+
+	# Begin to find out if we have a backup available. 
+	# Create an array of dictionaries with only id and activeSlot
+	new_dict_list = []
+	for server in realms_info["servers"]:
+	    new_dict = {"id": server["id"], "activeSlot": server["activeSlot"]}
+	    new_dict_list.append(new_dict)
+
+	headers = {"Authorization": f"Bearer {access_token}", "User-Agent": "Java/1.6.0_27"}
+	cookies = {"sid": f"token:{access_token}:{uuid}", "user": f"{username}", "version": "1.19.4"}
+
+	for new_dict in new_dict_list:
+		world_id = new_dict["id"]
+		active_slot = new_dict["activeSlot"]
+		backup_url_response = get_latest_backup_url(world_id, active_slot, headers, cookies)
+		new_dict["has_a_backup"] = backup_url_response != None 
+
+	# Update the original server list with the new "has_a_backup" key based on "id"
+	for server in realms_info["servers"]:
+	    for new_dict in new_dict_list:
+	        if server["id"] == new_dict["id"]:
+	            server["has_a_backup"] = new_dict["has_a_backup"]
+	            break
+
+
 
 	# Get latest blob_paths to help determine navigation route on client
 	world_ids = [server['id'] for server in realms_info['servers']]

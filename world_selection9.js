@@ -50,14 +50,17 @@ function worldSelected(button) {
   }
 
   const hasBlobPath = blobPath != null;
+  console.log(`The blob path upon world selection: ${blobPath}`);
 
   if (hasBlobPath) {
     const bucketName = "minecraft_maps";
+    console.log(`About to try to redirect to mappy`);
     showMessageAfterWorldSelection(hasBlobPath, button);
     setTimeout(function() {
       redirectToMapperPage(bucketName, blobPath, worldName, worldId, activeSlot, uuid, username);
     }, 800);
   } else if (access_token != null) {
+    console.log(`About to try to generate a new map`);
     showMessageAfterWorldSelection(hasBlobPath, button);
     generateNewMapImage(world_info)
   } else {
