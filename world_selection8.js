@@ -24,6 +24,103 @@ function fetchWorldList() {
   });
 }
 
+function worldSelected(button) {
+  let accessToken = localStorage.getItem('access_token');
+  let uuid = button.getAttribute('uuid');
+  let username = button.getAttribute('host');
+  let activeSlot = button.getAttribute('activeSlot');
+  let worldId = button.getAttribute('worldId');
+  let worldName = button.getAttribute('worldName');
+  let blobPath = button.getAttribute('blobPath');
+
+  localStorage.setItem('selected_world_id', worldId);
+  localStorage.setItem('selected_world_name', worldName);
+  localStorage.setItem('selected_world_slot', activeSlot);
+  localStorage.setItem('selected_world_owner_uuid', uuid);
+  localStorage.setItem('selected_world_owner_username', username);
+
+  console.log(`Selected Realm World: UUID=${uuid}, Host=${username}, Active Slot=${activeSlot}, worldId=${worldId}, worldName=${worldName}`);
+
+  world_info = {
+    'uuid': uuid,
+    'username': username,
+    'active_slot': activeSlot,
+    'world_id': worldId,
+    'access_token': accessToken
+  }
+
+  const hasBlobPath = blobPath != null;
+
+  if (hasBlobPath) {
+    const bucketName = "minecraft_maps";
+    showMessageAfterWorldSelection(hasBlobPath, button);
+    setTimeout(function() {
+      redirectToMapperPage(bucketName, blobPath, worldName, worldId, activeSlot, uuid, username);
+    }, 800);
+  } else if (access_token != null) {
+    showMessageAfterWorldSelection(hasBlobPath, button);
+    generateNewMapImage(world_info)
+  } else {
+    console.log('ran into error navigating user to a map from realm world selection');
+  }
+}
+
+function generateNewMapImage(world_info) {
+  $.ajax({
+    url: `${base_server_url}/world/map/generate`,
+    method: 'POST',
+    data: JSON.stringify(world_info),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(response) {
+      console.log('World map generation successful:', response);
+
+      const blob_path = response["blob_path"];
+      const bucket_name = response["bucket_name"];
+
+      const world_name = localStorage.getItem('selected_world_name');
+      const world_id = localStorage.getItem('selected_world_id');
+      const world_slot = localStorage.getItem('selected_world_slot');
+      const world_owner_uuid = localStorage.getItem('selected_world_owner_uuid');
+      const world_owner = localStorage.getItem('selected_world_owner_username');
+
+      redirectToMapperPage(bucket_name, blob_path, world_name, world_id, world_slot, world_owner_uuid, world_owner);
+    },
+    error: function(xhr, status, error) {
+      console.error('World map fetch failed:', error);
+    }
+  });
+}
+
+function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, world_slot, world_owner_uuid, world_owner) {
+  const queryParams = {
+    'bucket_name': bucket_name,
+    'blob_path': blob_path,
+    'world_name': world_name,
+    'world_id': world_id,
+    'world_slot': world_slot,
+    'world_owner_uuid': world_owner_uuid,
+    'world_owner': world_owner
+  };
+  const mapperUrl = base_site_url + map_page; // Constants from webflow site
+  const modifiedMapperUrl = `${mapperUrl}?${new URLSearchParams(queryParams).toString()}`;
+
+  window.location.href = modifiedMapperUrl;
+}
+
+function showMessageAfterWorldSelection(hasBlobPath, button) {
+  const worldNameTextElement = button.querySelector('div.world-name-txt');
+  const worldHostTextElement = button.querySelector('div.world-host-txt');
+  const routingTypeText = hasBlobPath ? 'Loading map' : 'Generating 1st map';
+
+  worldNameTextElement.innerHTML = `${routingTypeText}  &nbsp; <i class="fa fa-spinner fa-spin"></i>`;
+  worldHostTextElement.innerHTML = '';
+  button.disabled = true;
+  button.style.pointerEvents = 'none';
+}
+
+
+
 function worldSelectionContainerHtml() {
   return `
   <div id="realWorldSelectionContainer" class="relative w-full h-full opacity-0 transition-opacity duration-500 z-0">
@@ -40,7 +137,7 @@ function worldSelectionContainerHtml() {
     <div class="w-full h-full flex justify-center items-center ">
       <div class="max-w-lg mx-auto my-auto grow">
         <h2 id="selection-title" class="text-2xl font-bold mb-20 text-center text-shadow-style">Select a Realm World</h2>
-        <div class="world-card-container grid grid-cols-1 gap-4 pb-4 overflow-y-auto max-h-80">
+        <div id="worldCardContainer" class="world-card-container grid grid-cols-1 gap-4 pb-4 overflow-y-auto max-h-80">
         </div>
       </div>
     </div>
@@ -85,7 +182,7 @@ function generateCardHtml(jsonArray, uuid) {
     const textClassAddIfNotClickable = isNotClickable ? 'text-gray-400' : '';
 
     htmlString += `
-      <button onClick="realmWorldSelected(this)" class="minecraft-style text-shadow-style relative w-full pt-4 font-bold ${cursorType}" worldId="${jsonObj.id}" uuid="${jsonObj.ownerUUID}" host="${jsonObj.owner}" activeSlot="${jsonObj.activeSlot}" worldName="${jsonObj.name}" blobPath="${jsonObj.blobPath}">
+      <button onClick="worldSelected(this)" class="minecraft-style text-shadow-style relative w-full pt-4 font-bold ${cursorType}" worldId="${jsonObj.id}" uuid="${jsonObj.ownerUUID}" host="${jsonObj.owner}" activeSlot="${jsonObj.activeSlot}" worldName="${jsonObj.name}" blobPath="${jsonObj.blobPath}">
         <div class="world-name-txt text-xl font-bold ${textClassAddIfNotClickable}">${jsonObj.name}</div>
         <div class="world-host-txt mt-2 font-normal pl-4 pr-4 pb-4 ${textClassAddIfNotClickable}">Hosted by ${jsonObj.owner}</div>
         ${notOwnerText}
@@ -132,6 +229,9 @@ function transitionInWorldSelection() {
 
 
 function transitionOutWorldSelection() {
+  const worldCardContainer = document.getElementById('worldCardContainer');
+  worldCardContainer.innerHTML = '';
+
   const realWorldSelectionContainer = document.getElementById('realWorldSelectionContainer');
   const worldSelectionBg = document.getElementById('worldSelectionBg');
 
