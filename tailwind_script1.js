@@ -21,3 +21,5 @@ function setTailwindSource() {
 	  document.head.appendChild(tailwindScript);
 	}
 }
+
+setTailwindSource();
