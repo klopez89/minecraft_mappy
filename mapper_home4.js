@@ -1,6 +1,6 @@
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('TailwindLoaded', function() {
   configureHomePage();
 });
 

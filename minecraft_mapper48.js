@@ -1,5 +1,5 @@
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('TailwindLoaded', function() {
 
 	// Get the current page URL
 	const url = new URL(window.location.href);
