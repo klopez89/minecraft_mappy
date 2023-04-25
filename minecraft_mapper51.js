@@ -1,6 +1,6 @@
 
 // Hide the current content
-$('body').innerHTML = '';
+document.body.innerHTML = '';
 
 // // Replace the current history entry with a new one
 // history.replaceState({} , '', window.location.href);
