@@ -1,4 +1,11 @@
 
+window.addEventListener('beforeunload', function(event) {
+  const slideOverPanel = document.getElementById('slide-over-panel');
+  if (slideOverPanel.classList.contains('showing')) {
+    const exitMenuPanelButton = document.getElementById('exit-menu-button');
+    exitMenuPanelButton.click();
+  }
+});
 
 function add_slide_over_menu(is_authenticated) {
 

@@ -1,4 +1,7 @@
-
+window.addEventListener('beforeunload', function(event) {
+  toggleSelectionButtons(true);
+  transitionOutWorldSelection();
+});
 
 function fetchWorldList() {
   minecraft_auth_info = {
@@ -60,8 +63,6 @@ function worldSelected(button) {
     toggleSelectionButtons(false);
     setTimeout(function() {
       resetSelectedWorldButton(button);
-      toggleSelectionButtons(true);
-      transitionOutWorldSelection();
       redirectToMapperPage(bucketName, blobPath, worldName, worldId, activeSlot, uuid, username);
     }, 800);
   } else if (accessToken != null) {
@@ -97,8 +98,6 @@ function generateNewMapImage(world_info, world_button) {
       const world_owner = localStorage.getItem('selected_world_owner_username');
 
       resetSelectedWorldButton(world_button);
-      toggleSelectionButtons(true);
-      transitionOutWorldSelection();
       redirectToMapperPage(bucket_name, blob_path, world_name, world_id, world_slot, world_owner_uuid, world_owner);
     },
     error: function(xhr, status, error) {

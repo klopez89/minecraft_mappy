@@ -1,16 +1,6 @@
-
-// Hide the current content
-window.addEventListener("popstate", handlePopstate);
-
-function handlePopstate() {
+window.addEventListener('beforeunload', function(event) {
 	addLoadingDiv();
-  // Remove the event listener
-  // window.removeEventListener("popstate", handlePopstate);
-}
-
-// // Replace the current history entry with a new one
-// history.replaceState({} , '', window.location.href);
-
+});
 
 document.addEventListener('TailwindLoaded', function() {
 
@@ -333,7 +323,7 @@ function map_html(map_img_url) {
 
 function loading_html() {
 	return `
-	<div id="loadingContainer" class="loading-container absolute w-full h-full flex justify-center items-center opacity-100 transition-opacity duration-500 z-40 custom-dark-gray-bg">
+	<div id="loadingContainer" class="loading-container absolute w-full h-full flex justify-center items-center opacity-100 transition-opacity duration-500 z-[99] custom-dark-gray-bg">
 	  <div class="max-w-lg max-h-lg mx-auto my-auto overflow-y-auto grow text-center">
 	   <i class="text-5xl text-white fa fa-spinner fa-spin"></i>
 	  </div>
