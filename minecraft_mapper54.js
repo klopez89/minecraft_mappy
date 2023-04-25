@@ -1,5 +1,5 @@
 window.addEventListener('beforeunload', function(event) {
-	addLoadingDiv();
+	bringLoadingScreenBack();
 });
 
 document.addEventListener('TailwindLoaded', function() {
@@ -281,9 +281,15 @@ function transitionToMapper() {
 	const loadingDiv = document.getElementById('loadingContainer');
   const mapperDiv = document.getElementById('mapContainer');
   loadingDiv.classList.replace('opacity-100','opacity-0');
-  loadingDiv.classList.replace('z-40','z-1'); 
+  loadingDiv.classList.replace('z-[99]','z-1'); 
   mapperDiv.classList.replace('opacity-0','opacity-100');
   mapperDiv.classList.replace('z-1','z-40'); 
+}
+
+function bringLoadingScreenBack() {
+	const loadingDiv = document.getElementById('loadingContainer');
+  loadingDiv.classList.replace('opacity-0','opacity-100');
+  loadingDiv.classList.replace('z-1','z-[99]'); 
 }
 
 
