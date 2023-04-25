@@ -1,6 +1,12 @@
 
 // Hide the current content
-document.body.innerHTML = '';
+window.addEventListener("popstate", handlePopstate);
+
+function handlePopstate() {
+	addLoadingDiv();
+  // Remove the event listener
+  // window.removeEventListener("popstate", handlePopstate);
+}
 
 // // Replace the current history entry with a new one
 // history.replaceState({} , '', window.location.href);
