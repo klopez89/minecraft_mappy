@@ -57,19 +57,23 @@ function worldSelected(button) {
     const bucketName = "minecraft_maps";
     console.log(`About to try to redirect to mappy`);
     showMessageAfterWorldSelection(hasBlobPath, button);
+    toggleSelectionButtons(false);
     setTimeout(function() {
+      resetSelectedWorldButton(button);
+      toggleSelectionButtons(true);
       redirectToMapperPage(bucketName, blobPath, worldName, worldId, activeSlot, uuid, username);
     }, 800);
   } else if (accessToken != null) {
     console.log(`About to try to generate a new map`);
     showMessageAfterWorldSelection(hasBlobPath, button);
-    generateNewMapImage(world_info)
+    toggleSelectionButtons(false);
+    generateNewMapImage(world_info, button)
   } else {
     console.log('ran into error navigating user to a map from realm world selection');
   }
 }
 
-function generateNewMapImage(world_info) {
+function generateNewMapImage(world_info, world_button) {
   $.ajax({
     url: `${base_server_url}/world/map/generate`,
     method: 'POST',
@@ -88,9 +92,13 @@ function generateNewMapImage(world_info) {
       const world_owner_uuid = localStorage.getItem('selected_world_owner_uuid');
       const world_owner = localStorage.getItem('selected_world_owner_username');
 
+      resetSelectedWorldButton(world_button);
+      toggleSelectionButtons(true);
       redirectToMapperPage(bucket_name, blob_path, world_name, world_id, world_slot, world_owner_uuid, world_owner);
     },
     error: function(xhr, status, error) {
+      resetSelectedWorldButton(world_button);
+      toggleSelectionButtons(true);
       console.error('World map fetch failed:', error);
     }
   });
@@ -112,16 +120,39 @@ function redirectToMapperPage(bucket_name, blob_path, world_name, world_id, worl
   window.location.href = modifiedMapperUrl;
 }
 
+var original_world_name_selected = '';
+var original_world_host_selected = '';
+
 function showMessageAfterWorldSelection(hasBlobPath, button) {
   const worldNameTextElement = button.querySelector('div.world-name-txt');
   const worldHostTextElement = button.querySelector('div.world-host-txt');
   const routingTypeText = hasBlobPath ? 'Loading map' : 'Generating 1st map';
 
+  // save original world name and host strings to reset the button post navigation attempt
+  original_world_name_selected = worldNameTextElement.innerHTML;
+  original_world_host_selected = worldHostTextElement.innerHTML;
+
   worldNameTextElement.innerHTML = `${routingTypeText}  &nbsp; <i class="fa fa-spinner fa-spin"></i>`;
   worldHostTextElement.innerHTML = '';
-  button.disabled = true;
-  button.style.pointerEvents = 'none';
 }
+
+function resetSelectedWorldButton(button) {
+  const worldNameTextElement = button.querySelector('div.world-name-txt');
+  const worldHostTextElement = button.querySelector('div.world-host-txt');
+  worldNameTextElement.innerHTML = original_world_name_selected;
+  worldHostTextElement.innerHTML = original_world_host_selected;
+}
+
+function toggleSelectionButtons(enable) {
+  const parentDiv = document.getElementById('realWorldSelectionContainer');
+  const buttons = parentDiv.querySelectorAll("button");
+  
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].disabled = !enable;
+    buttons[i].style.pointerEvents = enable ? "auto" : "none";
+  }
+}
+
 
 
 
