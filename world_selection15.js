@@ -32,6 +32,7 @@ function worldSelected(button) {
   let worldId = button.getAttribute('worldId');
   let worldName = button.getAttribute('worldName');
   let blobPath = button.getAttribute('blobPath');
+  let hasABackup = button.getAttribute('hasABackup');
 
   localStorage.setItem('selected_world_id', worldId);
   localStorage.setItem('selected_world_name', worldName);
@@ -50,7 +51,7 @@ function worldSelected(button) {
   }
 
   const hasBlobPath = blobPath != null || blobPath != "undefined";
-  console.log(`The blob path upon world selection: ${blobPath}`);
+  console.log(`The blob path upon world selection: ${blobPath}, and hasBlobPath value: ${hasBlobPath}`);
 
   if (hasBlobPath) {
     const bucketName = "minecraft_maps";
