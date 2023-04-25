@@ -1,4 +1,8 @@
 
+document.addEventListener('DOMContentLoaded', function() {
+	$('body').innerHTML = '';
+});
+
 document.addEventListener('TailwindLoaded', function() {
 
 	// Get the current page URL
