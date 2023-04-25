@@ -60,7 +60,7 @@ function worldSelected(button) {
     setTimeout(function() {
       redirectToMapperPage(bucketName, blobPath, worldName, worldId, activeSlot, uuid, username);
     }, 800);
-  } else if (access_token != null) {
+  } else if (accessToken != null) {
     console.log(`About to try to generate a new map`);
     showMessageAfterWorldSelection(hasBlobPath, button);
     generateNewMapImage(world_info)
