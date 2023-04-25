@@ -61,6 +61,7 @@ function worldSelected(button) {
     setTimeout(function() {
       resetSelectedWorldButton(button);
       toggleSelectionButtons(true);
+      transitionOutWorldSelection();
       redirectToMapperPage(bucketName, blobPath, worldName, worldId, activeSlot, uuid, username);
     }, 800);
   } else if (accessToken != null) {
@@ -70,6 +71,9 @@ function worldSelected(button) {
     generateNewMapImage(world_info, button)
   } else {
     console.log('ran into error navigating user to a map from realm world selection');
+    resetSelectedWorldButton(button);
+    toggleSelectionButtons(true);
+    transitionOutWorldSelection();
   }
 }
 
@@ -94,6 +98,7 @@ function generateNewMapImage(world_info, world_button) {
 
       resetSelectedWorldButton(world_button);
       toggleSelectionButtons(true);
+      transitionOutWorldSelection();
       redirectToMapperPage(bucket_name, blob_path, world_name, world_id, world_slot, world_owner_uuid, world_owner);
     },
     error: function(xhr, status, error) {
