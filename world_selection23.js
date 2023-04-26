@@ -186,7 +186,7 @@ function worldSelectionContainerHtml() {
 
 function backgroundDivHtml() {
 	return `
-	<div id="worldSelectionBg" class="w-full h-full absolute opacity-0 transition-opacity duration-500 z-0">
+	<div id="worldSelectionBg" class="w-full h-full absolute opacity-100 transition-opacity duration-500 z-0">
 		<div class="w-full h-full bg-gray-950 bg-opacity-90 absolute z-1"></div>
 		<img src="https://storage.googleapis.com/minecraft_maps/minecraft_mappy_bg1_compressed.png" alt="Minecraft map" class="w-full h-full object-cover">
 	</div>
@@ -273,7 +273,7 @@ function transitionInWorldSelection() {
 	realWorldSelectionContainer.classList.replace('opacity-0', 'opacity-100');
 	realWorldSelectionContainer.classList.replace('z-0', 'z-[51]');
 
-	worldSelectionBg.classList.replace('opacity-0', 'opacity-100');
+	// worldSelectionBg.classList.replace('opacity-0', 'opacity-100');
 	worldSelectionBg.classList.replace('z-0', 'z-50');
 }
 
@@ -288,6 +288,6 @@ function transitionOutWorldSelection() {
 	realWorldSelectionContainer.classList.replace('opacity-100', 'opacity-0');
 	realWorldSelectionContainer.classList.replace('z-[51]', 'z-0');
 
-	worldSelectionBg.classList.replace('opacity-100', 'opacity-0');
+	// worldSelectionBg.classList.replace('opacity-100', 'opacity-0');
 	worldSelectionBg.classList.replace('z-50', 'z-0');
 }
