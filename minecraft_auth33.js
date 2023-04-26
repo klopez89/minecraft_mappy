@@ -4,9 +4,11 @@ document.addEventListener('TailwindLoaded', function() {
   configurePage(wasRedirected);
 });
 
-window.addEventListener('beforeunload', function(event) {
-  console.log('beforeunload is hit on auth page file');
-  resetSignInButton()
+window.addEventListener('pagehide', function(event) {
+  console.log('pagehide is hit on auth page file');
+  if (event.persisted) {
+    resetSignInButton();
+  }
 });
 
 function checkForAuthRedirect() {
@@ -58,12 +60,13 @@ function beginMicrosoftLogin() {
       localStorage.setItem('auth_state', state);
 
       // Redirect the user to another URL
-      console.log(`The login url we should redirect to: ${login_url}`);
+      resetSignInButton();
       window.location.href = login_url;
 
     },
     error: function(xhr, status, error) {
       console.error('Login failed:', error);
+      resetSignInButton();
     }
   });
 }
