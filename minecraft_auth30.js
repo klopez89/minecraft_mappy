@@ -24,6 +24,7 @@ function configurePage(wasRedirectedFromMicrosoft) {
   const sign_in_container_html = signInContainerHtml();
   const sing_in_container_div = $($.parseHTML(sign_in_container_html));
   if (wasRedirectedFromMicrosoft) {
+    console.log(`was directed from microsoft if statement hit: ${wasRedirectedFromMicrosoft}`);
     sing_in_container_div.find('#signInTextDiv').html(`Signing in &nbsp; <i class="fa fa-spinner fa-spin">`);
   }
   $('body').append(sing_in_container_div);
@@ -107,12 +108,10 @@ function beginMinecraftLogin() {
 
       validateAccessToken()
       .then(() => {
-        console.log('about to fetch world list from first promise in auth page file');
         return fetchWorldList();
       })
       .then(() => {
         setTimeout(function() {
-          console.log('about to reset sign in button after 500s delay');
           resetSignInButton();
         }, 500);
       })
