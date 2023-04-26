@@ -116,7 +116,9 @@ function beginMinecraftLogin() {
         fetchWorldList();
       })
       .then(() => {
-        resetSignInButton();
+        setTimeout(function() {
+          resetSignInButton();
+        }, 500);
       })
       .catch((error) => {
         errorValidatingAccessToken(error);
