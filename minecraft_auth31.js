@@ -5,6 +5,7 @@ document.addEventListener('TailwindLoaded', function() {
 });
 
 window.addEventListener('beforeunload', function(event) {
+  console.log('beforeunload is hit on auth page file');
   resetSignInButton()
 });
 
