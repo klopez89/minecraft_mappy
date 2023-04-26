@@ -113,10 +113,12 @@ function beginMinecraftLogin() {
 
       validateAccessToken()
       .then(() => {
+        console.log('about to fetch world list from first promise in auth page file');
         fetchWorldList();
       })
       .then(() => {
         setTimeout(function() {
+          console.log('about to reset sign in button after 500s delay');
           resetSignInButton();
         }, 500);
       })

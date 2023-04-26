@@ -17,6 +17,7 @@ function fetchWorldList() {
 				const realms_info = response["realms_info"];
 				const realm_servers = realms_info["servers"];
 				presentRealmWorldSelection(realm_servers, minecraft_auth_info['uuid'])
+		    console.log('about to resolve the fetchWorldList promise, but already started presentation of world selection');
 				resolve();
 			},
 			error: function(xhr, status, error) {
