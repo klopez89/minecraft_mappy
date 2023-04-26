@@ -4,7 +4,7 @@ document.addEventListener('TailwindLoaded', function() {
   configurePage(wasRedirected);
 });
 
-window.addEventListener('pagehide', function(event) {
+window.addEventListener('pageshow', function(event) {
   console.log('pagehide is hit on auth page file');
   if (event.persisted) {
     resetSignInButton();
