@@ -60,9 +60,7 @@ function beginMicrosoftLogin() {
       localStorage.setItem('auth_state', state);
 
       // Redirect the user to another URL
-      resetSignInButton();
       window.location.href = login_url;
-
     },
     error: function(xhr, status, error) {
       console.error('Login failed:', error);
