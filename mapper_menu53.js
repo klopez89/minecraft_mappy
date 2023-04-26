@@ -49,7 +49,7 @@ function configure_slide_over_menu() {
     styleEnabledButton([changeWorldButton]);
 
     changeWorldButton.addEventListener('click', function() {
-    fetchWorldList();
+      validateAccessToken().then(fetchWorldList).catch(errorValidatingAccessToken);
     });
   }
 
@@ -84,18 +84,21 @@ function configure_slide_over_menu() {
     genMapButton.classList.toggle('not-clickable');
     const buttonTitle = genMapButton.querySelector('.button-title');
     buttonTitle.innerHTML = 'Generating &nbsp; <i class="fa fa-spinner fa-spin"></i>';
-    triggerMapGeneration();
+    
+    validateAccessToken()
+    .then(() => triggerMapGeneration())
+    .catch(errorValidatingAccessToken);
   });
 }
 
 function configureAuthButton() {
-  const minecraft_auth_info = checkForMinecraftAuthInfo();
+  const is_signed_in = is_authenticated();
   const authButton = document.getElementById('auth-button');
   const buttonTitle = authButton.querySelector('.button-title');
 
   styleEnabledButton([authButton]);
 
-  if (minecraft_auth_info != null) {
+  if (is_signed_in) {
     buttonTitle.innerHTML = 'Sign out';
     authButton.setAttribute('signedIn', 'true');
   } else {
