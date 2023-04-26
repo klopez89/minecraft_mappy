@@ -49,7 +49,21 @@ function configure_slide_over_menu() {
     styleEnabledButton([changeWorldButton]);
 
     changeWorldButton.addEventListener('click', function() {
-      validateAccessToken().then(fetchWorldList).catch(errorValidatingAccessToken);
+      showChangeWorldButtonLoadingState();
+
+      validateAccessToken()
+      .then(() => {
+        return fetchWorldList();
+      })
+      .then(() => {
+        setTimeout(function() {
+          resetChangeWorldButton();
+        }, 500);
+      })
+      .catch((error) => {
+        errorValidatingAccessToken(error);
+        resetChangeWorldButton();
+      });
     });
   }
 
@@ -128,6 +142,22 @@ function showSignInButtonLoadingState() {
   signInButton.classList.add('not-clickable');
   const signInButtonTitle = signInButton.querySelector('.button-title');
   signInButtonTitle.innerHTML = 'Signing out &nbsp; <i class="fa fa-spinner fa-spin"></i>';
+}
+
+function showChangeWorldButtonLoadingState() {
+  const changeWorldButton = document.getElementById('change-world');
+  changeWorldButton.classList.add('not-clickable');
+  changeWorldButton.disabled = true;
+  const changeWorldButtonTitle = changeWorldButton.querySelector('.button-title');
+  changeWorldButtonTitle.innerHTML = 'Change world &nbsp; <i class="fa fa-spinner fa-spin"></i>';
+}
+
+function resetChangeWorldButton() {
+  const changeWorldButton = document.getElementById('change-world');
+  changeWorldButton.classList.remove('not-clickable');
+  changeWorldButton.disabled = false;
+  const changeWorldButtonTitle = changeWorldButton.querySelector('.button-title');
+  changeWorldButtonTitle.innerHTML = 'Change world';
 }
 
 function dismissSlideOutMenu() {

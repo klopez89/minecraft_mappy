@@ -5,13 +5,7 @@ document.addEventListener('TailwindLoaded', function() {
 });
 
 window.addEventListener('beforeunload', function(event) {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const microsoft_code = urlParams.get('code');
-  const wasRedirected = microsoft_code != null;
-  if (wasRedirected === false) {
-    resetSignInButton()
-  }
+  resetSignInButton()
 });
 
 function checkForAuthRedirect() {
