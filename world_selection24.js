@@ -5,22 +5,25 @@ window.addEventListener('beforeunload', function(event) {
 
 function fetchWorldList() {
 	minecraft_auth_info = get_auth_info();
-	$.ajax({
-		url: `${base_server_url}/realms`,
-		method: 'POST',
-		data: JSON.stringify(minecraft_auth_info),
-		contentType: "application/json",
-		dataType: "json",
-		success: function(response) {
-			console.log('Realms info fetch successful:', response);
-			const realms_info = response["realms_info"];
-			const realm_servers = realms_info["servers"];
-			presentRealmWorldSelection(realm_servers, minecraft_auth_info['uuid'])
-		},
-		error: function(xhr, status, error) {
-			console.error('World list info fetch failed:', error);
-		}
-	});
+	return new Promise((resolve, reject) => {
+		$.ajax({
+			url: `${base_server_url}/realms`,
+			method: 'POST',
+			data: JSON.stringify(minecraft_auth_info),
+			contentType: "application/json",
+			dataType: "json",
+			success: function(response) {
+				console.log('Realms info fetch successful:', response);
+				const realms_info = response["realms_info"];
+				const realm_servers = realms_info["servers"];
+				presentRealmWorldSelection(realm_servers, minecraft_auth_info['uuid'])
+				resolve();
+			},
+			error: function(xhr, status, error) {
+				reject(new Error(`Issue fetching world list, error: ${error}`));
+			}
+		});
+	}
 }
 
 function worldSelected(button) {

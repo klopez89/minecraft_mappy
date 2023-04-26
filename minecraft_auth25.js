@@ -114,6 +114,8 @@ function beginMinecraftLogin() {
       validateAccessToken()
       .then(() => {
         fetchWorldList();
+      })
+      .then(() => {
         resetSignInButton();
       })
       .catch((error) => {
