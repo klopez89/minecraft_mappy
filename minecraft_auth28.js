@@ -114,7 +114,7 @@ function beginMinecraftLogin() {
       validateAccessToken()
       .then(() => {
         console.log('about to fetch world list from first promise in auth page file');
-        fetchWorldList();
+        return fetchWorldList();
       })
       .then(() => {
         setTimeout(function() {
