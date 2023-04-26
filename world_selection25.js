@@ -23,7 +23,7 @@ function fetchWorldList() {
 				reject(new Error(`Issue fetching world list, error: ${error}`));
 			}
 		});
-	}
+	});
 }
 
 function worldSelected(button) {
