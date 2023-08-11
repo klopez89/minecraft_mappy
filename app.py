@@ -233,50 +233,50 @@ def world_map_retrieve():
 
 
 
-@app.route("/generate", methods=['POST'])
-def generate():
-	request_json = request.get_json() # dictionary type
+# @app.route("/generate", methods=['POST'])
+# def generate():
+# 	request_json = request.get_json() # dictionary type
 
-	print("The JSON hitting generate is:")
-	for k, v in request_json.items():
-		print(k, v)
+# 	print("The JSON hitting generate is:")
+# 	for k, v in request_json.items():
+# 		print(k, v)
 
-	img_to_img_url = request_json.get('imgToImgUrl','')
-	prompt_strength = request_json.get('promptStrength','')
-	prompt = request_json.get('prompt')
-	negative_prompt = request_json.get('negativePrompt')
-	idea_id = request_json.get('selectedIdea')
-	guidance_scale = request_json.get('guidanceScale')
-	seed = request_json.get('seed')
-	inference_steps =request_json.get('inferenceSteps', 50)
-	modelName = request_json.get('modelName') 
-	modelVersion = request_json.get('modelVersion') 
-	output = generate_ai_with(prompt, negative_prompt, guidance_scale, seed, inference_steps, modelName, modelVersion, img_to_img_url, prompt_strength)
+# 	img_to_img_url = request_json.get('imgToImgUrl','')
+# 	prompt_strength = request_json.get('promptStrength','')
+# 	prompt = request_json.get('prompt')
+# 	negative_prompt = request_json.get('negativePrompt')
+# 	idea_id = request_json.get('selectedIdea')
+# 	guidance_scale = request_json.get('guidanceScale')
+# 	seed = request_json.get('seed')
+# 	inference_steps =request_json.get('inferenceSteps', 50)
+# 	modelName = request_json.get('modelName') 
+# 	modelVersion = request_json.get('modelVersion') 
+# 	output = generate_ai_with(prompt, negative_prompt, guidance_scale, seed, inference_steps, modelName, modelVersion, img_to_img_url, prompt_strength)
 
-	(fileName, image_url, genTime, usedSeed) = ast.literal_eval(output)
+# 	(fileName, image_url, genTime, usedSeed) = ast.literal_eval(output)
 
-	promptInfo = {
-		'text' : prompt,
-		'ideaId' : idea_id,
-		'imageUrl' : image_url,
-		'genTime' : str(genTime),
-		'negText' : negative_prompt,
-		'gScale' : guidance_scale,
-		'seed' : usedSeed,
-		'inference_steps' : inference_steps,
-		'modelName' : modelName,
-		'modelVersion' : modelVersion,
-		'img_to_img_url' : img_to_img_url,
-		'prompt_strength' : prompt_strength,
-	}
+# 	promptInfo = {
+# 		'text' : prompt,
+# 		'ideaId' : idea_id,
+# 		'imageUrl' : image_url,
+# 		'genTime' : str(genTime),
+# 		'negText' : negative_prompt,
+# 		'gScale' : guidance_scale,
+# 		'seed' : usedSeed,
+# 		'inference_steps' : inference_steps,
+# 		'modelName' : modelName,
+# 		'modelVersion' : modelVersion,
+# 		'img_to_img_url' : img_to_img_url,
+# 		'prompt_strength' : prompt_strength,
+# 	}
 
-	createPromptOutput = create_prompt(promptInfo)
-	(created_prompt_rec_id, created_date) = ast.literal_eval(createPromptOutput)
+# 	createPromptOutput = create_prompt(promptInfo)
+# 	(created_prompt_rec_id, created_date) = ast.literal_eval(createPromptOutput)
 
-	resp = jsonify(success=True,imageUrl=image_url,prompt=prompt,
-		creationDate=created_date,generationTime=str(genTime),promptId=created_prompt_rec_id,
-		usedSeed=usedSeed)
-	return resp
+# 	resp = jsonify(success=True,imageUrl=image_url,prompt=prompt,
+# 		creationDate=created_date,generationTime=str(genTime),promptId=created_prompt_rec_id,
+# 		usedSeed=usedSeed)
+# 	return resp
 
 
 

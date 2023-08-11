@@ -124,6 +124,7 @@ function beginMinecraftLogin() {
     },
     error: function(xhr, status, error) {
       console.error('Minecraft login failed:', error);
+      console.log('Login error with status', status);
       resetSignInButton();
     }
   });
